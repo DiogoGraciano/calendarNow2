@@ -1,0 +1,76 @@
+<section class="contato">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h2 class="mb-5 fw-normal text-title lh-1 mt-4">Contato</h2>
+            </div>
+        </div>
+        <div class="row justify-content-center mb-9 fs-lg text-gray-500">
+            <div class="col-md-6">
+                {form}
+            </div>
+            <div class="col-md-6 mt-3">
+                <div class="container">
+                    <!-- BEGIN BLOCK_ENDERECO -->
+                    <div class="col-md-12 endereco">
+                        <h3 class="mb-3 fw-normal text-title lh-1">Endereço</h3>
+                        <p class="lead mb-3">
+                            {empresa->endereco}
+                        </p>
+                    </div>
+                    <!-- END BLOCK_ENDERECO -->
+                    <div class="col-md-12 atendimento">
+                        <h3 class="mb-3 fw-normal text-title lh-1">Atendimento</h3>
+                        <ul class="nav flex-column mb-3">
+                            <!-- BEGIN BLOCK_TELEFONE -->
+                            <li class="lead">
+                                <a href="tel:{empresa->__TELEFONE__}">
+                                    <i class="fa-solid fa-phone me-2 icon"></i>{empresa->telefone}
+                                </a>
+                            </li>
+                            <!-- END BLOCK_TELEFONE -->
+                            <!-- BEGIN BLOCK_CELULAR -->
+                            <li class="lead">
+                                <a href="tel:{empresa->__CELULAR__}">
+                                    <i class="fa-solid fa-mobile me-2 icon"></i>{empresa->celular}
+                                </a>
+                            </li>
+                            <!-- END BLOCK_CELULAR -->
+                            <!-- BEGIN BLOCK_CONTATO_EMAIL -->
+                            <li class="lead">
+                                <a href="mailto:{empresa->contato_email}">
+                                    <i class="fa-solid fa-envelope me-2 icon"></i>{empresa->contato_email}
+                                </a>
+                            </li>
+                            <!-- END BLOCK_CONTATO_EMAIL -->
+                            <!-- BEGIN BLOCK_CONTATO_SAC -->
+                            <li class="lead">
+                                <a href="{empresa->__SAC__}">
+                                    <i class="fa-solid fa-question me-2 icon"></i>{empresa->contato_sac}
+                                </a>  
+                            </li>
+                            <!-- END BLOCK_CONTATO_SAC -->
+                            <!-- BEGIN BLOCK_CONTATO_COMERCIAL -->
+                            <li class="lead">
+                                <a href="{empresa->__COMERCIAL__}">
+                                    <i class="fa-solid fa-handshake-angle me-2 icon"></i>{empresa->contato_comercial}
+                                </a>
+                            </li>
+                            <!-- END BLOCK_CONTATO_COMERCIAL -->
+                        </ul>
+                        <!-- BEGIN BLOCK_ATENDIMENTO -->
+                        <p class="lead">
+                            {empresa->horario_atendimento}
+                        </p>
+                        <!-- END BLOCK_ATENDIMENTO -->
+                    </div>
+                    <!-- BEGIN BLOCK_MAPS -->
+                    <div class="col-md-12 mt-3 mb-3 maps">
+                        <iframe src="https://maps.google.com/maps?q={empresa->latitude},{empresa->longitude}&hl=pt-br&z=14&amp;output=embed" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                    <!-- END BLOCK_MAPS -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

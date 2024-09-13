@@ -1,0 +1,30 @@
+<section class="produto-detalhe pt-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div id="produto-listagem" class="carousel slide carousel-fade" data-bs-ride="carousel">
+                    <!-- BEGIN BLOCK_IMAGENS -->
+                    <div class="carousel-item {active}">
+                        <img class="w-100 img-destaque-produto" src="{img_produto}" alt="{img_titulo_produto}">
+                    </div>
+                    <!-- END BLOCK_IMAGENS -->
+                </div>
+            </div>
+            <div class="col-md-8 pt-5">
+                <div class="mb-5">
+                    <h2 class="mb-3 fw-normal text-title lh-1">{produto->nome}</h2>
+                    <p class="text-body-secondary">{produto->descricao}</p>
+                </div>
+                <!-- BEGIN BLOCK_DOCUMENTOS -->
+                <div>
+                    <h2 class="mb-3 fw-normal text-title lh-1">Ficha Tecnica</h2>
+                    <p class="text-body-secondary">Para obter a ficha técnica faça o download abaixo:</p>
+                    <!-- BEGIN BLOCK_DOCUMENTO -->
+                    <a target="_blank" href="{documento_caminho}" class="btn btn-primary">{documento_titulo}</a>
+                    <!-- END BLOCK_DOCUMENTO -->
+                </div>
+                <!-- END BLOCK_DOCUMENTOS -->
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,6 @@
+.vscode/*
+vendor/*
+logs/*
+assets/imagens/banners/*
+assets/imagens/marcas/*
+assets/imagens/produtos/*

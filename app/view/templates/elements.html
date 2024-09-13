@@ -1,0 +1,72 @@
+
+    <!-- BEGIN BLOCK_INPUT -->
+        <!-- BEGIN BLOCK_LABEL_INPUT -->  
+        <label for="{name}">{label}</label>
+        <!-- END BLOCK_LABEL_INPUT -->
+        <input type="{type}" name="{name}" id="{name}" class="{class}" value="{value}" {extra}/>
+    <!-- END BLOCK_INPUT -->
+
+    <!-- BEGIN BLOCK_BUTTON -->
+        <button type="{type}" name="{name}" id="{name}" class="{class}" onclick="{action}" {extra}>{label}</button> 
+    <!-- END BLOCK_BUTTON -->
+
+    <!-- BEGIN BLOCK_BUTTON_HTMX -->
+        <button name="{name}" id="{name}" class="{class}" hx-post="{action}" hx-trigger="click" hx-target="{target}" hx-swap="{swap}" {extra}>{label}</button> 
+    <!-- END BLOCK_BUTTON_HTMX -->
+
+    <!-- BEGIN BLOCK_BUTTON_MODAL -->
+        <button type="button" name="{name}" id="{name}" class="{class}" data-bs-toggle="modal" data-bs-target="{modal}">{label}</button>
+    <!-- END BLOCK_BUTTON_MODAL -->  
+
+    <!-- BEGIN BLOCK_ENBED --> 
+        <embed src="{caminho}" class="d-block w-100" type="{type}" {extra}>
+    <!-- END BLOCK_ENBED -->
+
+    <!-- BEGIN BLOCK_LABEL -->
+        <label class="label-admin {class}">{titulo}</label>
+    <!-- END BLOCK_LABEL -->
+
+    <!-- BEGIN BLOCK_TITULO -->
+        <h{tipo} class="titulo-admin {class}">{titulo}</h{tipo}>
+    <!-- END BLOCK_TITULO -->
+
+    <!-- BEGIN BLOCK_TEXTAREA -->
+        <!-- BEGIN BLOCK_LABEL_TEXTAREA -->    
+        <label for="{name}">{label}</label>
+        <!-- END BLOCK_LABEL_TEXTAREA -->
+        <textarea name="{name}" id="{name}" class="{class}" {extra}>{value}</textarea>   
+    <!-- END BLOCK_TEXTAREA -->
+
+    <!-- BEGIN BLOCK_CHECKBOX -->  
+        <input type="{type}" name="{name}" id="{name|app\helpers\functions::createNameId}" class="{class}" {extra}/>
+        <!-- BEGIN BLOCK_LABEL_CHECKBOX --> 
+            <label for="{name}">{label}</label> 
+        <!-- END BLOCK_LABEL_CHECKBOX -->
+    <!-- END BLOCK_CHECKBOX -->
+
+    <!-- BEGIN BLOCK_SELECT -->
+        <!-- BEGIN BLOCK_LABEL_SELECT -->
+        <label for="{name}">{label}</label>
+        <!-- END BLOCK_LABEL_SELECT -->
+        <select class="{class}" name="{name}"  id="{name}" {extra}>
+            <!-- BEGIN BLOCK_OPTION_SELECT -->
+                <option value="{value}" {extra_option}>{label}</option>
+            <!-- END BLOCK_OPTION_SELECT -->
+        </select>
+    <!-- END BLOCK_SELECT -->
+
+    <!-- BEGIN BLOCK_DATALIST -->
+        <!-- BEGIN BLOCK_LABEL_DATALIST -->
+        <label for="{name}">{label}</label>
+        <!-- END BLOCK_LABEL_DATALIST -->
+        <input class="{class}" list="{name}" name="{name}"  id="{name}" value="{value}" {extra}>
+        <datalist class="{class}" id="{name}" style="display: none;">
+            <!-- BEGIN BLOCK_OPTION_DATALIST -->
+                <option value="{value}" {extra_option}>{label}</option>
+            <!-- END BLOCK_OPTION_DATALIST -->
+        </datalist>  
+    <!-- END BLOCK_DATALIST -->
+
+    <!-- BEGIN BLOCK_IMG -->
+        <img class="d-block w-100" src="{img}" alt="{alt}" {extra}>
+    <!-- END BLOCK_IMG -->

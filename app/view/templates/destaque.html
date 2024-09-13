@@ -1,0 +1,35 @@
+<section id="{id}" class="{id}">
+  <div class="container">
+    <div class="row">
+        <!-- BEGIN BLOCK_IMAGE -->
+        <div class="col-md-{tamanho_imagem} imagem-marca">
+          <a href="{link_imagem}">
+            <img class="w-100 img-destaque-produto" src="{image}" alt="{alt_image}">
+          </a>
+        </div>
+        <!-- END BLOCK_IMAGE -->
+        <!-- BEGIN BLOCK_ROW -->
+        <div class="col-md-{tamanho_row}">
+        </div>
+        <!-- END BLOCK_ROW -->
+        <!-- BEGIN BLOCK_IMAGEMS_MOBILE -->
+        <div id="produto-listagem-{id}" class="carousel slide carousel-fade imagem-marca" data-bs-ride="carousel">
+          <!-- BEGIN BLOCK_IMAGEM_MOBILE -->
+          <div class="carousel-item {active}">
+            <a href="{link_imagem}">
+              <img class="w-100 img-destaque-produto" src="{image}" alt="{alt_image}">
+            </a>
+          </div>
+          <!-- END BLOCK_IMAGEM_MOBILE -->
+        </div>
+        <!-- END BLOCK_IMAGEMS_MOBILE -->
+        <div class="col-md-{tamanho_texto} p-6 descricao-marca">
+          <h2 class="fw-normal text-title lh-1">{titulo} 
+            <span class="text-body-secondary">{subtituto}</span>
+          </h2>
+          <p class="lead">{descricao}</p>
+          <a href="{link}" class="btn btn-primary">Saiba Mais</a>
+        </div>
+    </div> 
+  </div>
+</section>

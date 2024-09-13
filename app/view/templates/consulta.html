@@ -1,0 +1,36 @@
+<div id="consulta-admin" class="col-md-12 px-2 pt-2">
+    <h1 class="titulo-admin fw-normal text-title mt-2 mb-3">{titulo}</h1>
+    {filter}
+    <div class="mt-2 mb-2">
+        <!-- BEGIN BLOCK_BUTTONS -->
+        {button}
+        <!-- END BLOCK_BUTTONS -->
+    </div>
+    <!-- BEGIN BLOCK_MASSACTION -->
+    <div class="mt-2">
+        <button id="btn_massaction_marcar" class="btn btn-link ps-0">Marcar Todos</button>
+        <button id="btn_massaction_desmarcar" class="btn btn-link ps-0">Desmarcar Todos</button>
+    </div>
+    <!-- END BLOCK_MASSACTION -->
+    <form method="POST" enctype="multipart/form-data" id="formConsulta">
+        <div id="table_consulta">
+            {table}
+        </div>
+    </form>
+    <!-- BEGIN BLOCK_SEMDADOS -->
+        <div class="col-md-12">
+            <div class="alert alert-primary" role="alert">
+                Nenhum dado encontrado
+            </div>
+        </div>
+    <!-- END BLOCK_SEMDADOS -->
+    <!-- BEGIN BLOCK_PAGINATION -->
+    <div class="col-md-12">
+        {pagination}
+    </div>
+    <!-- END BLOCK_PAGINATION -->
+    <div class="fixed-bottom mt-0">
+        {mensagem}
+    </div>
+</div>
+    

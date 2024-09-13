@@ -1,0 +1,228 @@
+:root, [data-bs-theme=light] {
+    --bs-link-color: #2957a4;
+    --bs-nav-link-color: #2655a3;
+    --bs-link-hover-color: #db4905;
+    --bs-nav-link-hover-color: #db4905;
+}
+
+.btn-primary {
+    --bs-btn-bg: #f58634;
+    --bs-btn-border-color: #f58634;
+    --bs-btn-hover-bg: #ee4c01;
+    --bs-btn-hover-border-color: #ee4c01;
+    --bs-btn-active-bg: #db4905;
+    --bs-btn-active-border-color: #db4905;
+    --bs-btn-disabled-bg: #d78a51;
+    --bs-btn-disabled-border-color: #d78a51;
+}
+
+.icon {
+    height: 16px;
+    width: 16px;
+}
+
+img.img-responsive {
+    width: 100%;
+    height: 100%;
+}
+
+.p-6{
+    padding: 4rem !important;
+}
+
+svg.wave {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: auto;
+    z-index: 2;
+    pointer-events: none;
+    top: 2px;
+}
+
+#banner-principal .carousel-inner {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+}
+
+img.img-destaque-produto:hover {
+    filter: brightness(0.5);
+}
+
+footer h5 {
+    color: #ea592a;
+}
+
+header {
+    background-image: linear-gradient(to left, red, yellow);
+    position: fixed;
+    z-index: 3;
+    width: 100%;
+    max-height: 120px;
+    top:0px
+}
+
+header a {max-height: 100px;}
+
+img.logo-header {
+    max-height: 100px;
+}
+
+.nav-link {
+    font-size: 16px;
+    text-shadow: 1px 0 #fff, -1px 0 #fff, 0 1px #fff, 0 -1px #fff, 1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;
+}
+
+main {
+    margin-top: 120px;
+}
+
+header {
+    min-height: 120px;
+}
+
+.Quem.Somos path#branco_topo {
+    fill: #dfdabe;
+}
+
+.contato a {
+    text-decoration: none;
+}
+
+#svg-map path { fill:#ededef }
+a.svg-est.active path {fill: #f7972e !important;}
+#svg-map text { fill:#fff; font:12px Arial-BoldMT, sans-serif; cursor:pointer }
+#svg-map a{ text-decoration:none }
+#svg-map a.svg-est.active:hover { cursor:pointer; text-decoration:none }
+#svg-map a.svg-est.active:hover path{ fill:#ed3237 !important }
+#svg-map .circle { fill:#ededef }
+#svg-map a.svg-est.active:hover .circle { fill:#ed3237 !important; cursor:pointer }
+
+.choices__inner {
+    border-radius: 5px !important;
+    background-color: #fff !important;
+    min-height: 38px !important;
+    padding: 2.5px 7.5px 3.75px !important;
+}
+
+section.wave svg.wave {
+    top: 0px;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.area-atuacao li {
+    color: #0d6efd;
+}
+
+#loader {
+	position: fixed;
+    z-index: 1000;
+    width: 100%;
+    height: 100%;
+    color: #ea592a !important;
+    background-color: #000;
+    opacity: 0.7;
+    display: none;
+}
+
+.spinner-loader {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    width: 120px;
+	height: 120px;
+    z-index: 1001;
+    color: #ea592a!important;
+}
+
+.text-title{
+    color: #ea592a!important;
+}
+
+div#consulta-admin .filter {
+    padding: 0px !important;
+}
+
+@media (max-width: 550px) {
+    header a.nav-link {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 778px) {
+    svg.wave {
+        top: 4px;
+    }
+
+    .linha path {
+        stroke-width: 20px;
+        stroke-dasharray: 14 14;
+    }
+
+    #produto-listagem .carousel-item.active {
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+
+    .home .imagem-marca .carousel-item.active {
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+
+    .home .descricao-marca {
+        padding-top: 25px !important;
+        padding-bottom: 25px !important;
+    }
+
+    footer .d-grid.justify-items-center.justify-content-start {
+        justify-content: center !important;
+    }
+}
+
+.home section#banner-principal {
+    margin-bottom: 1.5rem !important;
+}
+
+#aviso-cookies {
+    z-index:100000;
+    display:flex;width:100%;
+    position:fixed;
+    bottom:0;
+    left:0;
+    background-color:#fff;
+    padding:20px;
+    box-sizing:border-box;
+    box-shadow:0 0 7px rgb(0 0 0 / 50%);
+    justify-content:center;
+    align-items:center
+}
+
+span#texto-cookies {
+    padding-right: 20px;
+}
+
+img.logo-footer {
+    margin-left: 18px;
+}
+
+img.icon-link-hover:hover {
+    filter: brightness(1.5);
+}
+
+a.link-sistema{
+    max-width: 35px;
+}
+
+.justify-items-center{
+    justify-items: center!important;
+}
+
+.nav-link.active {
+    color: #db4905;
+}

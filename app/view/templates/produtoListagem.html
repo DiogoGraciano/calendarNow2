@@ -1,0 +1,29 @@
+<section class="listagem-produtos mb-4">
+    <div class="row justify-content-center">
+        <!-- BEGIN BLOCK_PRODUTOS -->
+            <div class="col-md-12 text-center d-flex justify-content-center mt-4">
+                <div class="w-50">
+                    <h2 class="mb-2 fw-normal text-title lh-1">{marca}</h2>
+                    <p class="text-body-secondary">{marca_descricao}</p>
+                </div>
+            </div>
+            <!-- BEGIN BLOCK_PRODUTO -->
+            <div class="col-md-3 d-flex justify-content-center flex-wrap mb-2">
+                <div id="produto-listagem" class="carousel slide carousel-fade" data-bs-ride="carousel">
+                    <!-- BEGIN BLOCK_IMAGENS -->
+                    <div class="carousel-item {active}">
+                        <a href="{link_produto}">
+                            <img class="w-100 img-destaque-produto" src="{img_produto}" alt="{img_titulo_produto}">
+                        </a>
+                    </div>
+                    <!-- END BLOCK_IMAGENS -->
+                </div>
+                <a class="nav-link pt-2 text-decoration-none" href="{link_produto}">{produto}</a>
+            </div>
+            <!-- END BLOCK_PRODUTO -->
+            <!-- BEGIN BLOCK_WAVE -->
+            {wave}
+            <!-- END BLOCK_WAVE -->
+        <!-- END BLOCK_PRODUTOS -->
+    </div>
+</section>

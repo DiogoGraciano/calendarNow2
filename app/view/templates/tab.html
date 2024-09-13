@@ -1,0 +1,15 @@
+<ul class="nav nav-tabs pt-3" id="form-tab" role="tablist">
+    <!-- BEGIN BLOCK_TAB -->
+    <li class="nav-item" role="presentation">
+      <button class="nav-link {active}" id="{name}-tab" data-bs-toggle="tab" data-bs-target="#{name}-tab-pane" type="button" role="tab" aria-controls="{name}-tab-pane" aria-selected="true">{name_label}</button>
+    </li>
+    <!-- END BLOCK_TAB -->
+</ul>
+
+<div class="tab-content" id="tab-content">
+    <!-- BEGIN BLOCK_TAB_CONTENT -->
+    <div class="tab-pane fade {active}" id="{name}-tab-pane" role="tabpanel" aria-labelledby="{name}-tab" tabindex="0">
+        {content}
+    </div>
+    <!-- END BLOCK_TAB_CONTENT -->
+</div>

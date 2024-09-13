@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name='language' content='pt-br'>
+    <meta http-equiv="content-language" content="pt-br" />
+    <meta name='author' content='{empresa->nome}'>
+    <meta name="description" content="{empresa->descricao}">
+    <meta name="keywords" content="{empresa->keywords}" />
+    <meta name='copyright' content='{empresa->nome}'>
+    <meta name='rating' content='General'>
+    <meta name='owner' content='{empresa->nome}'>
+    <meta name='url' content='{caminho_completo}'>
+    <meta name='identifier-URL' content='{caminho}'>
+    <meta name='reply-to' content='{empresa->contato_email}'>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="{title}" />
+    <meta property="og:description" content="{empresa->descricao}" />
+    <meta property="og:phone_number" content="{empresa->telefone}">
+    <meta property="og:street-address" content="{empresa->rua}">
+    <meta name='og:site_name' content='{empresa->nome}'>
+    <meta property="og:locality" content="{empresa->cidade}">
+    <meta property="og:region" content="`{empresa->estado}">
+    <meta property="og:email" content="{empresa->contato_email}">
+    <meta name='og:latitude' content='{empresa->latitude}'>
+    <meta name='og:longitude' content='{empresa->longitude}'>
+    <meta property="og:image" content="{caminho}assets/imagens/logo.png" />
+    <meta property="og:url" content="{caminho_completo}" />
+    <meta name="robots" content="{robots}" />
+    <link rel="canonical" href="{caminho_completo}" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{caminho}assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{caminho}assets/css/all.min.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="{caminho}assets/imagens/favicon.png">
+    <link rel='shortcut icon' type='image/x-icon' href='{caminho}assets/imagens/favicon.png'>
+    <link rel="stylesheet" type="text/css" href="{caminho}assets/css/main.css">
+    <!-- BEGIN BLOCK_ADMIN -->
+    <link rel="stylesheet" type="text/css" href="{caminho}assets/css/choices.min.css">
+    <script src="{caminho}assets/js/choices.min.js"></script>
+    <script src="{caminho}assets/js/admin.js"></script>
+    <!-- END BLOCK_ADMIN -->
+    <!-- BEGIN BLOCK_SITE -->
+    <script src="{caminho}assets/js/website.js"></script>
+    <!-- END BLOCK_SITE -->
+    <title>{title}</title>
+</head>
+<body class="{class}">
+    <div id="loader">
+        <div class="spinner-border text-primary spinner-loader" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>

@@ -1,0 +1,22 @@
+<div class="filter px-2">
+    <form id="filter" method="POST" enctype="multipart/form-data" hx-post="{action}" hx-target="{target}" hx-swap="outerHTML">
+        <!-- BEGIN BLOCK_LINHA_FILTER -->
+            <div class="row mt-2">
+            <!-- BEGIN BLOCK_FILTER -->
+                <div class="col-md-{tamanho}">
+                    <!-- BEGIN BLOCK_INPUT -->
+                        {filter}
+                    <!-- END BLOCK_INPUT -->
+                </div>
+            <!-- END BLOCK_FILTER -->
+            </div>
+        <!-- END BLOCK_LINHA_FILTER -->
+        <!-- BEGIN BLOCK_BUTTON -->
+            <div class="row">
+                <div class="col-md-12 mt-2 mb-2">
+                    {button}
+                </div>
+            </div>
+        <!-- END BLOCK_BUTTON -->
+    </form>
+</div>

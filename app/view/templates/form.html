@@ -1,0 +1,46 @@
+<!-- BEGIN BLOCK_START -->
+<div id="form-{form_nome}" class="container">
+    <div class="text-center">
+    </div>
+    <div class="row">
+        <div class="col-lg-12 mx-auto">
+            <div class="mt-2 mx-auto">
+                {mensagem}
+                        <form id="manutencao" 
+                        method="POST" 
+                        enctype="multipart/form-data" 
+                        hx-encoding="multipart/form-data" 
+                        hx-post="{action}" 
+                        hx-target="{target}"  
+                        hx-swap="outerHTML" {include}>
+                            <div class="controls">
+<!-- END BLOCK_START -->
+<!-- BEGIN BLOCK_INPUT_HIDDEN -->
+    <input type="hidden" id="{nome}" name="{nome}" value="{cd_value}" />
+<!-- END BLOCK_INPUT_HIDDEN -->
+<!-- BEGIN BLOCK_INPUT -->
+    {input}
+<!-- END BLOCK_INPUT -->
+<!-- BEGIN BLOCK_BUTTONS -->  
+                                <div class="row mt-3">
+                                    <div class="col-md-12 d-flex justify-content-center"> 
+                                        {button}
+                                    </div>
+                                </div>
+<!-- END BLOCK_BUTTONS --> 
+<!-- BEGIN BLOCK_END -->
+                            </div>
+                        </form>
+<!-- BEGIN BLOCK_BUTTONS_NO_FORM -->  
+                        <div class="row mt-3">
+                            <div class="col-md-12 d-flex justify-content-center"> 
+                                {button_no}
+                            </div>
+                        </div>
+<!-- END BLOCK_BUTTONS_NO_FORM --> 
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END BLOCK_END -->
+{recapcha}

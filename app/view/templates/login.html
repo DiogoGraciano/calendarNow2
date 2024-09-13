@@ -1,0 +1,23 @@
+<section class="login col-md-12 h-90 d-flex justify-content-center pt-5 mt-5 h-75">
+    <div class="col-md-3 d-flex flex-column align-items-center">
+        <div class="row w-100 mt-5">
+            <form method="POST" action="{caminho}{action_login}">
+                <div class="col-md-12">
+                    <label for="login">Login:</label>
+                    <input type="text" class="form-control mt-1" name="login" id="login" value="{usuario}" required/>     
+                    <label for="senha">Senha:</label>
+                    <input type="password" class="form-control mt-1" name="senha"  id="senha" value="{senha}" required/>
+                    <!-- <a href="{caminho}{action_esqueci}">Esqueci minha senha</a> -->
+                </div>
+                <div class="col-md-12 mt-5 d-flex justify-content-center">
+                    <div class="row w-50">
+                        <input type="submit" class="btn btn-primary" value="ENTRAR"/> 
+                    </div>
+                </div>    
+                <div class="col-md-12 mt-2">
+                    {mensagem}
+                <div class="col-md-12 mt-2">
+            </form>  
+        </div>
+    </div>
+</section>

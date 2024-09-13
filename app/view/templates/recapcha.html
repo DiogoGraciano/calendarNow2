@@ -1,0 +1,8 @@
+<script src="https://www.google.com/recaptcha/api.js?render={empresa->recaptcha_site_key}"></script>
+<script>
+    grecaptcha.ready(function() {
+        grecaptcha.execute('{empresa->recaptcha_site_key}', {action: 'submit'}).then(function(token) {
+            document.getElementById('{element_id}').value = token;
+        });
+    });
+</script>

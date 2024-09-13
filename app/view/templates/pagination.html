@@ -1,0 +1,19 @@
+<nav aria-label="...">
+    <ul class="pagination">
+      <!-- BEGIN BLOCK_ANTERIOR -->
+      <li class="page-item">
+        <button class="page-link" name="page-anterior" id="page-anterior" hx-post="{link_anterior}" hx-trigger="click" hx-target="{target}" hx-swap="outerHTML" hx-include="form">Anterior</button>
+      </li>
+      <!-- END BLOCK_ANTERIOR -->
+      <!-- BEGIN BLOCK_PAGINA -->
+      <li class="page-item {class_page}" aria-current="page">
+        <button class="page-link" name="page-{page}" id="page-{page}" hx-post="{link_page}" hx-trigger="click" hx-target="{target}" hx-swap="outerHTML" hx-include="form">{page}</button>
+      </li>
+      <!-- END BLOCK_PAGINA -->
+      <!-- BEGIN BLOCK_PROXIMO -->
+      <li class="page-item">
+        <button class="page-link" name="page-proximo" id="page-proximo" hx-post="{link_proximo}" hx-trigger="click" hx-target="{target}" hx-swap="outerHTML" hx-include="form">Proximo</button>
+      </li>
+      <!-- END BLOCK_PROXIMO -->
+    </ul>
+  </nav>
