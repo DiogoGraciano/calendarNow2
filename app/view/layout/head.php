@@ -3,9 +3,6 @@
 namespace app\view\layout;
 
 use app\helpers\functions;
-use app\models\main\cidadeModel;
-use app\models\main\empresaModel;
-use app\models\main\estadoModel;
 use app\view\layout\abstract\pagina;
 use core\session;
 use core\url;
@@ -25,11 +22,11 @@ class head extends pagina{
             $this->tpl->block("BLOCK_SITE");
         }
 
-        $empresa = empresaModel::get(1);
-        $empresa->cidade = cidadeModel::get($empresa->id_cidade)->nome;
-        $empresa->estado = estadoModel::get($empresa->id_estado)->nome;
+        // $empresa = empresaModel::get(1);
+        // $empresa->cidade = cidadeModel::get($empresa->id_cidade)->nome;
+        // $empresa->estado = estadoModel::get($empresa->id_estado)->nome;
 
-        $this->tpl->empresa = $empresa;
+        // $this->tpl->empresa = new stdClass;
         $this->tpl->caminho = url::getUrlBase();
         $this->tpl->caminho_completo = url::getUrlCompleta();
         $this->tpl->title = $titulo;

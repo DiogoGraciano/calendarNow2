@@ -6,7 +6,7 @@ use app\db\migrations\table;
 use app\db\migrations\column;
 use app\helpers\mensagem;
 
-class cliente extends model {
+final class cliente extends model {
     public const table = "cliente";
 
     public function __construct() {
@@ -33,11 +33,11 @@ class cliente extends model {
 
     public function getByEmpresa(int $id_empresa,?int $id_usuario,?int $limit = null,?int $offset = null):array
     {
-        $this->addJoin("funcionario","funcionario.id","cliente.id_funcionario")->addJoin("usuario","usuario.id","funcionario.id_usuario")->addFilter("usuario.id_empresa", "=", $id_empresa);
+        $this->addJoin(funcionario::table."",funcionario::table.".id","cliente.id_funcionario")->addJoin(usuario::table,usuario::table.".id",funcionario::table.".id_usuario")->addFilter(usuario::table.".id_empresa", "=", $id_empresa);
         
         if($id_usuario)
         {
-            $this->addFilter("funcionario.id_usuario", "=", $id_usuario);
+            $this->addFilter(funcionario::table.".id_usuario", "=", $id_usuario);
         }
 
         if($limit && $offset){
@@ -61,7 +61,7 @@ class cliente extends model {
             $mensagens[] = "Cliente não encontrado";
 
         if(!($this->id_funcionario = (new funcionario)->get($this->id_funcionario)->id))
-            $mensagens[] = "Funcionario informado não encontrado";
+            $mensagens[] = funcionario::table." informado não encontrado";
 
         if(!($this->nome = htmlspecialchars(trim($this->nome))))
             $mensagens[] = "Nome é obrigatorio";
@@ -77,10 +77,5 @@ class cliente extends model {
         } 
 
         return false;
-    }
-
-    public function remove(int $id):bool
-    {
-        return $this->delete($id);
     }
 }

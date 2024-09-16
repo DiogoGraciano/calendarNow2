@@ -5,8 +5,8 @@ use app\db\abstract\model;
 use app\db\migrations\table;
 use app\db\migrations\column;
 
-class agendaFuncionario extends model {
-    public const table = "agenda_funcionario";
+final class agendaFuncionario extends model {
+    public const table = agendaFuncionario::table;
 
     public function __construct() {
         parent::__construct(self::table,get_class($this));
@@ -42,22 +42,22 @@ class agendaFuncionario extends model {
         return true;
     }
 
-    public function removeByAgenda(int $id_agenda):bool
+    public function removeByAgenda():bool
     {
-        return $this->addFilter(agendaFuncionario::table."id_agenda","=",$id_agenda)
+        return $this->addFilter(agendaFuncionario::table."id_agenda","=",$this->id_agenda)
                     ->deleteByFilter();
     }
 
-    public function removeByFuncionario(int $id_funcionario):bool
+    public function removeByFuncionario():bool
     {
-        return $this->addFilter(agendaFuncionario::table."id_funcionario","=",$id_funcionario)
+        return $this->addFilter(agendaFuncionario::table."id_funcionario","=",$this->id_funcionario)
                     ->deleteByFilter();
     }
 
-    public function remove(int $id_agenda,int $id_funcionario):bool
+    public function remove():bool
     {
-        return $this->addFilter(agendaFuncionario::table."id_agenda","=",$id_agenda)
-                    ->addFilter(agendaFuncionario::table."id_funcionario","=",$id_funcionario)
+        return $this->addFilter(agendaFuncionario::table."id_agenda","=",$this->id_agenda)
+                    ->addFilter(agendaFuncionario::table."id_funcionario","=",$this->id_funcionario)
                     ->deleteByFilter();
     }
 }

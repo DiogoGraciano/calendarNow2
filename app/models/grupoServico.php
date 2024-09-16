@@ -4,8 +4,9 @@ namespace app\models;
 use app\db\abstract\model;
 use app\db\migrations\table;
 use app\db\migrations\column;
+use app\helpers\mensagem;
 
-class grupoServico extends model {
+final class grupoServico extends model {
     public const table = "grupo_servico";
 
     public function __construct() {
@@ -17,5 +18,60 @@ class grupoServico extends model {
                 ->addColumn((new column("id","INT"))->isPrimary()->isNotNull()->setComment("ID do grupo de serviços"))
                 ->addColumn((new column("id_empresa","INT"))->isForeingKey(empresa::table())->isNotNull()->setComment("ID da empresa"))
                 ->addColumn((new column("nome", "VARCHAR", 250))->isNotNull()->setComment("Nome do grupo de serviços"));
+    }
+
+    public function getByFilter(int $id_empresa,string $nome = null,?int $limit = null,?int $offset = null):array{
+
+        $this->addFilter("id_empresa", "=", $id_empresa);
+
+        if($nome){
+            $this->addFilter("nome", "like", "%".$nome."%");
+        }
+
+        if($limit && $offset){
+            self::setLastCount($this);
+            $this->addLimit($limit);
+            $this->addOffset($offset);
+        }
+        elseif($limit){
+            self::setLastCount($this);
+            $this->addLimit($limit);
+        }
+
+        $values = $this->selectColumns("id","nome");
+
+        return $values;
+    }
+
+    public function getByServico(int $id_servico):array
+    {
+        return $this->addJoin(servicoGrupoServico::table,"id","id_grupo_servico")
+                    ->addFilter("id_servico","=",$id_servico)
+                    ->selectAll();
+    }
+
+    public function set():bool{
+
+        $mensagens = [];
+
+        if($this->id&& !self::get($this->id)->id){
+            $mensagens[] = "Grupo de Funcionarios não encontrada";
+        }
+        
+        if(!(new empresa)->get($this->id_empresa)->id){
+            $mensagens[] = "Empresa não encontrada";
+        }
+
+        if(!$this->nome = htmlspecialchars((trim($this->nome)))){
+            $mensagens[] = "Nome invalido";
+        }
+
+        if ($this->store()){
+            mensagem::setSucesso("Grupo de funcionarios salvo com sucesso");
+            return true;
+        }
+        
+        mensagem::setErro("Erro ao salvar grupo de funcionarios");
+        return false;
     }
 }

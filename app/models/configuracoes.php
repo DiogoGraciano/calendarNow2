@@ -6,7 +6,7 @@ use app\db\migrations\table;
 use app\db\migrations\column;
 use app\helpers\mensagem;
 
-class configuracoes extends model {
+final class configuracoes extends model {
     public const table = "configuracoes";
 
     public function __construct() {
@@ -78,10 +78,4 @@ class configuracoes extends model {
         
         return False;
     }
-
-    public function remove(int $id):bool
-    {
-        return $this->delete($id);
-    }
-
 }

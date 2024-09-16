@@ -4,8 +4,10 @@ namespace app\models;
 use app\db\abstract\model;
 use app\db\migrations\table;
 use app\db\migrations\column;
+use app\helpers\functions;
+use app\helpers\mensagem;
 
-class usuario extends model {
+final class usuario extends model {
     public const table = "usuario";
 
     public function __construct() {
@@ -22,5 +24,110 @@ class usuario extends model {
                 ->addColumn((new column("email", "VARCHAR", 200))->isUnique()->setComment("Email do usuário"))
                 ->addColumn((new column("tipo_usuario","INT"))->isNotNull()->setComment("Tipo de usuário: 0 -> ADM, 1 -> empresa, 2 -> funcionario, 3 -> usuário, 4 -> cliente cadastrado"))
                 ->addColumn((new column("id_empresa","INT"))->isForeingKey(empresa::table())->setComment("ID da empresa"));
+    }
+
+    public function getByCpfEmail(string $cpf_cnpj,string $email):object|bool
+    {
+        $usuario = $this->addFilter("cpf_cnpj", "=", functions::onlynumber($cpf_cnpj))->addFilter("email", "=", $email)->addLimit(1)->selectAll();
+
+        return $usuario[0] ?? false;
+    }
+
+    public function getByFilter(int $id_empresa,?string $nome = null,?int $id_funcionario = null,?int $tipo_usuario = null,?int $limit = null,?int $offset = null):array
+    {
+        $this->addFilter("id_empresa", "=", $id_empresa);
+
+        if($nome){
+            $this->addFilter("nome","LIKE","%".$nome."%");
+        }
+
+        if($id_funcionario){
+            $this->addJoin("cliente","cliente.id_funcionario",$id_funcionario);
+        }
+
+        if($tipo_usuario !== null){
+            $this->addFilter("tipo_usuario", "=", $tipo_usuario);
+        }
+
+        if($limit && $offset){
+            self::setLastCount($this);
+            $this->addLimit($limit);
+            $this->addOffset($offset);
+        }
+        elseif($limit){
+            self::setLastCount($this);
+            $this->addLimit($limit);
+        }
+
+        return $this->selectColumns(self::table.'id',self::table.'nome',self::table.'cpf_cnpj',self::table.'telefone',self::table.'senha',self::table.'email',self::table.'tipo_usuario',self::table.'id_empresa');
+    }
+
+    public function getByTipoUsuarioAgenda(int $tipo_usuario,string $id_agenda):array
+    {
+        return $this->addJoin(agendamento::table,usuario::table.".id",agendamento::table.".id_usuario")
+                    ->addFilter("tipo_usuario","=",$tipo_usuario)
+                    ->addFilter(agendamento::table.".id_agenda","=",$id_agenda)
+                    ->addFilter(usuario::table.".tipo_usuario","=",$tipo_usuario)
+                    ->addGroup(usuario::table.".id")
+                    ->selectColumns(self::table.'id',self::table.'nome',self::table.'cpf_cnpj',self::table.'telefone',self::table.'senha',self::table.'email',self::table.'tipo_usuario',self::table.'id_empresa');
+    }
+
+    public function set(bool $valid_fk = true):int|bool
+    {
+        $mensagens = [];
+
+        if(!($this->nome = htmlspecialchars((trim($this->nome))))){
+            $mensagens[] = "Nome é invalido";
+        }
+
+        if(!($this->cpf_cnpj = functions::onlynumber($this->cpf_cnpj)) || !functions::validaCpfCnpj($this->cpf_cnpj)){
+            $mensagens[] = "CPF/CNPJ invalido";
+        }
+
+        if(!($this->email = htmlspecialchars(filter_var(trim($this->email), FILTER_VALIDATE_EMAIL)))){
+            $mensagens[] = "E-mail Invalido";
+        }
+
+        if(!($this->telefone = functions::onlynumber($this->telefone)) || !functions::validaTelefone($this->telefone)){
+            $mensagens[] = "Telefone Invalido";
+        }
+
+        if(!($this->tipo_usuario) || $this->tipo_usuario < 0 || $this->tipo_usuario  > 3){
+            $mensagens[] = "Tipo de Usuario Invalido";
+        }
+
+        if(($this->tipo_usuario == 2 || $this->tipo_usuario == 1) && !$this->id_empresa){
+            $mensagens[] = "Informar a empresa é obrigatorio para esse tipo de usuario";
+        }
+
+        if(($this->id_empresa) && $valid_fk && !(new empresa)->get($this->id_empresa)->id){
+            $mensagens[] = "Empresa não existe";
+        }
+
+        $usuario = self::get($this->id);
+        if(($this->id) && !$usuario->id){
+            $mensagens[] = "Usuario não existe";
+        }
+
+        if(!$this->id && !$this->senha){
+            $mensagens[] = "Senha obrigatoria para usuario não cadastrados";
+        }
+
+        if($mensagens){
+            mensagem::setErro(...$mensagens);
+            return false;
+        }
+
+        $this->senha = $this->senha ? password_hash(trim($this->senha),PASSWORD_DEFAULT) : $usuario->senha;
+
+        $retorno = $this->store();
+        
+        if ($retorno == true){
+            mensagem::setSucesso("Salvo com sucesso");
+            return $this->id;
+        }
+
+        mensagem::setErro("Erro ao cadastrar usuario");
+        return False;
     }
 }

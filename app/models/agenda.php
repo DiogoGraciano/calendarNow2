@@ -11,7 +11,7 @@ use app\helpers\mensagem;
 
 final class agenda extends model {
 
-    public const table = "agenda";
+    public const table = agenda::table."";
 
     public function __construct() {
         parent::__construct(self::table,get_class($this));
@@ -72,7 +72,7 @@ final class agenda extends model {
         $mensagens = [];
 
         if($this->id && !(new self)->get($this->id)->id)
-            $mensagens[] = "Agenda não encontrada";
+            $mensagens[] = agenda::table." não encontrada";
         
         if(!((new empresa)->get($this->id_empresa)->id))
             $mensagens[] = "Empresa não encontrada"; 
@@ -91,22 +91,37 @@ final class agenda extends model {
             $this->codigo = functions::genereteCode(7);
 
         if ($this->store()){
-            mensagem::setSucesso("Agenda salvo com sucesso");
+            mensagem::setSucesso(agenda::table." salvo com sucesso");
             return $this->id;
         }
         
         return False;
     }
 
-    public function remove(int $id):bool
+    public function getByFuncionario(int $id_funcionario):array
+    {
+        return $this->addJoin(agendaFuncionario::table,"id","id_agenda")
+                    ->addFilter("id_funcionario","=",$this->id_funcionario)
+                    ->selectColumns(agenda::table.".id",agenda::table.".nome");
+    }
+
+    public function remove():bool
     {
         try {
 
             transactionManeger::init();
             transactionManeger::beginTransaction();
 
-            if((new agendaUsuario)->removeByAgenda($id) && (new agendaFuncionario)->removeByAgenda($id) && $this->delete($id)){
-                mensagem::setSucesso("agenda deletada com sucesso");
+            $agendaUsuario = (new agendaUsuario);
+            $agendaUsuario->id_agenda = $this->id;
+            $agendaUsuario->removeByAgenda();
+
+            $agendaFuncionario = (new agendaFuncionario);
+            $agendaFuncionario->id_agenda = $this->id;
+            $agendaFuncionario->removeByAgenda($this->id);
+
+            if($this->delete($this->id)){
+                mensagem::setSucesso(agenda::table." deletada com sucesso");
                 transactionManeger::commit();
                 return true;
             }
@@ -116,7 +131,7 @@ final class agenda extends model {
             return false;
 
         }catch (\exception $e){
-            logger::error("agendaModel->remove(): ".$e->getMessage()." ".$e->getTraceAsString());
+            logger::error(agenda::table."Model->remove(): ".$e->getMessage()." ".$e->getTraceAsString());
             mensagem::setErro("Erro ao deletar agenda");
             transactionManeger::rollBack();
             return false;

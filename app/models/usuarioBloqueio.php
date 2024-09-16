@@ -5,7 +5,7 @@ use app\db\abstract\model;
 use app\db\migrations\table;
 use app\db\migrations\column;
 
-class usuarioBloqueio extends model {
+final class usuarioBloqueio extends model {
     public const table = "usuario_bloqueio";
 
     public function __construct() {
@@ -17,5 +17,29 @@ class usuarioBloqueio extends model {
                 ->addColumn((new column("id", "INT"))->isPrimary()->setComment("ID do bloqueio"))
                 ->addColumn((new column("id_usuario", "INT"))->isForeingKey(usuario::table())->isNotNull()->setComment("ID do usuário"))
                 ->addColumn((new column("id_empresa", "INT"))->isForeingKey(empresa::table())->isNotNull()->setComment("ID da empresa"));
+    }
+
+    public function setBloqueio(int $id_usuario,int $id_agenda):bool
+    {
+        if(!($this->id_usuario = (new usuario)->get($id_usuario)->id)){
+            $mensagens[] = "Usuario não existe";
+        }
+        if(!($this->id_agenda = (new agenda)->get($id_agenda)->id)){
+            $mensagens[] = "Agenda não existe";
+        }
+
+        if($this->store()){
+            return true;
+        }
+
+        return false;
+    }
+
+   
+    public function remove():bool
+    {
+        return $this->addFilter("id_usuario","=",$this->id_usuario)
+                    ->addFilter("id_agenda","=",$this->id_agenda)
+                    ->deleteByFilter();
     }
 }

@@ -5,7 +5,7 @@ use app\db\abstract\model;
 use app\db\migrations\table;
 use app\db\migrations\column;
 
-class pais extends model {
+final class pais extends model {
     public const table = "pais";
 
     public function __construct() {

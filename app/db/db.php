@@ -322,10 +322,7 @@ class db
     */
     protected function store():bool
     {
-        try {
-            // Gera Objeto da tabela
-            $this->getColumnTable();
-
+        try{
             foreach ($this->columns as $columns){
                 $columnsDb[$columns] = true;
             }
@@ -391,9 +388,6 @@ class db
     protected function storeMutiPrimary():bool{
         try {
 
-            // Gera Objeto da tabela
-            $this->getColumnTable();
-
             foreach ($this->columns as $columns){
                 $columnsDb[$columns] = true;
             }
@@ -426,16 +420,10 @@ class db
         throw new Exception('Tabela: '.$this->table." Objeto não está setado");
     }
 
-    /**
-     * Deleta um registro da tabela com base em um ID.
-     * 
-     * @param int $id O ID do registro a ser deletado.
-     * @return bool Retorna true se a operação foi bem-sucedida, caso contrário, retorna false.
-    */
-    protected function delete(int $id):bool
+    protected function delete(string|int $id):bool
     {
         try {
-            $this->getColumnTable();
+            
 
             if ($id){
                 $this->setBind($id);

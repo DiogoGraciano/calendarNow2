@@ -12,7 +12,7 @@ class header extends pagina{
     public function __construct(string $pathlogo = "assets\imagens\logo.png")
     {
         $this->setTemplate("header.html");
-        $this->tpl->logo = url::getUrlBase().$pathlogo;
+        // $this->tpl->logo = url::getUrlBase().$pathlogo;
     }
 
     public function addLink(string $link,string $titulo,bool $ativo = false,bool $target_blank = false,string $extra = ""):header

@@ -5,7 +5,7 @@ use app\db\abstract\model;
 use app\db\migrations\table;
 use app\db\migrations\column;
 
-class estado extends model {
+final class estado extends model {
     public const table = "estado";
 
     public function __construct() {
@@ -20,6 +20,11 @@ class estado extends model {
                 ->addColumn((new column("pais","INT"))->isNotNull()->isForeingKey(pais::table())->setComment("id da pais do estado"))
                 ->addColumn((new column("ibge","INT"))->isUnique()->setComment("id do IBJE do estado"))
                 ->addColumn((new column("ddd","VARCHAR",50))->setComment("DDDs separado por , da Uf"));
+    }
+
+    public function getByUf(string $uf):array
+    {
+        return $this->addFilter("uf", "=", $uf)->selectAll();
     }
 
     public static function seed(){

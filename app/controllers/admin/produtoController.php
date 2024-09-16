@@ -28,8 +28,7 @@ final class produtoController extends controller{
         $head->show();
 
         $header = new header();
-        $header->addMenus(new menuAdmModel)
-        ->show(); 
+        $header->show(); 
 
         $elements = new elements;
         
@@ -46,9 +45,7 @@ final class produtoController extends controller{
         $this->loadConsulta();
        
         $footer = new footer();
-        $footer->setSectionPagina(new menuAdmModel)
-                ->setSectionAtendimento()
-                ->show();
+        $footer->show();
     }
 
     public function manutencao(array $parameters = []):void

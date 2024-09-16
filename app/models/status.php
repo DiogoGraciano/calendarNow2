@@ -4,9 +4,8 @@ namespace app\models;
 use app\db\abstract\model;
 use app\db\migrations\table;
 use app\db\migrations\column;
-use app\db\db;
 
-class status extends model {
+final class status extends model {
     public const table = "status";
 
     public function __construct() {

@@ -19,7 +19,7 @@ class migrate{
          foreach ($tableFiles as $tableFile) {
             $className = 'app\\models\\' . str_replace(".php", "", $tableFile);
 
-            if (class_exists($className) && method_exists($className, "table")) {
+            if (class_exists($className) && method_exists($className, "table") && is_subclass_of($className,"app\db\abstract\model")) {
 
                transactionManeger::beginTransaction();
 

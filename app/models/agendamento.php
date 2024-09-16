@@ -7,8 +7,8 @@ use app\db\migrations\column;
 use app\helpers\functions;
 use app\helpers\mensagem;
 
-class agendamento extends model {
-    public const table = "agendamento";
+final class agendamento extends model {
+    public const table = agendamento::table;
 
     public function __construct() {
         parent::__construct(self::table,get_class($this));
@@ -48,7 +48,7 @@ class agendamento extends model {
 
         $return = [];
 
-        $user = (new usuario)->getLogged();
+        $user = (new login)->getLogged();
 
         if ($results){
             foreach ($results as $result){
@@ -85,31 +85,31 @@ class agendamento extends model {
 
     public function getAgendamentosByfilter($id_empresa,?int $id_usuario = null,?string $dt_ini = null,?string $dt_fim = null,bool $onlyActive = false,?int $id_agenda = null,?int $id_funcionario = null,?int $limit = null,?int $offset = null):array
     {
-        $this->addJoin("usuario","usuario.id","agendamento.id_usuario","LEFT")
-            ->addJoin("agenda","agenda.id","agendamento.id_agenda")
-            ->addJoin("cliente","cliente.id","agendamento.id_cliente","LEFT")
-            ->addJoin("funcionario","funcionario.id","agendamento.id_funcionario")
-            ->addFilter("agenda.id_empresa","=",$id_empresa);
+        $this->addJoin(usuario::table,usuario::table.".id",agendamento::table.".id_usuario","LEFT")
+            ->addJoin(agenda::table."",agenda::table.".id",agendamento::table.".id_agenda")
+            ->addJoin("cliente","cliente.id",agendamento::table.".id_cliente","LEFT")
+            ->addJoin(funcionario::table."",funcionario::table.".id",agendamento::table.".id_funcionario")
+            ->addFilter(agenda::table.".id_empresa","=",$id_empresa);
 
         if($id_usuario){
-            $this->addFilter("usuario.id","=",$id_usuario);
+            $this->addFilter(usuario::table.".id","=",$id_usuario);
         }
                   
         if($dt_ini && $dt_fim){
-            $this->addFilter("agendamento.dt_fim",">=",functions::dateTimeBd($dt_ini));
-            $this->addFilter("agendamento.dt_fim","<=",functions::dateTimeBd($dt_fim));
+            $this->addFilter(agendamento::table.".dt_fim",">=",functions::dateTimeBd($dt_ini));
+            $this->addFilter(agendamento::table.".dt_fim","<=",functions::dateTimeBd($dt_fim));
         }
 
         if($onlyActive){
-            $this->addFilter("agendamento.id_status","IN",[1,2]);
+            $this->addFilter(agendamento::table.".id_status","IN",[1,2]);
         }
 
         if($id_funcionario){
-            $this->addFilter("agendamento.id_funcionario","=",$id_funcionario);
+            $this->addFilter(agendamento::table.".id_funcionario","=",$id_funcionario);
         }
 
         if($id_agenda){
-            $this->addFilter("agendamento.id_agenda","=",$id_agenda);
+            $this->addFilter(agendamento::table.".id_agenda","=",$id_agenda);
         }
 
         if($limit && $offset){
@@ -122,7 +122,7 @@ class agendamento extends model {
             $this->addLimit($limit);
         }
 
-        return $this->selectColumns("agendamento.id","usuario.cpf_cnpj","cliente.nome as cli_nome","usuario.nome as usu_nome","usuario.email","usuario.telefone","agenda.nome as age_nome","funcionario.nome as fun_nome","agendamento.id_status","dt_ini","dt_fim");
+        return $this->selectColumns(agendamento::table.".id",usuario::table.".cpf_cnpj","cliente.nome as cli_nome",usuario::table.".nome as usu_nome",usuario::table.".email",usuario::table.".telefone",agenda::table.".nome as age_nome",funcionario::table.".nome as fun_nome",agendamento::table.".id_status","dt_ini","dt_fim");
     }
 
     public static function prepareList(array $agendamentos)
@@ -171,7 +171,7 @@ class agendamento extends model {
         $mensagens = [];
 
         if(!($agendamento->id)){
-            $mensagens[] = "Agendamento não encontrada";
+            $mensagens[] = agendamento::table." não encontrada";
         }
 
         $agendamentosItens = (new agendamentoItem)->getItens($agendamento->id);
@@ -191,7 +191,7 @@ class agendamento extends model {
         }
 
         if ($agendamento->store()){
-            mensagem::setSucesso("Agendamento salvo com sucesso");
+            mensagem::setSucesso(agendamento::table." salvo com sucesso");
             return $agendamento;
         }
 
@@ -205,7 +205,7 @@ class agendamento extends model {
         $mensagens = [];
 
         if(!$agendamento->id){
-            $mensagens[] = "Agendamento não encontrada";
+            $mensagens[] = agendamento::table." não encontrada";
         }
 
         if($mensagens){
@@ -216,7 +216,7 @@ class agendamento extends model {
         $agendamento->id_status = 4;
 
         if ($agendamento->store()){
-            mensagem::setSucesso("Agendamento salvo com sucesso");
+            mensagem::setSucesso(agendamento::table." salvo com sucesso");
             return $agendamento;
         }
          
@@ -228,11 +228,11 @@ class agendamento extends model {
         $mensagens = [];
 
         if($this->id  && (new self)->get($this->id)->id){
-            $mensagens[] = "Agendamento não encontrada";
+            $mensagens[] = agendamento::table." não encontrada";
         }
 
         if(!$this->id_agenda || !(new agenda)->get($this->id_agenda)->id){
-            $mensagens[] = "Agenda não encontrada";
+            $mensagens[] = agenda::table." não encontrada";
         }
 
         if(!$this->id_cliente && !$this->id_usuario){
@@ -240,7 +240,7 @@ class agendamento extends model {
         }
         else{
             if($this->id_usuario && !(new usuario)->get($this->id_usuario)->id){
-                $mensagens[] = "Usuario não encontrado";
+                $mensagens[] = usuario::table." não encontrado";
             }
 
             if($this->id_cliente && !(new cliente)->get($this->id_cliente)->id){
@@ -249,7 +249,7 @@ class agendamento extends model {
         }
 
         if(!$this->id_funcionario || !(new funcionario)->get($this->id_funcionario)->id){
-            $mensagens[] = "Funcionario não cadastrado";
+            $mensagens[] = funcionario::table." não cadastrado";
         }
 
         if(!$this->titulo = htmlspecialchars(ucwords(strtolower(trim($this->titulo))))){
@@ -327,15 +327,15 @@ class agendamento extends model {
         $this->obs = htmlspecialchars(trim($this->obs));
 
         if ($this->store()){
-            mensagem::setSucesso("Agendamento salvo com sucesso");
+            mensagem::setSucesso(agendamento::table." salvo com sucesso");
             return $this;
         }
             
         return null;
     }
 
-    public function remove(int $id):bool
+    public function remove():bool
     {
-        return $this->delete($id);
+        return $this->delete($this->id);
     }
 }

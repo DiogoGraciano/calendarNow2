@@ -5,11 +5,11 @@ use app\db\abstract\model;
 use app\db\migrations\table;
 use app\db\migrations\column;
 
-class cidade extends model {
+final class cidade extends model {
     public const table = "cidade";
 
     public function __construct() {
-        parent::__construct(self::table,get_class($this));
+        parent::__construct(self::table,$this::class);
     }
 
     public static function table(){

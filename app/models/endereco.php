@@ -7,7 +7,7 @@ use app\db\migrations\column;
 use app\helpers\functions;
 use app\helpers\mensagem;
 
-class endereco extends model {
+final class endereco extends model {
     public const table = "endereco";
 
     public function __construct() {
@@ -64,7 +64,7 @@ class endereco extends model {
         $this->complemento = htmlspecialchars(trim($this->complemento));
        
         if(!$this->id_usuario && !$this->id_empresa){
-            $mensagens[] = "Usuario ou Empresa precisa ser informado para cadastro";
+            $mensagens[] = usuario::table." ou Empresa precisa ser informado para cadastro";
         }
 
         if(($this->id_empresa) && $valid_fk && !(new empresa)->get($this->id_empresa)->id){
@@ -72,7 +72,7 @@ class endereco extends model {
         }
 
         if(($this->id_usuario) && $valid_fk && !(new usuario)->get($this->id_usuario)->id){
-            $mensagens[] = "Usuario não existe";
+            $mensagens[] = usuario::table." não existe";
         }
 
         if(($this->id) && !(new self)->get($this->id)->id){
@@ -87,19 +87,9 @@ class endereco extends model {
         if ($this->store()){
             mensagem::setSucesso("Endereço salva com sucesso");
             return $this;
-        }else{
-            mensagem::setErro("Erro ao cadastrar a endereço");
-            return False;
         }
-    }
 
-    /**
-     * Exclui um registro de endereço.
-     * 
-     * @param string $id O ID do endereço a ser excluído.
-     * @return bool Retorna true se a operação for bem-sucedida, caso contrário retorna false.
-     */
-    public function remove($id){
-       return $this->delete($id);
+        mensagem::setErro("Erro ao cadastrar a endereço");
+        return False;
     }
 } 

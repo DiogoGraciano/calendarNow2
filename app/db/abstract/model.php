@@ -44,6 +44,10 @@ abstract class model extends db{
         $class = get_called_class();
         return isset(self::$lastCount[$class."::".$method]) ? self::$lastCount[$class."::".$method] : 0;
     }
+
+    public function remove(){
+        return $this->delete($this->getArrayData()[$this->getColumns()[0]]);
+    }
 }
 
 ?>

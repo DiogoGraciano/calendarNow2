@@ -7,7 +7,7 @@ use app\db\migrations\column;
 use app\helpers\functions;
 use app\helpers\mensagem;
 
-class empresa extends model {
+final class empresa extends model {
     public const table = "empresa";
 
     public function __construct() {
@@ -99,10 +99,5 @@ class empresa extends model {
 
         mensagem::setErro("Erro ao cadastrar a empresa");
         return false;
-    }
-
-    public function remove(int $id):bool
-    {
-       return $this->delete($id);
     }
 }

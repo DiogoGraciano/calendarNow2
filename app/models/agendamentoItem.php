@@ -7,8 +7,8 @@ use app\db\migrations\column;
 use app\helpers\functions;
 use app\helpers\mensagem;
 
-class agendamentoItem extends model {
-    public const table = "agendamento_item";
+final class agendamentoItem extends model {
+    public const table = agendamento::table."_item";
 
     public function __construct() {
         parent::__construct(self::table,get_class($this));
@@ -26,7 +26,7 @@ class agendamentoItem extends model {
 
     public  function getItens(int $id_agendamento):array
     {
-        $result = $this->addJoin("servico","servico.id","agendamento_item.id_servico")
+        $result = $this->addJoin(servico::table."",servico::table.".id",agendamento::table."_item.id_servico")
                     ->addFilter("id_agendamento","=",$id_agendamento)
                     ->selectAll();
         
@@ -35,11 +35,11 @@ class agendamentoItem extends model {
 
     public function getItemByServico(int $id_agendamento,int $id_servico):object|null
     {
-        $result = $this->addJoin("servico","servico.id","agendamento_item.id_servico")
+        $result = $this->addJoin(servico::table."",servico::table.".id",agendamento::table."_item.id_servico")
                     ->addFilter("id_agendamento","=",$id_agendamento)
                     ->addFilter("id_servico","=",$id_servico)
                     ->addLimit(1)
-                    ->selectColumns("agendamento_item.id","id_agendamento","id_servico","qtd_item","tempo_item","total_item","nome","valor","tempo","id_empresa");
+                    ->selectColumns(agendamento::table."_item.id","id_agendamento","id_servico","qtd_item","tempo_item","total_item","nome","valor","tempo","id_empresa");
 
         if ($result)
             return $result[0];
@@ -71,7 +71,7 @@ class agendamentoItem extends model {
         }
 
         if(!($this->id_agendamento) || !(new agendamento)->get($this->id_agendamento)->id){
-            $mensagens[] = "Agendamento não existe";
+            $mensagens[] = agendamento::table." não existe";
         }
 
         if(($this->id) && !self::get($this->id)->id){
@@ -90,10 +90,6 @@ class agendamentoItem extends model {
         else {
             return null;
         }
-    }
-
-    public function remove(int $id){
-        return $this->delete($id);
     }
 
     public function deleteByIdAgendamento(int $id_agendamento){

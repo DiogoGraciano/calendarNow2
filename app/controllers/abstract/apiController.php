@@ -43,7 +43,7 @@ abstract class apiController
         $user = usuarioApiModel::getLogged();
 
         if(!$user->id){
-            throw new \exception("Usuario da Api não está logado");
+            throw new \exception(usuario::table." da Api não está logado");
         }
 
         $this->user = $user;
