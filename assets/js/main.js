@@ -1,6 +1,24 @@
     function go(url) {
         window.location.href = url;
     }
+
+    function avisoCookies({
+        message='Utilizamos cookies para que vocÃª tenha a melhor experiÃªncia em nosso site. Para saber mais acesse nossa pÃ¡gina de PolÃ­tica de Privacidade',
+    }){
+        var check = localStorage.getItem('avisoCookies')
+        if(!check){
+            var body = document.getElementsByTagName('body')[0];
+            body.innerHTML += `
+            <div id="aviso-cookies">
+                <span id="texto-cookies">${message}</span>
+                <button class="btn btn-primary" id="entendi-cookies">Entendi</button>
+            </div>`;
+            document.getElementById('entendi-cookies').addEventListener('click', function(){
+                localStorage.setItem("avisoCookies", "accept");
+                document.getElementById('aviso-cookies').remove()
+            })
+        }
+    }
     
     function validaVazio(seletor) {
         var valor = seletor.value;
@@ -218,4 +236,10 @@
 
         htmx.config.globalViewTransitions = true;
         htmx.config.defaultFocusScroll = true;
+
+        if(localStorage.getItem("avisoCookies") != "accept"){
+            avisoCookies({
+                message:'Utilizamos cookies para que você tenha a melhor experiência em nosso site. Para saber mais acesse nossa página de <a href="\\privacidade">Política de Privacidade</a>'
+            });
+        }
     });

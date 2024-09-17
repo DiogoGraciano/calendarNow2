@@ -7,7 +7,7 @@ use core\session;
 
 final class login{
 
-    public function login($cpf_cnpj, $senha):bool
+    public function login(string $cpf_cnpj,string $senha):bool
     {
         $login = (new usuario)->get(functions::onlynumber($cpf_cnpj),"cpf_cnpj");
         
@@ -28,11 +28,10 @@ final class login{
         if($user = session::get("user"))
             return $user;
 
-        login::deslogar();
         return false;
     }
 
-    public static function deslogar():bool
+    public function deslogar():bool
     {
         return session_destroy();
     }

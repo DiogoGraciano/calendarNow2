@@ -8,7 +8,7 @@ use app\helpers\functions;
 use app\helpers\mensagem;
 
 final class agendamento extends model {
-    public const table = agendamento::table;
+    public const table = "agendamento";
 
     public function __construct() {
         parent::__construct(self::table,get_class($this));

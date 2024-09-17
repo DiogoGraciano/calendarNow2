@@ -10,7 +10,7 @@ use app\helpers\functions;
 use app\helpers\mensagem;
 
 final class funcionario extends model {
-    public const table = funcionario::table."";
+    public const table = "funcionario";
 
     public function __construct() {
         parent::__construct(self::table,get_class($this));
@@ -66,7 +66,7 @@ final class funcionario extends model {
         if ($funcionarios){
             foreach ($funcionarios as $funcionario){
 
-                if(is_subclass_of($funcionario,$this::class)){
+                if(is_subclass_of($funcionario,"app\db\db")){
                     $funcionario = $funcionario->getArrayData();
                 }
 

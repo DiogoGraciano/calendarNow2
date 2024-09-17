@@ -12,6 +12,14 @@ abstract class controller
 
     protected readonly array $urlQuery;
 
+    public const headTitle = "CalendarNow";
+
+    public const addHeader = true;
+
+    public const addFooter = true;
+
+    public const addHead = true;
+
     public function __construct()
     {
         $this->url = url::getUrlBase();

@@ -6,7 +6,7 @@ use app\db\migrations\table;
 use app\db\migrations\column;
 
 final class servicoFuncionario extends model {
-    public const table = servico::table."_funcionario";
+    public const table = "servico_funcionario";
 
     public function __construct() {
         parent::__construct(self::table,get_class($this));

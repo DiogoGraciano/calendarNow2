@@ -1,22 +1,3 @@
-:root,
-[data-bs-theme=light] {
-    --bs-link-color: #2957a4;
-    --bs-nav-link-color: #2655a3;
-    --bs-link-hover-color: #db4905;
-    --bs-nav-link-hover-color: #db4905;
-}
-
-.btn-primary {
-    --bs-btn-bg: #f58634;
-    --bs-btn-border-color: #f58634;
-    --bs-btn-hover-bg: #ee4c01;
-    --bs-btn-hover-border-color: #ee4c01;
-    --bs-btn-active-bg: #db4905;
-    --bs-btn-active-border-color: #db4905;
-    --bs-btn-disabled-bg: #d78a51;
-    --bs-btn-disabled-border-color: #d78a51;
-}
-
 .icon {
     height: 16px;
     width: 16px;
@@ -53,29 +34,12 @@ img.img-destaque-produto:hover {
     filter: brightness(0.5);
 }
 
-footer h5 {
-    color: #ea592a;
-}
-
-.nav-link {
-    font-size: 16px;
-    text-shadow: 1px 0 #fff, -1px 0 #fff, 0 1px #fff, 0 -1px #fff, 1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;
-}
-
-.Quem.Somos path#branco_topo {
-    fill: #dfdabe;
-}
-
 .contato a {
     text-decoration: none;
 }
 
 #svg-map path {
     fill: #ededef
-}
-
-a.svg-est.active path {
-    fill: #f7972e !important;
 }
 
 #svg-map text {
@@ -94,7 +58,7 @@ a.svg-est.active path {
 }
 
 #svg-map a.svg-est.active:hover path {
-    fill: #ed3237 !important
+    fill: #0b5ed7 !important
 }
 
 #svg-map .circle {
@@ -102,7 +66,7 @@ a.svg-est.active path {
 }
 
 #svg-map a.svg-est.active:hover .circle {
-    fill: #ed3237 !important;
+    fill: #0b5ed7 !important;
     cursor: pointer
 }
 
@@ -130,7 +94,7 @@ section.wave svg.wave {
     z-index: 1000;
     width: 100%;
     height: 100%;
-    color: #ea592a !important;
+    color: #0b5ed7 !important;
     background-color: #000;
     opacity: 0.7;
     display: none;
@@ -143,11 +107,11 @@ section.wave svg.wave {
     width: 120px;
     height: 120px;
     z-index: 1001;
-    color: #ea592a !important;
+    color: #0b5ed7 !important;
 }
 
 .text-title {
-    color: #ea592a !important;
+    color: #000 !important;
 }
 
 div#consulta-admin .filter {
@@ -205,7 +169,7 @@ a.link-sistema {
 }
 
 .nav-link.active {
-    color: #db4905;
+    color: #0b52bd;
 }
 
 #wrapper {
@@ -216,6 +180,7 @@ a.link-sistema {
     min-height: 100vh;
     margin-left: -15rem;
     transition: margin 0.25s ease-out;
+    max-width: 240px;
 }
 
 #sidebar-wrapper .sidebar-heading {

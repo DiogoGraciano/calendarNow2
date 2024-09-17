@@ -11,7 +11,7 @@ use app\helpers\mensagem;
 
 final class agenda extends model {
 
-    public const table = agenda::table."";
+    public const table = "agenda";
 
     public function __construct() {
         parent::__construct(self::table,get_class($this));

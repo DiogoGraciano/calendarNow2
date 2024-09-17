@@ -9,7 +9,7 @@ use app\helpers\functions;
 use app\helpers\mensagem;
 
 final class servico extends model {
-    public const table = servico::table."";
+    public const table = "servico";
 
     public function __construct() {
         parent::__construct(self::table,get_class($this));
@@ -64,7 +64,7 @@ final class servico extends model {
 
         if ($values){
             foreach ($values as $value){
-                if(is_subclass_of($value,$this::class)){
+                if(is_subclass_of($value,"app\db\db")){
                     $value = $value->getArrayData();
                 }
 

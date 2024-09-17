@@ -1,11 +1,10 @@
 <?php 
-namespace app\controllers\admin;
-use app\view\layout\head;
-use app\view\layout\header;
-use app\view\layout\footer;
+namespace app\controllers\main;
 use app\controllers\abstract\controller;
 
 final class homeController extends controller{
+
+    public const headTitle = "Home";
 
     public function index(array $parameters = []){
 

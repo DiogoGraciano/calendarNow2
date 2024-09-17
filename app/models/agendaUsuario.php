@@ -6,7 +6,7 @@ use app\db\migrations\table;
 use app\db\migrations\column;
 
 final class agendaUsuario extends model {
-    public const table = agenda::table."_usuario";
+    public const table = "agenda_usuario";
 
     public function __construct() {
         parent::__construct(self::table,get_class($this));

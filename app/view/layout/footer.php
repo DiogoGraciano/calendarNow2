@@ -2,11 +2,10 @@
 namespace app\view\layout;
 
 use app\helpers\functions;
+use app\models\login;
 use app\models\main\empresaModel;
 use app\view\layout\abstract\pagina;
-use app\models\main\menuSiteModel;
-use app\models\main\menuAdmModel;
-use core\session;
+use app\models\menu;
 use core\url;
 
 /**
@@ -15,7 +14,7 @@ use core\url;
 class footer extends pagina
 {
 
-    public function __construct(string $logo = "assets\imagens\logo.png",int $tamanho_logo = 4)
+    public function __construct(string $logo = "assets\imagens\logo_grande.png",int $tamanho_logo = 4)
     {
         $this->setTemplate("footer.html");
         if($logo){
@@ -47,17 +46,41 @@ class footer extends pagina
         return $this;
     }
 
-    public function setSectionPagina(menuSiteModel|menuAdmModel $model){
-        $menus = $model::getByFilter(ativo:1);
+    public function setSectionPagina(){
+        $model = new menu;
+    
+        $menus = $model->getByFilter(ativo:1);
+
+        $user = (new login)->getLogged();
         
+        $i = 1;
+        $titulo = "Paginas";
         foreach ($menus as $menu){
-            $this->addLink(url::getUrlBase().$menu["controller"],$menu["nome"]);
+            if($user && in_array($user->tipo_usuario,json_decode($menu["tipo_usuario"]))){
+                if($menu["controller"])
+                    $this->addLink(url::getUrlBase().$menu["controller"],$menu["nome"]);
+
+                if($i == 6 && !$this->isMobile()){
+                    $this->setSection($titulo,2);
+                    $titulo = "&nbsp;";
+                    $i = 1;
+                }
+
+                $i++;
+            } 
         }
+        if($i != 1)
+            $this->setSection($titulo,2);
 
-        if("app\controllers\admin" != session::get("controller_namespace"))
-            $this->addLink(url::getUrlBase()."privacidade","Privacidade e Termos de Uso");
+        return $this;
+    }
 
-        $this->setSection("Paginas",2);
+    public function setSectionInstitucional(){
+
+        $this->addLink(url::getUrlBase()."contato","Contato");
+        $this->addLink(url::getUrlBase()."privacidade","Privacidade e Termos de Uso");
+        $this->addLink(url::getUrlBase()."quemSomos","Quem Somos");
+        $this->setSection("Institucional",2);
 
         return $this;
     }
@@ -91,12 +114,16 @@ class footer extends pagina
 
     public function show():void
     {
-        (new wave(4,"#ea592a",name:"footer",margin:3))->show();
+        $this->setSectionPagina();
+        $this->setSectionInstitucional();
+        (new wave(4,"#0b5ed7",name:"footer",margin:3))->show();
         $this->tpl->show();
     }
 
     public function parse():string
     {
-        return (new wave(4,"#ea592a",name:"footer",margin:3))->parse().$this->tpl->parse();
+        $this->setSectionPagina();
+        $this->setSectionInstitucional();
+        return (new wave(4,"#0b5ed7",name:"footer",margin:3))->parse().$this->tpl->parse();
     }
 }

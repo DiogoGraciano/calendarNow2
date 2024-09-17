@@ -9,6 +9,7 @@ use app\view\layout\header;
 use core\controller;    
 use core\method;
 use core\parameter;
+use core\request;
 use core\session;
 use core\url;
 
@@ -17,14 +18,15 @@ session::start();
 $controller = new Controller;
 
 
-// $urlPermitidas = ["/ajax","/usuario/manutencao","/usuario/action/","/empresa/manutencao","/empresa/action/"];
+$urlPermitidas = ["/ajax","/usuario/manutencao","/usuario/action/","/empresa/manutencao","/empresa/action/"];
     
-// if (session::get("user") || in_array(url::getUriPath(),$urlPermitidas)){
+if (session::get("user") || in_array(url::getUriPath(),$urlPermitidas)){
     $controller = $controller->load();
-// }else 
-//     $controller = $controller->load("login");
+}else 
+    $controller = $controller->load("login");
 
 $namespace = explode("\\",$controller::class);
+$controllerName = $namespace[array_key_last($namespace)];
 unset($namespace[array_key_last($namespace)]);
 $namespace = implode("\\",$namespace);
 
@@ -39,16 +41,27 @@ $parameters = $parameters->load($controller);
 
 try{
 
-    $head = new head("Home");
-    $head->show();
+    if(request::isXmlHttpRequest()){
+        $controller->$method($parameters);
+    }
+    else{
+        if($controller::addHead){
+            $head = new head($controller::headTitle);
+            $head->show();
+        }
 
-    $header = new header();
-    $header->show();
+        if($controller::addHeader){
+            $header = new header();
+            $header->show();
+        }
 
-    $controller->$method($parameters);
+        $controller->$method($parameters);
 
-    $footer = new footer();
-    $footer->show();
+        if($controller::addFooter){
+            $footer = new footer();
+            $footer->show();
+        }
+    }
 
 }catch(Exception $e){
     $local = $controller::class.'->'.$method.'('.trim(preg_replace( "/\r|\n/","",print_r($parameters,true))).')';
