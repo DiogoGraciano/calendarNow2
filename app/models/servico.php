@@ -25,7 +25,7 @@ final class servico extends model {
     }
 
    
-    public function getListByEmpresa(int $id_empresa,string $nome = null,int $id_funcionario = null,int $id_grupo_servico = null,?int $limit = null,?int $offset = null):array
+    public function getByfilter(int $id_empresa,string $nome = null,int $id_funcionario = null,int $id_grupo_servico = null,?int $limit = null,?int $offset = null):array
     {
         $this->addFilter(servico::table.".id_empresa","=",$id_empresa);
 

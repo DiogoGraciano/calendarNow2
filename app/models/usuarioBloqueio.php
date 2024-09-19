@@ -19,12 +19,12 @@ final class usuarioBloqueio extends model {
                 ->addColumn((new column("id_empresa", "INT"))->isForeingKey(empresa::table())->isNotNull()->setComment("ID da empresa"));
     }
 
-    public function setBloqueio(int $id_usuario,int $id_agenda):bool
+    public function set():bool
     {
-        if(!($this->id_usuario = (new usuario)->get($id_usuario)->id)){
+        if(!($this->id_usuario = (new usuario)->get($this->id_usuario )->id)){
             $mensagens[] = "Usuario não existe";
         }
-        if(!($this->id_agenda = (new agenda)->get($id_agenda)->id)){
+        if(!($this->id_agenda = (new agenda)->get($this->id_agenda)->id)){
             $mensagens[] = "Agenda não existe";
         }
 

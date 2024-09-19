@@ -4,7 +4,7 @@ use app\view\layout\abstract\pagina;
 
 class filter extends pagina
 {
-    public function __construct(string $action,string $target)
+    public function __construct(string $action,string $target = "#consulta-admin")
     {
         $this->setTemplate("filter.html");
         $this->tpl->action = $action;

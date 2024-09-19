@@ -36,6 +36,12 @@ class consulta extends pagina
         return $this;
     }
 
+    public function addModal(modal $modal){
+        $this->tpl->modal = $modal->parse();
+        $this->tpl->block("BLOCK_MODAL");
+        return $this;
+    }
+
     public function addPagination(pagination $pagination){
 
         $this->tpl->pagination = $pagination->parse();
@@ -65,13 +71,13 @@ class consulta extends pagina
                     if($this->massaction)
                         $data["massaction"] = $elements->checkbox("massaction[]", false, false, false, false, $data[$coluna_action]);
 
-                    $data["acoes"] = $elements->button("Editar","editar","button",class:"btn btn-primary",action:"location.href='".$pagina_manutencao.'/'.functions::encrypt($data[$coluna_action])."'");
-                    $data["acoes"] .= $elements->buttonHtmx("Excluir","excluir",$pagina_action.'/'.functions::encrypt($data[$coluna_action]),"#consulta-admin",class:"btn btn-primary",confirmMessage:"Deseja realmente Excluir?");
+                    $data["acoes"] = $elements->button("Editar","editar","button",class:"btn btn-primary",action:"location.href='".$pagina_manutencao.'/'.$data[$coluna_action]."'");
+                    $data["acoes"] .= $elements->buttonHtmx("Excluir","excluir",$pagina_action.'/'.$data[$coluna_action],"#consulta-admin",class:"btn btn-primary",confirmMessage:"Deseja realmente Excluir?");
                 }
 
                 $this->table->addRow($data);
             }
-            $this->tpl->table = $this->table->set()->parse();
+            $this->tpl->table = $this->table->parse();
 
             if($this->massaction)
                 $this->tpl->block("BLOCK_MASSACTION");

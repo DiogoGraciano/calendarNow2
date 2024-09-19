@@ -9,11 +9,13 @@ class tabela extends pagina{
 
     private $rows = [];
 
-    public function set():tabela
+    public function __construct()
     {
-
         $this->setTemplate("tabela.html");
-        
+    }
+
+    private function set()
+    {
         if($this->rows){
             $i = 1;
             foreach ($this->rows as $row){
@@ -37,8 +39,6 @@ class tabela extends pagina{
         }
 
         $this->columns = $this->rows = [];
-
-        return $this;
     }
 
     public function addColumns(string|int $width,string $nome, string $coluna):tabela
@@ -60,6 +60,26 @@ class tabela extends pagina{
         $this->rows = $rows;
 
         return $this;
+    }
+
+    public function show():void
+    {
+        $this->set();
+        $this->rows = [];
+        $this->columns = [];
+        $this->show();
+        $this->setTemplate("tabela.html");
+    }
+
+
+    public function parse():string
+    {
+        $this->set();
+        $this->rows = [];
+        $this->columns = [];
+        $tabela = $this->tpl->parse();
+        $this->setTemplate("tabela.html");
+        return $tabela;
     }
 
 }

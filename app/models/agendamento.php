@@ -48,13 +48,13 @@ final class agendamento extends model {
 
         $return = [];
 
-        $user = (new login)->getLogged();
+        $user = login::getLogged();
 
         if ($results){
             foreach ($results as $result){
                 if ($user->tipo_usuario != 3){
                     $return[] = [
-                        'id' => functions::encrypt($result->id),
+                        'id' => ($result->id),
                         'title' => $result->titulo,
                         'color' => $result->cor,
                         'start' => $result->dt_ini,
@@ -63,7 +63,7 @@ final class agendamento extends model {
                 }
                 elseif ($user->id == $result->id_usuario){
                     $return[] = [
-                        'id' => functions::encrypt($result->id),
+                        'id' => ($result->id),
                         'title' => $result->titulo,
                         'color' => $result->cor,
                         'start' => $result->dt_ini,

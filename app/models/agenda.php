@@ -25,7 +25,7 @@ final class agenda extends model {
                 ->addColumn((new column("codigo","VARCHAR",7))->isNotNull()->setComment("Codigo da agenda"));
     }
 
-    public function getByEmpresa(int $id_empresa,?string $nome = null,?string $codigo = null,?int $limit = null,?int $offset = null,$asArray = true):array
+    public function getByFilter(int $id_empresa,?string $nome = null,?string $codigo = null,?int $limit = null,?int $offset = null,$asArray = true):array
     {
         $this->addFilter("id_empresa","=",$id_empresa);
 
@@ -67,7 +67,7 @@ final class agenda extends model {
                     ->selectColumns(agenda::table.".id",agenda::table.".nome",empresa::table.".nome as emp_nome");
     }
 
-    public function set():self
+    public function set():self|null
     {
         $mensagens = [];
 
@@ -82,7 +82,7 @@ final class agenda extends model {
 
         if($mensagens){
             mensagem::setErro(...$mensagens);
-            return false;
+            return null;
         }
 
         if ($this->codigo)
@@ -92,10 +92,10 @@ final class agenda extends model {
 
         if ($this->store()){
             mensagem::setSucesso(agenda::table." salvo com sucesso");
-            return $this->id;
+            return $this;
         }
         
-        return False;
+        return null;
     }
 
     public function getByFuncionario(int $id_funcionario):array

@@ -127,18 +127,26 @@ final class menu extends model {
             $menu->tipo_usuario = json_encode([3]);
             $menu->nome = "Deslogar";
             $menu->ordem = 0;
+            $menu->target_blank = 0;
+            $menu->ativo = 1;
             $menu->store();
-            $menu->controller = "agendamentos";
-            $menu->tipo_usuario = json_encode([1,2]);
+            $menu = new self;
+            $menu->controller = "agendamentos/listagem";
+            $menu->tipo_usuario = json_encode([1,2,3]);
             $menu->nome = "Agendamentos";
             $menu->class_icone = "fa-solid fa-calendar-days";
             $menu->ordem = 1;
+            $menu->target_blank = 0;
+            $menu->ativo = 1;
             $menu->store();
+            $menu = new self;
             $menu->controller = "agenda";
             $menu->tipo_usuario = json_encode([1]);
             $menu->nome = "Agendas";
             $menu->class_icone = "fa-regular fa-calendar-plus";
             $menu->ordem = 2;
+            $menu->target_blank = 0;
+            $menu->ativo = 1;
             $menu->store();
             $menu = new self;
             $menu->controller = "funcionario";
@@ -146,6 +154,8 @@ final class menu extends model {
             $menu->nome = "Funcionarios";
             $menu->class_icone = "fa-solid fa-people-carry-box";
             $menu->ordem = 3;
+            $menu->target_blank = 0;
+            $menu->ativo = 1;
             $menu->store();
             $menu = new self;
             $menu->controller = "servico";
@@ -153,6 +163,8 @@ final class menu extends model {
             $menu->nome = "Serviços";
             $menu->class_icone = "fa-solid fa-bell-concierge";
             $menu->ordem = 4;
+            $menu->target_blank = 0;
+            $menu->ativo = 1;
             $menu->store();
             $menu = new self;
             $menu->controller = "grupo/index/funcionario";
@@ -160,6 +172,8 @@ final class menu extends model {
             $menu->nome = "Grupo de Funcionarios";
             $menu->class_icone = "fa-solid fa-users";
             $menu->ordem = 5;
+            $menu->target_blank = 0;
+            $menu->ativo = 1;
             $menu->store();
             $menu = new self;
             $menu->controller = "grupo/index/servico";
@@ -167,6 +181,8 @@ final class menu extends model {
             $menu->nome = "Grupo de Serviços";
             $menu->class_icone = "fa-solid fa-users";
             $menu->ordem = 6;
+            $menu->target_blank = 0;
+            $menu->ativo = 1;
             $menu->store();
             $menu = new self;
             $menu->controller = "usuario";
@@ -174,13 +190,8 @@ final class menu extends model {
             $menu->nome = "Usuarios";
             $menu->class_icone = "fa-solid fa-address-book";
             $menu->ordem = 7;
-            $menu->store();
-            $menu = new self;
-            $menu->controller = "cliente";
-            $menu->tipo_usuario = json_encode([1,2]);
-            $menu->nome = "Clientes";
-            $menu->class_icone = "fa-solid fa-user-plus";
-            $menu->ordem = 8;
+            $menu->target_blank = 0;
+            $menu->ativo = 1;
             $menu->store();
             $menu = new self;
             $menu->controller = "cadastro";
@@ -188,6 +199,8 @@ final class menu extends model {
             $menu->nome = "Cadastro";
             $menu->class_icone = "fa-solid fa-user-gear";
             $menu->ordem = 9;
+            $menu->target_blank = 0;
+            $menu->ativo = 1;
             $menu->store();
             $menu = new self;
             $menu->controller = "configuracoes";
@@ -195,6 +208,8 @@ final class menu extends model {
             $menu->nome = "Configurações";
             $menu->class_icone = "fa-solid fa-gear";
             $menu->ordem = 10;
+            $menu->target_blank = 0;
+            $menu->ativo = 1;
             $menu->store();
             $menu = new self;
             $menu->controller = "login\deslogar";
@@ -202,6 +217,8 @@ final class menu extends model {
             $menu->tipo_usuario = json_encode([1,2,3]);
             $menu->nome = "Deslogar";
             $menu->ordem = 11;
+            $menu->target_blank = 0;
+            $menu->ativo = 1;
             $menu->store();
         }
     }

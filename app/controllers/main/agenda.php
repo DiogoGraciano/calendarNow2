@@ -1,0 +1,190 @@
+<?php 
+namespace app\controllers\main;
+use app\view\layout\form;
+use app\view\layout\consulta;
+use app\controllers\abstract\controller;
+use app\view\layout\elements;
+use app\view\layout\tabela;
+use app\view\layout\tabelaMobile;
+use app\helpers\mensagem;
+use app\view\layout\filter;
+use app\db\transactionManeger;
+use app\models\agenda as ModelsAgenda;
+use app\models\agendaFuncionario;
+use app\models\agendaUsuario;
+use app\models\funcionario;
+use app\models\login;
+use app\view\layout\pagination;
+
+final class agenda extends controller{
+
+    public const headTitle = "Agenda";
+
+    public function index():void
+    {
+        $nome = $this->getValue("nome");
+        $codigo = $this->getValue("codigo");
+
+        $elements = new elements;
+
+        $filter = new filter($this->url."agenda/index/");
+
+        $filter->addbutton($elements->button("Buscar","buscar","submit","btn btn-primary pt-2"))
+                ->addFilter(3,$elements->input("nome","Nome:",$nome))
+                ->addFilter(3,$elements->input("codigo","Codigo:",$codigo));
+
+        $user = login::getLogged();
+
+        $agendaModel = new ModelsAgenda;
+
+        $agenda = new consulta(false,"Consulta Agenda");
+
+        $agenda->addButtons($elements->button("Adicionar","manutencao","button","btn btn-primary","location.href='".$this->url."agenda/manutencao'"));
+        $agenda->addButtons($elements->button("Voltar","voltar","button","btn btn-primary","location.href='".$this->url."home'"));
+
+        $agenda->addColumns("1","Id","id")
+            ->addColumns("50","Nome","nome")
+            ->addColumns("8","Codigo","codigo")
+            ->addColumns("11","Ações","acoes")
+            ->setData($this->url."agenda/manutencao",
+                    $this->url."agenda/action/",
+                    $agendaModel->getByFilter($user->id_empresa,$nome,$codigo,$this->getLimit(),$this->getOffset()),
+                    "id")
+            ->addPagination(new pagination(
+                $agendaModel::getLastCount("getByFilter"),
+                $this->url."agenda/index",
+                limit:$this->getLimit()))
+            ->addFilter($filter)
+            ->show();
+    }
+    public function manutencao(array $parameters,?ModelsAgenda $agenda = null):void
+    {
+        $id = "";
+        
+        $form = new form($this->url."agenda/action/");
+
+        $elements = new elements;
+
+        if ($parameters && array_key_exists(0,$parameters)){
+            $form->setHidden("cd",$parameters[0]);
+            $id = $parameters[0];
+        }
+        
+        $dado = $agenda?:(new ModelsAgenda)->get($id);
+        
+        $form->setInput($elements->titulo(1,"Manutenção Agenda"));
+        $form->setInput($elements->input("nome","Nome:",$dado->nome,true));
+
+        $user = login::getLogged();
+
+        $funcionarios = (new agendaFuncionario)->getFuncionarioByAgenda($dado->id);
+
+        if($funcionarios){
+
+            $form->setInput($elements->label("Funcionarios Vinculados"));
+
+            if ($this->isMobile()){
+                $table = new tabelaMobile();
+            }else {
+                $table = new tabela();
+            }
+            $table->addColumns("1","ID","id");
+            $table->addColumns("90","Nome","nome");
+            $table->addColumns("10","Ações","acoes");
+
+            foreach ($funcionarios as $funcionario){
+                $funcionario->acoes = $elements->buttonHtmx("Desvincular","desvincular",$this->url."funcionario/desvincularFuncionario/".$dado->id."/".$funcionario->id,"#form-manutencao");
+                $table->addRow($funcionario->getArrayData());
+            }
+
+            $form->setInput($table->parse());
+        }
+
+        $funcionarios = (new funcionario)->getByEmpresa($user->id_empresa);
+
+        $elements->addOption("","Nenhum");
+        foreach ($funcionarios as $funcionario){
+            $elements->addOption($funcionario->id,$funcionario->nome);
+        }
+        $form->setInput($elements->select("funcionario","Funcionario:",""));
+
+        $form->setInput($elements->input("codigo","Codigo:",$dado->codigo,false,true));
+
+        $form->setButton($elements->button("Salvar","submit"));
+        $form->setButton($elements->button("Voltar","voltar","button","btn btn-primary w-100 btn-block","location.href='".$this->url."agenda'"));
+        $form->show();
+    }
+
+    public function desvincularFuncionario($parameters = []):void
+    {
+        $id_agenda = ($parameters[0] ?? '');
+        $id_funcionario = ($parameters[1] ?? '');
+
+        if($id_agenda && $id_funcionario){
+            $agendaFuncionario = (new agendaFuncionario);
+            $agendaFuncionario->id_agenda = $id_agenda;
+            $agendaFuncionario->id_funcionario = $id_funcionario;
+            $agendaFuncionario->remove();
+        }
+
+        mensagem::setErro("Agenda ou Funcionario não informados");
+        $this->manutencao([$id_agenda]);
+        return;
+    }
+
+    public function action(array $parameters):void
+    {
+        $user = login::getLogged();
+
+        $agenda = new ModelsAgenda;
+       
+        if (isset($parameters[0])){
+            $agenda->id = ($parameters[0]);
+            $agenda->remove();
+            $this->index(); 
+            return;
+        }
+       
+        $agenda->id               = intval($this->getValue('cd'));
+        $agenda->id_funcionario   = intval($this->getValue('funcionario'));
+        $agenda->id_empresa       = intval($user->id_empresa);
+        $agenda->codigo           = $this->getValue('codigo');
+        $agenda->nome             = $this->getValue('nome');
+
+        try{
+            transactionManeger::init();
+            transactionManeger::beginTransaction();
+
+            if ($agenda->set()){ 
+
+                $agendaUsuario = new agendaUsuario;
+                $agendaUsuario->id_usuario = $user->id;
+                $agendaUsuario->id_agenda = $agenda->id;
+                $agendaUsuario->set();
+
+                if($agenda->id_funcionario){
+                    $agendaFuncionario = new agendaFuncionario;
+                    $agendaFuncionario->id_funcionario = $agenda->id_funcionario;
+                    $agendaFuncionario->id_agenda = $agenda->id;
+                    $agendaFuncionario->set();
+                }
+
+                mensagem::setSucesso("Agenda salva com sucesso");
+                transactionManeger::commit();
+                $this->manutencao([$agenda->id],$agenda); 
+                return;
+            }
+
+        }catch (\exception $e){
+            mensagem::setSucesso(false);
+            transactionManeger::rollBack();
+            mensagem::setErro("Erro ao cadastrar agenda, tente novamente");
+            $this->manutencao([$agenda->id],$agenda); 
+            return;
+        }
+
+        mensagem::setSucesso(false);
+        $this->manutencao([$agenda->id],$agenda); 
+        return;
+    }
+}

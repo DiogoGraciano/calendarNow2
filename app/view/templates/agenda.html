@@ -1,0 +1,84 @@
+<!-- BEGIN BLOCK_CALENDARIO -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+  
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        height: "auto",
+        expandRows: true,
+        timeZone: 'local',
+        initialDate: "{initial_date}",
+        slotMinTime: '{initial_time}',
+        slotMaxTime: '{final_time}',
+        slotDuration: '{slot_duration}',
+        locale: 'pt-br',
+        headerToolbar: {
+          left: 'prevYear,prev,next,nextYear today',
+          center: 'multiMonthYear,dayGridMonth,timeGridWeek,timeGridDay',
+          right: 'title'
+        },
+        initialView: 'timeGridDay',
+        longPressDelay: 500,
+        eventLongPressDelay: 500,
+        selectLongPressDelay: 500,
+        hiddenDays: {days_off},
+        selectable: true,
+        allDaySlot: false,
+        dayMaxEvents: true,
+        select: function(arg) {
+          let dataAtual = new Date();
+          if (arg.start > dataAtual)
+            window.location.href = "{action}" + btoa(arg.start).toString().replace("/","@") + "/" + btoa(arg.end).toString().replace("/","@");
+          else{
+            mensagem("Data menor que a data atual")
+            window.scroll({
+              top: 0,
+              left: 0,
+              behavior: "smooth",
+            });
+          }
+        },
+        eventClick: function(arg) {
+          if (arg.event.id)
+            window.location.href = "{action}" + arg.event.id;
+        }, 
+        events: {events}
+      });
+  
+      calendar.render();
+    });
+
+    window.onload = function () {
+      if (window.screen.width < 1000){
+        $('.fc-toolbar.fc-header-toolbar').addClass('row col-lg-12');
+        $('.fc-toolbar-chunk').addClass('mt-2 mb-2');
+      }
+    };
+
+    $(document).on('click', '.fc-button', function(e) {
+      if (window.screen.width < 1000){
+        $('.fc-toolbar.fc-header-toolbar').addClass('row col-lg-12');
+        $('.fc-toolbar-chunk').addClass('mt-2 mb-2');
+      }
+    });
+
+  </script>
+    <div class="px-2">
+
+        <div id='calendar'></div>
+
+        <div class="fixed-bottom mt-0">
+          {mensagem}
+        </div>
+
+        <!-- BEGIN BLOCK_BUTTON -->
+          <div class="col-md-12 d-flex justify-content-center mt-2">                          
+            {button}
+          </div>
+        <!-- END BLOCK_BUTTON -->
+
+    </div>
+    <script src='{caminho}assets/js/calendar.min.js'></script>
+    <script src="{caminho}assets/js/calendarBootstrap5.min.js"></script>
+    <script src='{caminho}assets/js/locales-calendar.min.js'></script>
+<!-- END BLOCK_CALENDARIO -->

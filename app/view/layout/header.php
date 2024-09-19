@@ -41,13 +41,9 @@ class header extends pagina{
             'Dec' => 'Dezembro'
         );
         
-       
 
         $this->setTemplate("header.html");
         $this->tpl->logo = url::getUrlBase().$pathlogo;
-        $dataMobile = 
-
-
         $this->tpl->data = $this->isMobile() ? $semana["$data"] . ", {$dia}/".date('m')."/{$ano}" : $semana["$data"] . ", {$dia} de " .$mes_extenso["$mes"]. " de {$ano}";
 
         $model = new menu;
@@ -56,9 +52,9 @@ class header extends pagina{
 
         foreach ($menus as $menu)
         {
-            $ativo = url::getUrlCompleta() == url::getUrlBase().$menu["controller"] || url::getUrlCompleta() == url::getUrlBase() && $menu["controller"] == "home";
+            $ativo = explode("/",url::getUriPath())[1] == $menu["controller"];
 
-            $user = (new login)->getLogged();
+            $user = login::getLogged();
 
             if($user && in_array($user->tipo_usuario,json_decode($menu["tipo_usuario"]))){
                 if($menu["controller"])

@@ -18,7 +18,7 @@ final class configuracoes extends model {
                 ->addColumn((new column("id","INT"))->isPrimary()->setComment("ID self"))
                 ->addColumn((new column("id_empresa","INT"))->isNotNull()->isForeingKey(empresa::table(),"id")->setComment("ID da tabela empresa"))
                 ->addColumn((new column("identificador","VARCHAR",30))->isNotNull()->isUnique()->setComment("Identificador da selfuração"))
-                ->addColumn((new column("selfuracao","BLOB"))->isNotNull()->setComment("selfuração"));
+                ->addColumn((new column("valor","BLOB"))->isNotNull()->setComment("selfuração"));
     }
 
     public function getByEmpresa(int $id_empresa):array
@@ -30,15 +30,15 @@ final class configuracoes extends model {
     {
         $self = $this->addFilter(self::table.".identificador", "=", $identificador)
                       ->addFilter(self::table.".id_empresa", "=", $id_empresa)
-                      ->addLimit(1)->selectColumns("configuracao");
+                      ->addLimit(1)->selectColumns("valor");
 
         if($self)
-            return $self[0]->configuracao;
+            return $self[0]->valor;
          
         return false;
     }
 
-    public function getConfiguracaoStore(string $identificador, int $id_empresa):self|bool
+    public function getConfiguracaoStore(string $identificador, int $id_empresa):self
     {
         $self = $this->addFilter(self::table.".identificador", "=", $identificador)
                       ->addFilter(self::table.".id_empresa", "=", $id_empresa)
@@ -47,14 +47,14 @@ final class configuracoes extends model {
         if($self)
             return $self[0];
          
-        return false;
+        return new self;
     }
 
     public function set():bool|int
     {
         $mensagens = [];
 
-        if(!($this->getConfiguracaoStore($this->identificador,$this->id_empresa))){
+        if(!($this->id = $this->getConfiguracaoStore($this->identificador,$this->id_empresa)->id)){
 
             if(!(new empresa)->get($this->id_empresa)->id)
                 $mensagens[] = "Empresa não existe";
@@ -63,7 +63,7 @@ final class configuracoes extends model {
                 $mensagens[] = "Identificador é obrigatorio";
         }
 
-        if(!($this->configuracao = htmlspecialchars($this->configuracao)))
+        if(!($this->valor = htmlspecialchars($this->valor)))
             $mensagens[] = "Valor é obrigatorio";
         
         if($mensagens){
@@ -72,7 +72,7 @@ final class configuracoes extends model {
         }
 
         if ($this->store()){
-            mensagem::setSucesso("selfuração salvo com sucesso");
+            mensagem::setSucesso("Configuração salvo com sucesso");
             return $this->id;
         }
         

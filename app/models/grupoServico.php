@@ -20,7 +20,7 @@ final class grupoServico extends model {
                 ->addColumn((new column("nome", "VARCHAR", 250))->isNotNull()->setComment("Nome do grupo de serviços"));
     }
 
-    public function getByFilter(int $id_empresa,string $nome = null,?int $limit = null,?int $offset = null):array{
+    public function getByFilter(int $id_empresa,string $nome = null,?int $limit = null,?int $offset = null,?bool $asArray = true):array{
 
         $this->addFilter("id_empresa", "=", $id_empresa);
 
@@ -37,13 +37,17 @@ final class grupoServico extends model {
             self::setLastCount($this);
             $this->addLimit($limit);
         }
+        
+        if($asArray){
+            $this->asArray();
+        }
 
         $values = $this->selectColumns("id","nome");
 
         return $values;
     }
 
-    public function getByServico(int $id_servico):array
+    public function getVinculos(int $id_servico):array
     {
         return $this->addJoin(servicoGrupoServico::table,"id","id_grupo_servico")
                     ->addFilter("id_servico","=",$id_servico)

@@ -33,7 +33,7 @@ final class usuario extends model {
         return $usuario[0] ?? false;
     }
 
-    public function getByFilter(int $id_empresa,?string $nome = null,?int $id_funcionario = null,?int $tipo_usuario = null,?int $limit = null,?int $offset = null):array
+    public function getByFilter(int $id_empresa,?string $nome = null,?int $id_funcionario = null,?int $tipo_usuario = null,?int $limit = null,?int $offset = null,?bool $asArray = true):array
     {
         $this->addFilter("id_empresa", "=", $id_empresa);
 
@@ -42,7 +42,7 @@ final class usuario extends model {
         }
 
         if($id_funcionario){
-            $this->addJoin("cliente","cliente.id_funcionario",$id_funcionario);
+            $this->addJoin("funcionario","funcionario.id_funcionario",$id_funcionario);
         }
 
         if($tipo_usuario !== null){
@@ -59,7 +59,34 @@ final class usuario extends model {
             $this->addLimit($limit);
         }
 
-        return $this->selectColumns(self::table.'id',self::table.'nome',self::table.'cpf_cnpj',self::table.'telefone',self::table.'senha',self::table.'email',self::table.'tipo_usuario',self::table.'id_empresa');
+        if($asArray){
+            $this->asArray();
+        }
+
+        return $this->selectColumns(self::table.'.id',self::table.'.nome',self::table.'.cpf_cnpj',self::table.'.telefone',self::table.'.senha',self::table.'.email',self::table.'.tipo_usuario',self::table.'.id_empresa');
+    }
+
+    public function prepareData(array $dados){
+        $dadosFinal = [];
+        if ($dados){
+            foreach ($dados as $dado){
+
+                if(is_subclass_of($dado,"app\db\db")){
+                    $dado = $dado->getArrayData();
+                }
+
+                if ($dado["cpf_cnpj"]){
+                    $dado["cpf_cnpj"] = functions::formatCnpjCpf($dado["cpf_cnpj"]);
+                }
+                if ($dado["telefone"]){
+                    $dado["telefone"] = functions::formatPhone($dado["telefone"]);
+                }
+
+                $dadosFinal[] = $dado;
+            }
+        }
+        
+        return $dadosFinal;
     }
 
     public function getByTipoUsuarioAgenda(int $tipo_usuario,string $id_agenda):array
@@ -69,12 +96,14 @@ final class usuario extends model {
                     ->addFilter(agendamento::table.".id_agenda","=",$id_agenda)
                     ->addFilter(usuario::table.".tipo_usuario","=",$tipo_usuario)
                     ->addGroup(usuario::table.".id")
-                    ->selectColumns(self::table.'id',self::table.'nome',self::table.'cpf_cnpj',self::table.'telefone',self::table.'senha',self::table.'email',self::table.'tipo_usuario',self::table.'id_empresa');
+                    ->selectColumns(self::table.'.id',self::table.'.nome',self::table.'.cpf_cnpj',self::table.'.telefone',self::table.'.senha',self::table.'.email',self::table.'.tipo_usuario',self::table.'.id_empresa');
     }
 
-    public function set(bool $valid_fk = true):int|bool
+    public function set(bool $valid_fk = true):usuario|null
     {
         $mensagens = [];
+
+        $usuario = (new self);
 
         if(!($this->nome = htmlspecialchars((trim($this->nome))))){
             $mensagens[] = "Nome é invalido";
@@ -84,8 +113,16 @@ final class usuario extends model {
             $mensagens[] = "CPF/CNPJ invalido";
         }
 
+        if(!$this->id && ($usuario->get($this->cpf_cnpj,"cpf_cnpj")->id)){
+            $mensagens[] = "CPF/CNPJ já Cadastrado";
+        }
+
         if(!($this->email = htmlspecialchars(filter_var(trim($this->email), FILTER_VALIDATE_EMAIL)))){
             $mensagens[] = "E-mail Invalido";
+        }
+
+        if(!$this->id && ($usuario->get($this->email,"email")->id)){
+            $mensagens[] = "Email já Cadastrado";
         }
 
         if(!($this->telefone = functions::onlynumber($this->telefone)) || !functions::validaTelefone($this->telefone)){
@@ -104,8 +141,8 @@ final class usuario extends model {
             $mensagens[] = "Empresa não existe";
         }
 
-        $usuario = self::get($this->id);
-        if(($this->id) && !$usuario->id){
+        $usuario = $usuario->get($this->id);
+        if($this->id && !$usuario->id){
             $mensagens[] = "Usuario não existe";
         }
 
@@ -115,19 +152,17 @@ final class usuario extends model {
 
         if($mensagens){
             mensagem::setErro(...$mensagens);
-            return false;
+            return null;
         }
 
         $this->senha = $this->senha ? password_hash(trim($this->senha),PASSWORD_DEFAULT) : $usuario->senha;
 
-        $retorno = $this->store();
-        
-        if ($retorno == true){
+        if ($this->store()){
             mensagem::setSucesso("Salvo com sucesso");
-            return $this->id;
+            return $this;
         }
 
         mensagem::setErro("Erro ao cadastrar usuario");
-        return False;
+        return null;
     }
 }

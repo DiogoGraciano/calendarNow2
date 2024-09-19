@@ -130,6 +130,8 @@ class db
         $this->class = $class;
 
         $this->getColumnTable();
+
+        $this->setObjectNull();
     }
 
     public function __set($name,$value)
@@ -149,6 +151,7 @@ class db
             ' in ' . $trace[0]['file'] .
             ' on line ' . $trace[0]['line'],
             E_USER_ERROR);
+
         return null;
     }
 

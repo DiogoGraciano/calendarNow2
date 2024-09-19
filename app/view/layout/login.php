@@ -22,6 +22,8 @@ class login extends pagina{
         $this->tpl->mensagem = $mensagem->parse();
         $this->tpl->usuario = $usuario;
         $this->tpl->senha = $senha;
+        $this->tpl->action_cadastro_usuario = "login/usuario";
+        $this->tpl->action_cadastro_empresa = "login/empresa";
         $this->tpl->action_esqueci = "login/esqueci";
     }
 }

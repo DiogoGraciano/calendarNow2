@@ -25,6 +25,53 @@ final class empresa extends model {
                 ->addColumn((new column("fantasia","VARCHAR",300))->isNotNull()->setComment("Nome fantasia da empresa"));
     }
 
+    public function getByFilter(?string $nome = null,?int $limit = null,?int $offset = null,?bool $asArray = true):array
+    {
+        if($nome){
+            $this->addFilter("nome","LIKE","%".$nome."%");
+        }
+
+        if($limit && $offset){
+            self::setLastCount($this);
+            $this->addLimit($limit);
+            $this->addOffset($offset);
+        }
+        elseif($limit){
+            self::setLastCount($this);
+            $this->addLimit($limit);
+        }
+
+        if($asArray){
+            $this->asArray();
+        }
+
+        return $this->selectAll();
+    }
+
+    public function prepareData(array $dados):array
+    {
+        $dadosFinal = [];
+        if ($dados){
+            foreach ($dados as $dado){
+
+                if(is_subclass_of($dado,"app\db\db")){
+                    $dado = $dado->getArrayData();
+                }
+
+                if ($dado["cpf_cnpj"]){
+                    $dado["cpf_cnpj"] = functions::formatCnpjCpf($dado["cpf_cnpj"]);
+                }
+                if ($dado["telefone"]){
+                    $dado["telefone"] = functions::formatPhone($dado["telefone"]);
+                }
+
+                $dadosFinal[] = $dado;
+            }
+        }
+        
+        return $dadosFinal;
+    }
+
     public function getByAgenda($id_agenda):object|bool
     {
         $empresa = $this->addJoin(agenda::table,self::table.".empresa",agenda::table.".id",$id_agenda)->addLimit(1)->selectColumns("empresa.id,empresa.nome,empresa.email,empresa.telefone,empresa.cnpj,empresa.razao,empresa.fantasia");
@@ -47,7 +94,7 @@ final class empresa extends model {
         return false;
     }
 
-    public function set():int|bool
+    public function set():empresa|null
     {
         $mensagens = [];
 
@@ -71,7 +118,7 @@ final class empresa extends model {
             $mensagens[] = "CPF/CNPJ invalido";
         }
 
-        if((new self)->get($this->cnpj = functions::onlynumber($this->cpf_cnpj),"cpf_cnpj")->id){
+        if((new self)->get($this->cnpj = functions::onlynumber($this->cpf_cnpj?:""),"cpf_cnpj")->id){
             $mensagens[] = "CPF/CNPJ já cadastrado";
         }
   
@@ -83,21 +130,21 @@ final class empresa extends model {
             $mensagens[] = "Email já cadastrado";
         }
 
-        if(!($this->telefone = functions::onlynumber($this->telefone)) || !functions::validaTelefone($this->telefone)){
+        if(!($this->telefone = functions::onlynumber($this->telefone?:"")) || !functions::validaTelefone($this->telefone)){
             $mensagens[] = "Telefone Invalido";
         }
 
         if($mensagens){
             mensagem::setErro(...$mensagens);
-            return false;
+            return null;
         }
 
         if ($this->store()){
             mensagem::setSucesso("Empresa salva com sucesso");
-            return $this->id;
+            return $this;
         }
 
         mensagem::setErro("Erro ao cadastrar a empresa");
-        return false;
+        return null;
     }
 }

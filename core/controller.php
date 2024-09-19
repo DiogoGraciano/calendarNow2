@@ -1,7 +1,7 @@
 <?php
 namespace core;
 
-use app\controllers\main\errorController;
+use app\controllers\main\error;
 use Exception;
 
 class controller{
@@ -36,7 +36,7 @@ class controller{
     public function load($controller=false){
 
         if ($controller){
-            return $this->controllerSet($controller.'Controller'); 
+            return $this->controllerSet($controller); 
         }
         
         if($this->isHome())
@@ -46,7 +46,7 @@ class controller{
     }
 
     private function controllerHome(){
-        if (!$this->controllerExist('homeController'))
+        if (!$this->controllerExist('home'))
             throw new Exception("Essa pagina não existe");
         
         return $this->instatiateController();
@@ -63,8 +63,7 @@ class controller{
         $controller = $this->getControllerNotHome();
 
         if (!$this->controllerExist($controller)){
-            (new errorController)->index();
-            die;
+            return (new error);
         }
         
         return $this->instatiateController();
@@ -74,9 +73,9 @@ class controller{
 
         if(substr_count($this->uri,'/') > 1){
             list($controller) = array_values(array_filter(explode('/',$this->uri)));
-            return (($controller).'Controller');
+            return (($controller));
         }
-        return ((ltrim($this->uri,"/")).'Controller');
+        return ((ltrim($this->uri,"/")));
     }
 
     private function controllerExist($controller){

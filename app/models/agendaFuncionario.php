@@ -29,6 +29,17 @@ final class agendaFuncionario extends model {
                     ->selectColumns(funcionario::table.".id",funcionario::table.".nome");
     }
 
+    public function getAgendaByFuncionario(int|null $id_funcionario = null):array
+    {
+        if(!$id_funcionario){
+            return [];
+        }
+
+        return $this->addJoin(agenda::table,"id","id_agenda")
+                    ->addFilter("id_funcionario","=",$id_funcionario)
+                    ->selectColumns(agenda::table.".id",agenda::table.".nome");
+    }
+
     public function set():bool
     {
         $result = $this->addFilter($this::table.".id_funcionario","=",$this->id_funcionario)
@@ -44,20 +55,20 @@ final class agendaFuncionario extends model {
 
     public function removeByAgenda():bool
     {
-        return $this->addFilter(agendaFuncionario::table."id_agenda","=",$this->id_agenda)
+        return $this->addFilter(agendaFuncionario::table.".id_agenda","=",$this->id_agenda)
                     ->deleteByFilter();
     }
 
     public function removeByFuncionario():bool
     {
-        return $this->addFilter(agendaFuncionario::table."id_funcionario","=",$this->id_funcionario)
+        return $this->addFilter(agendaFuncionario::table.".id_funcionario","=",$this->id_funcionario)
                     ->deleteByFilter();
     }
 
     public function remove():bool
     {
-        return $this->addFilter(agendaFuncionario::table."id_agenda","=",$this->id_agenda)
-                    ->addFilter(agendaFuncionario::table."id_funcionario","=",$this->id_funcionario)
+        return $this->addFilter(agendaFuncionario::table.".id_agenda","=",$this->id_agenda)
+                    ->addFilter(agendaFuncionario::table.".id_funcionario","=",$this->id_funcionario)
                     ->deleteByFilter();
     }
 }

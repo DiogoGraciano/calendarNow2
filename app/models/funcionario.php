@@ -2,7 +2,6 @@
 namespace app\models;
 
 use app\db\abstract\model;
-use app\db\db;
 use app\db\migrations\table;
 use app\db\migrations\column;
 use app\db\transactionManeger;
@@ -32,7 +31,7 @@ final class funcionario extends model {
                 ->addColumn((new column("espacamento_agenda", "INT"))->isNotNull()->setComment("Tamanho do Slot para selecionar na agenda em minutos"));
     }
 
-    public function getFuncionariosByFilter(int $id_empresa,string $nome = null,int $id_agenda = null,int $id_grupo_funcionarios = null,?int $limit = null,?int $offset = null):array
+    public function getByFilter(int $id_empresa,?string $nome = null,?int $id_agenda = null,?int $id_grupo_funcionarios = null,?int $limit = null,?int $offset = null,?bool $asArray = true):array
     {
         $this->addJoin(funcionarioGrupoFuncionario::table,funcionario::table.".id",funcionarioGrupoFuncionario::table.".id_funcionario","LEFT")
             ->addJoin(agendaFuncionario::table,agendaFuncionario::table.".id_funcionario",funcionario::table.".id","LEFT")  
@@ -48,6 +47,8 @@ final class funcionario extends model {
         if($nome)
             $this->addFilter(funcionario::table.".nome","LIKE","%".$nome."%");
 
+        $this->addGroup("funcionario.id");
+
         if($limit && $offset){
             self::setLastCount($this);
             $this->addLimit($limit);
@@ -56,6 +57,10 @@ final class funcionario extends model {
         elseif($limit){
             self::setLastCount($this);
             $this->addLimit($limit);
+        }
+
+        if($asArray){
+            $this->asArray();
         }
                     
         return $this->selectColumns(funcionario::table.".id,funcionario.cpf_cnpj,funcionario.nome,funcionario.email,funcionario.telefone,hora_ini,hora_fim,hora_almoco_ini,hora_almoco_fim,dias");
@@ -113,14 +118,14 @@ final class funcionario extends model {
         $mensagens = [];
 
         if($this->id && !self::get($this->id)->id){
-            $mensagens[] = funcionario::table." não encontrada";
+            $mensagens[] = "Funcionario não encontrada";
         }
 
         if(!$this->id_usuario || !(new usuario)->get($this->id_usuario)->id){
-            $mensagens[] = usuario::table." não encontrada";
+            $mensagens[] = "Usuario não encontrada";
         }
 
-        if(!($this->nome = htmlspecialchars(ucwords(strtolower(trim($this->nome)))))){
+        if(!($this->nome = htmlspecialchars(ucwords(strtolower(trim($this->nome?:"")))))){
             $mensagens[] = "Nome deve ser informado";
         }
 
@@ -205,7 +210,7 @@ final class funcionario extends model {
 
         if ($this->store()){
             mensagem::setSucesso(funcionario::table." salvo com sucesso");
-            return $this->id;
+            return $this;
         }
         
         return null;

@@ -288,13 +288,14 @@ class elements extends pagina{
         return $this->parse();
     }
 
-    public function setOptions(model $class,$coluna_vl,$coluna_nm){
-        $db = $class;
-        $dados = $db->getAll($coluna_vl,$coluna_nm);
-
+    public function setOptions(array $dados,$coluna_vl,$coluna_nm){
         if ($dados){
             foreach ($dados as $dado){
-                $this->addOption($dado->$coluna_vl,$dado->$coluna_nm);
+                if(is_subclass_of($dado,"app\db\db")){
+                    $dado = $dado->getArrayData();
+                }
+                if(isset($dado[$coluna_vl]) && isset($dado[$coluna_nm]))
+                    $this->addOption($dado[$coluna_vl],$dado[$coluna_nm]);
             }
         }
     }

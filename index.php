@@ -41,7 +41,7 @@ $parameters = $parameters->load($controller);
 
 try{
 
-    if(request::isXmlHttpRequest()){
+    if(request::isXmlHttpRequest() || isset(request::getAllHeaders()["Hx-Request"])){
         $controller->$method($parameters);
     }
     else{

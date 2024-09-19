@@ -36,10 +36,23 @@ class request
             return null;
     }
 
-    public static function isXmlHttpRequest()
+    public static function isXmlHttpRequest():bool
     {
         $isAjax = isset($_SERVER['HTTP_X_REQUESTED_WITH']) ? $_SERVER['HTTP_X_REQUESTED_WITH'] : "";
         return (strtolower($isAjax) === 'xmlhttprequest');
+    }
+
+    public static function getAllHeaders():array
+    {
+        $headers = []; 
+        foreach ($_SERVER as $name => $value) 
+        { 
+            if (substr($name, 0, 5) == 'HTTP_') 
+            { 
+                $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value; 
+            } 
+        } 
+        return $headers; 
     }
 
     public function get(){

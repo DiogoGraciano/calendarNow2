@@ -4,7 +4,6 @@ namespace app\view\layout;
 use app\helpers\functions;
 use app\view\layout\abstract\pagina;
 use app\helpers\mensagem;
-use app\models\main\empresaModel;
 use stdClass;
 
 /**
@@ -14,7 +13,7 @@ class form extends pagina
 {
     private $inputs_custom = [];
     
-    public function __construct(string $action,$nome = "manutencao",string $includes = "",string $target = "",bool $hasRecapcha = false)
+    public function __construct(string $action,$nome = "manutencao",string $include = "",string $target = "",bool $hasRecapcha = false)
     {
         $this->setTemplate("form.html");
         $mensagem = new mensagem;
@@ -29,15 +28,15 @@ class form extends pagina
             $this->tpl->target = $target;
         }
         
-        if($includes){
-            $this->tpl->includes = ' hx-include="'.$includes.'"';
+        if($include){
+            $this->tpl->include = ' hx-include="'.$include.'"';
         }
 
         $this->tpl->block("BLOCK_START");
 
         if($hasRecapcha){
             $this->setHidden("g-recaptcha-{$nome}-response","");
-            $empresa = empresaModel::get(1);
+            $empresa = (new calendarNow)->get(1);
             $recapcha = $this->getTemplate("recapcha.html");
             $recapcha->element_id = "g-recaptcha-{$nome}-response";
             $recapcha->empresa = $empresa;
@@ -149,10 +148,17 @@ class form extends pagina
         return $this;
     }
 
-    public function set():form
+    public function show():void
     {
         $this->tpl->block("BLOCK_END");
 
-        return $this;
+        $this->tpl->show();
+    }
+
+    public function parse():string
+    {
+        $this->tpl->block("BLOCK_END");
+
+        return $this->tpl->parse();
     }
 }

@@ -4,6 +4,7 @@ namespace app\models;
 use app\db\abstract\model;
 use app\db\migrations\table;
 use app\db\migrations\column;
+use app\helpers\mensagem;
 
 final class status extends model {
     public const table = "status";
@@ -16,6 +17,24 @@ final class status extends model {
         return (new table(self::table,comment:"Tabela de status"))
                 ->addColumn((new column("id","INT"))->isPrimary()->setComment("ID agenda"))
                 ->addColumn((new column("nome","VARCHAR",250))->isNotNull()->setComment("Status do agendamento"));
+    }
+
+
+    public function getUsuarioStatus():array|object
+    {
+        return $this->addFilter("id","IN",[1,4])->selectAll();
+    }
+
+    public function set(string $nome,int|null $id = null):status|null
+    {
+        $this->nome = htmlspecialchars(trim($this->nome));
+        
+        if ($this->store()){
+            mensagem::setSucesso("Status salvo com sucesso");
+            return $this;
+        }
+
+        return null;
     }
 
     public static function seed(){

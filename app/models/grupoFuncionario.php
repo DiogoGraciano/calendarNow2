@@ -20,7 +20,7 @@ final class grupoFuncionario extends model {
                 ->addColumn((new column("nome", "VARCHAR", 200))->isNotNull()->setComment("Nome do grupo de funcionarios"));
     }
 
-    public function getByFilter(int $id_empresa,string $nome = null,?int $limit = null,?int $offset = null):array{
+    public function getByFilter(int $id_empresa,string $nome = null,?int $limit = null,?int $offset = null,?bool $asArray = true):array{
 
         $this->addFilter("id_empresa", "=", $id_empresa);
 
@@ -38,12 +38,16 @@ final class grupoFuncionario extends model {
             $this->addLimit($limit);
         }
 
+        if($asArray){
+            $this->asArray();
+        }
+
         $values = $this->selectColumns("id","nome");
 
         return $values;
     }
 
-    public function getByFuncionario(int $id_funcionario):array
+    public function getVinculos(int $id_funcionario):array
     {
         return $this->addJoin(funcionarioGrupoFuncionario::table,"id","id_grupo_funcionario")
                     ->addFilter("id_funcionario","=",$id_funcionario)

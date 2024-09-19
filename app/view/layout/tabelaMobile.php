@@ -3,34 +3,19 @@
 namespace app\view\layout;
 use app\view\layout\abstract\pagina;
 
-/**
- * Classe para criação e manipulação de tabelas adaptadas para dispositivos móveis.
- */
 class tabelaMobile extends pagina{
 
-    /**
-     * Array para armazenar os nomes das colunas.
-     *
-     * @var array
-     */
-    private $columns = [];
+    private array $columns = [];
 
-    /**
-     * Array para armazenar as linhas da tabela.
-     *
-     * @var array
-     */
-    private $rows = [];
+    private array $rows = [];
 
-    /**
-     * Gera a representação HTML da tabela adaptada para dispositivos móveis.
-     *
-     * @return string   Retorna a representação HTML da tabela.
-     */
-    public function set():tabelaMobile
+    public function __construct()
     {
         $this->setTemplate("tabelaMobile.html");
+    }
 
+    private function set():void
+    {
         if($this->rows){
             foreach ($this->rows as $row){
                 if(is_subclass_of($row,"app\db\db")){
@@ -47,19 +32,8 @@ class tabelaMobile extends pagina{
         }
 
         $this->columns = $this->rows = [];
-
-        return $this;
     }
 
-    /**
-     * Adiciona uma nova coluna à tabela.
-     *
-     * @param string|int $width Nome da coluna.
-     * @param string $nome      Largura da coluna.
-     * @param string $coluna    Nome da coluna DB.
-     *
-     * @return tabelaMobile   Retorna a instância atual da tabela para permitir encadeamento de métodos.
-     */
     public function addColumns(string|int $width,string $nome,string $coluna):tabelaMobile
     {
         $this->columns[] = ["nome" => $nome,"width" => $width.'%',"coluna" => $coluna];
@@ -67,13 +41,6 @@ class tabelaMobile extends pagina{
         return $this;
     }
 
-    /**
-     * Adiciona uma nova linha à tabela.
-     *
-     * @param array $row     Dados da linha como um array associativo.
-     *
-     * @return tabelaMobile  Retorna a instância atual da tabela para permitir encadeamento de métodos.
-     */
     public function addRow(array $row = []):tabelaMobile
     {
         $this->rows[] = $row;
@@ -81,13 +48,6 @@ class tabelaMobile extends pagina{
         return $this;
     }
 
-    /**
-     * Adiciona todas as linhas à tabelas.
-     *
-     * @param array $rows     Dados das linhas como um array associativo.
-     *
-     * @return tabela        Retorna a instância atual da tabela para permitir encadeamento de métodos.
-     */
     public function addRows(array $rows = []):tabelaMobile
     {
         $this->rows = $rows;
@@ -95,6 +55,24 @@ class tabelaMobile extends pagina{
         return $this;
     }
 
-}
+    public function show():void
+    {
+        $this->set();
+        $this->rows = [];
+        $this->columns = [];
+        $this->show();
+        $this->setTemplate("tabelaMobile.html");
+    }
 
+
+    public function parse():string
+    {
+        $this->set();
+        $this->rows = [];
+        $this->columns = [];
+        $tabela = $this->tpl->parse();
+        $this->setTemplate("tabelaMobile.html");
+        return $tabela;
+    }
+}
 ?>

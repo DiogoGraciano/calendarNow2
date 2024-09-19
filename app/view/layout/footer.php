@@ -51,7 +51,7 @@ class footer extends pagina
     
         $menus = $model->getByFilter(ativo:1);
 
-        $user = (new login)->getLogged();
+        $user = login::getLogged();
         
         $i = 1;
         $titulo = "Paginas";

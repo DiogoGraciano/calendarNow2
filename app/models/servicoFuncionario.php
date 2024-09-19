@@ -41,14 +41,20 @@ final class servicoFuncionario extends model {
 
     public function removeByFuncionario():bool
     {
-        return $this->addFilter(self::table."id_funcionario","=",$this->id_funcionario)
+        return $this->addFilter(self::table.".id_funcionario","=",$this->id_funcionario)
                     ->deleteByFilter();
+    }
+
+    public function getByFuncionario($id_servico){
+        return $this->addJoin(funcionario::table,funcionario::table.".id",self::table.".id_funcionario")
+                    ->addFilter("id_servico","=",$id_servico)
+                    ->selectColumns(funcionario::table.".id","nome");
     }
 
     public function remove():bool
     {
-        return $this->addFilter(self::table."id_servico","=",$this->id_servico)
-                    ->addFilter(self::table."id_funcionario","=",$this->id_funcionario)
+        return $this->addFilter(self::table.".id_servico","=",$this->id_servico)
+                    ->addFilter(self::table.".id_funcionario","=",$this->id_funcionario)
                     ->deleteByFilter();
     }
 }
