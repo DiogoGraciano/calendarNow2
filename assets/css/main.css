@@ -308,3 +308,12 @@ button.btn.btn-dark.pt-2.btn-block {
 .h-90{
 	height: 90%!important;
 }
+
+.modal button#voltar {
+    display: none;
+}
+
+#map {
+    height: 60vh;
+    width: 100%;
+}

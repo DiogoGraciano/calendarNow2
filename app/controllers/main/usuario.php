@@ -10,9 +10,9 @@ use app\view\layout\consulta;
 use app\helpers\mensagem;
 use app\view\layout\filter;
 use app\db\transactionManeger;
-use app\models\cidade;
+use app\models\agenda;
+use app\models\agendaUsuario;
 use app\models\endereco;
-use app\models\estado as ModelsEstado;
 use app\models\funcionario;
 use app\models\login;
 use app\models\usuario as usuarioModel;
@@ -67,7 +67,7 @@ final class usuario extends controller {
                  ->setData($this->url."usuario/manutencao", $this->url."usuario/action", $dados,"id")
                  ->addPagination(new pagination(
                     $usuario::getLastCount("getByFilter"),
-                    $this->url."usuario/index",
+                    "#consulta-admin",
                     limit:$this->getLimit()))
                 ->addFilter($filter)
                  ->show();
@@ -170,7 +170,11 @@ final class usuario extends controller {
     }
 
     public function manutencao($parameters = [],?usuarioModel $usuario = null,?endereco $endereco = null){
+       $this->formUsuario($parameters,$usuario,$endereco)->show();
+    }
 
+    public function formUsuario($parameters = [],?usuarioModel $usuario = null,?endereco $endereco = null):form
+    {
         $id = null;
         $location = null;
 
@@ -184,12 +188,9 @@ final class usuario extends controller {
 
         $dado = $usuario?:(new usuarioModel)->get($id);
 
-        $dadoEndereco = $endereco?:(new endereco)->get($dado->id,"id_usuario");
-
         $elements = new elements();
 
         $form->setHidden("cd",$dado->id);
-        $form->setHidden("id_endereco",$dadoEndereco->id);
 
         $form->setInput($elements->titulo(1,"Cadastro de Usuario"))
         ->setDoisInputs(
@@ -205,34 +206,35 @@ final class usuario extends controller {
             array("email", "senha", "telefone")
         );
 
-        $elements->setOptions((new ModelsEstado())->getAll(), "id", "nome");
-        $estado = $elements->select("id_estado","Estado",$dadoEndereco->id_estado ?: 24, true);
+        // $dadoEndereco = $endereco?:(new endereco)->get($dado->id,"id_usuario");
+        // $form->setHidden("id_endereco",$dadoEndereco->id);
 
-        $form->setDoisInputs(
-            $elements->input("cep", "CEP", $dadoEndereco->cep, true),
-            $estado,
-            array("cep", "id_estado")
-        );
+        // $elements->setOptions((new ModelsEstado())->getAll(), "id", "nome");
+        // $estado = $elements->select("id_estado","Estado",$dadoEndereco->id_estado ?: 24, true);
 
-        $elements->setOptions((new cidade())->getByEstado($dadoEndereco->id_estado ?: 24), "id", "nome");
-        $form->setDoisInputs(
-            $elements->select("id_cidade","Cidade", $dadoEndereco->id_cidade ?: 4487, true),
-            $elements->input("bairro", "Bairro", $dadoEndereco->bairro, true),
-            array("bairro", "id_cidade")
-        );
+        // $form->setDoisInputs(
+        //     $elements->input("cep", "CEP", $dadoEndereco->cep, true),
+        //     $estado,
+        //     array("cep", "id_estado")
+        // );
 
-        $form->setDoisInputs(
-            $elements->input("rua", "Rua", $dadoEndereco->rua, true),
-            $elements->input("numero", "Número", $dadoEndereco->numero, true, false, "", "number", "form-control", 'min="0" max="999999"'),
-            array("rua", "numero")
-        );
+        // $elements->setOptions((new cidade())->getByEstado($dadoEndereco->id_estado ?: 24), "id", "nome");
+        // $form->setDoisInputs(
+        //     $elements->select("id_cidade","Cidade", $dadoEndereco->id_cidade ?: 4487, true),
+        //     $elements->input("bairro", "Bairro", $dadoEndereco->bairro, true),
+        //     array("bairro", "id_cidade")
+        // );
 
-        $form->setInput($elements->textarea("complemento", "Complemento", $dadoEndereco->complemento), "complemento");
+        // $form->setDoisInputs(
+        //     $elements->input("rua", "Rua", $dadoEndereco->rua, true),
+        //     $elements->input("numero", "Número", $dadoEndereco->numero, true, false, "", "number", "form-control", 'min="0" max="999999"'),
+        //     array("rua", "numero")
+        // );
 
-        $form->setButton($elements->button("Salvar", "submit"));
-        $form->setButton($elements->button("Voltar", "voltar", "button", "btn btn-primary w-100 pt-2 btn-block", "location.href='".($this->url.$location?:"login")."'"));
+        // $form->setInput($elements->textarea("complemento", "Complemento", $dadoEndereco->complemento), "complemento");
 
-        $form->show();
+        $form->setButton($elements->button("Salvar", "submitUsuario"));
+        return $form->setButton($elements->button("Voltar", "voltar", "button", "btn btn-primary w-100 pt-2 btn-block", "location.href='".($this->url.$location?:"login")."'"));
     }
 
     public function action($parameters = []):void
@@ -243,14 +245,14 @@ final class usuario extends controller {
         $senha = $this->getValue('senha');
         $email = $this->getValue('email');
         $telefone = $this->getValue('telefone');
-        $id_endereco = intval($this->getValue('id_endereco'));
-        $cep = $this->getValue('cep');
-        $id_estado = intval($this->getValue('id_estado'));
-        $id_cidade = intval($this->getValue('id_cidade'));
-        $bairro = $this->getValue('bairro');
-        $rua = $this->getValue('rua');
-        $numero = $this->getValue('numero');
-        $complemento = $this->getValue('complemento');
+        // $id_endereco = intval($this->getValue('id_endereco'));
+        // $cep = $this->getValue('cep');
+        // $id_estado = intval($this->getValue('id_estado'));
+        // $id_cidade = intval($this->getValue('id_cidade'));
+        // $bairro = $this->getValue('bairro');
+        // $rua = $this->getValue('rua');
+        // $numero = $this->getValue('numero');
+        // $complemento = $this->getValue('complemento');
 
         $usuario = new usuarioModel;
         $usuario->id           = $id;
@@ -261,15 +263,15 @@ final class usuario extends controller {
         $usuario->tipo_usuario = 3;
         $usuario->telefone     = functions::onlynumber($telefone);
 
-        $endereco              = new endereco;
-        $endereco->id          = $id_endereco;
-        $endereco->cep         = $cep;
-        $endereco->id_estado   = $id_estado;
-        $endereco->id_cidade   = $id_cidade;
-        $endereco->bairro      = $bairro;
-        $endereco->rua         = $rua;
-        $endereco->numero      = $numero;
-        $endereco->complemento = $complemento;
+        // $endereco              = new endereco;
+        // $endereco->id          = $id_endereco;
+        // $endereco->cep         = $cep;
+        // $endereco->id_estado   = $id_estado;
+        // $endereco->id_cidade   = $id_cidade;
+        // $endereco->bairro      = $bairro;
+        // $endereco->rua         = $rua;
+        // $endereco->numero      = $numero;
+        // $endereco->complemento = $complemento;
 
         if (array_key_exists(0, $parameters)){
             $id = intval(($parameters[1])); 
@@ -280,31 +282,44 @@ final class usuario extends controller {
 
         try {
             if ($usuario->set()){
-                $endereco->id_usuario = $usuario->id;
-                if ($endereco->set(false)){
+                // $endereco->id_usuario = $usuario->id;
+                // if ($endereco->set(false)){
+
+                    $login = (new login);
+                    $user = $login::getLogged();
+                   
+                    if($user->tipo_usuario != 3){
+                        $agendas = (new agenda)->getByUsuario($user->id);
+
+                        foreach ($agendas as $agenda){
+                            $agendaUsuario = new agendaUsuario;
+                            $agendaUsuario->id_agenda = $agenda->id;
+                            $agendaUsuario->id_usuario = $usuario->id;
+                            $agendaUsuario->set();
+                        }
+                    }
 
                     mensagem::setSucesso("Usuário salvo com sucesso");
                     transactionManeger::commit();
 
-                    $login = (new login);
-                    if(!$login->getLogged() && $login->login($usuario->cpf_cnpj,$senha)){
+                    if(!$user && $login->login($usuario->cpf_cnpj,$senha)){
                         $this->go("home");
                     }
 
-                    $this->manutencao([$usuario->id],$usuario,$endereco);
+                    $this->manutencao([$usuario->id],$usuario);//,$endereco);
                     return;
-                }
+                // }
             }
         } catch (\Exception $e) {
             mensagem::setErro("Erro ao salvar usuário",$e->getMessage());
             transactionManeger::rollback();
-            $this->manutencao([$usuario->id],$usuario,$endereco);
+            $this->manutencao([$usuario->id],$usuario);//,$endereco);
             return;
         }
 
         mensagem::setSucesso(false);
         transactionManeger::rollback();
-        $this->manutencao([$usuario->id],$usuario,$endereco);
+        $this->manutencao([$usuario->id],$usuario);//,$endereco);
     }
 }
 

@@ -21,22 +21,42 @@ function avisoCookies({
 }
 
 function calcularMinutos(tempo) {
+  
     var partes = tempo.split(":");
-    return parseInt(partes[0]) * 60 + parseInt(partes[1]);
+    
+    var horas = parseInt(partes[0]);
+    var minutos = parseInt(partes[1]);
+    var segundos = parseInt(partes[2]);
+    
+    var totalMinutos = horas * 60 + minutos + Math.round(segundos / 60);
+    
+    return totalMinutos;
 }
 
-function multiplicarTempo(tempo, qtd) {
+function multiplicarTempo(tempo, multiplicador) {
+    var partesTempo = tempo.split(":");
+    var horas = parseInt(partesTempo[0]);
+    var minutos = parseInt(partesTempo[1]);
+    var segundos = parseInt(partesTempo[2]);
+  
+    var tempoTotalSegundos = horas * 3600 + minutos * 60 + segundos;
+  
+    var tempoMultiplicadoSegundos = tempoTotalSegundos * multiplicador;
+  
+    var horasMultiplicadas = Math.floor(tempoMultiplicadoSegundos / 3600);
+    var minutosMultiplicados = Math.floor((tempoMultiplicadoSegundos % 3600) / 60);
+    var segundosMultiplicados = Math.floor(tempoMultiplicadoSegundos % 60);
+  
+    var tempoResultado = 
+        pad(horasMultiplicadas) + ":" + 
+        pad(minutosMultiplicados) + ":" + 
+        pad(segundosMultiplicados);
+  
+    return tempoResultado;
+}
 
-    var partes = tempo.split(":");
-    var horas = parseInt(partes[0]) * qtd;
-    var minutos = parseInt(partes[1]) * qtd;
-
-    while (minutos >= 60) {
-        minutos -= 60;
-        horas++;
-    }
-
-    return horas.toString().padStart(2, '0') + ":" + minutos.toString().padStart(2, '0');
+function pad(num) {
+    return (num < 10 ? "0" : "") + num;
 }
 
 function validaVazio(seletor) {
@@ -53,7 +73,7 @@ function validaVazio(seletor) {
 
 function mensagem(mensagem, type = "alert-danger") {
     var alertDiv = document.createElement("div");
-    alertDiv.className = "alert " + type + " alert-dismissible mt-1 d-flex justify-content-between align-items-center";
+    alertDiv.className = "alert " + type + " alert-dismissible position-absolute z-2 w-100 alert-dismissible mt-1 d-flex justify-content-between align-items-center";
     alertDiv.role = "alert";
     alertDiv.innerHTML = mensagem + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
     document.body.prepend(alertDiv);
@@ -163,6 +183,70 @@ function validaEmail() {
     }
 
     document.getElementById("email").classList.remove('is-invalid');
+}
+
+function validCep(){
+    let cep = document.querySelector("input#cep");
+    if (cep) {
+        cep.addEventListener("blur", function () {
+            let cepV = cep.value.replace(/[^0-9]/g, "");
+
+            showLoader();
+
+            fetch(url_base + "ajax", {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Accept': 'application/json'
+                },
+                method: 'POST',
+                body: "method=getEndereco&parameters=" + cepV
+            })
+                .then(Result => Result.json())
+                .then(json => {
+                    if (json.sucesso) {
+
+                        json = json.retorno;
+
+                        let bairro = document.querySelector("input#bairro");
+                        if (bairro) {
+                            bairro.value = json.bairro;
+                            bairro.focus();
+                        }
+                        let id_cidade = document.querySelector("select#id_cidade");
+                        if (id_cidade) {
+                            id_cidade.value = json.localidade
+                            id_cidade.focus();
+                        }
+                        let id_estado = document.querySelector("select#id_estado");
+                        if (id_estado) {
+                            id_estado.value = json.uf
+                            id_estado.focus();
+                        }
+                        let cep = document.querySelector("input#cep");
+                        if (cep) {
+                            cep.value = json.cep
+                        }
+                        let rua = document.querySelector("input#rua");
+                        if (rua) {
+                            rua.value = json.logradouro
+                            rua.focus();
+                        }
+                        let numero = document.querySelector("input#numero");
+                        if (numero) {
+                            numero.focus();
+                        }
+                    }
+                    else {
+                        mensagem(json.retorno)
+                    }
+
+                    return;
+                })
+                .catch(errorMsg => { mensagem(errorMsg); });
+
+            removeLoader();
+        })
+    }
 }
 
 function setEvents() {
@@ -334,75 +418,24 @@ function setEvents() {
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    var url_base = window.location.href.split("/");
-    url_base = url_base[0] + "//" + url_base[2] + "/";
     var url_atual = window.location.href;
+    var url_base = url_atual.split("/");
+    url_base = url_base[0] + "//" + url_base[2] + "/";
     var qtd_bara = window.location.href.split("/").length;
+    var uri = window.location.pathname;
 
-    let cep = document.querySelector("input#cep");
-    if (cep) {
-        cep.addEventListener("blur", function () {
-            let cepV = cep.value.replace(/[^0-9]/g, "");
-
-            showLoader();
-
-            fetch(url_base + "ajax", {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Accept': 'application/json'
-                },
-                method: 'POST',
-                body: "method=getEndereco&parameters=" + cepV
+    if(uri.split("/")[1] == "agendamento"){
+        let modalUsuario = document.querySelector("#modalUsuario");
+        if (modalUsuario) {
+            modalUsuario.addEventListener("hidden.bs.modal", function () {
+                htmx.ajax('GET',uri,{target:'#form-agendamento', swap:'outerHTML'})
             })
-                .then(Result => Result.json())
-                .then(json => {
-                    if (json.sucesso) {
-
-                        json = json.retorno;
-
-                        let bairro = document.querySelector("input#bairro");
-                        if (bairro) {
-                            bairro.value = json.bairro;
-                            bairro.focus();
-                        }
-                        let id_cidade = document.querySelector("select#id_cidade");
-                        if (id_cidade) {
-                            id_cidade.value = json.localidade
-                            id_cidade.focus();
-                        }
-                        let id_estado = document.querySelector("select#id_estado");
-                        if (id_estado) {
-                            id_estado.value = json.uf
-                            id_estado.focus();
-                        }
-                        let cep = document.querySelector("input#cep");
-                        if (cep) {
-                            cep.value = json.cep
-                        }
-                        let rua = document.querySelector("input#rua");
-                        if (rua) {
-                            rua.value = json.logradouro
-                            rua.focus();
-                        }
-                        let numero = document.querySelector("input#numero");
-                        if (numero) {
-                            numero.focus();
-                        }
-                    }
-                    else {
-                        mensagem(json.retorno)
-                    }
-
-                    return;
-                })
-                .catch(errorMsg => { mensagem(errorMsg); });
-
-            removeLoader();
-        })
+        }
     }
 
     loadChoices();
     setEvents();
+    validCep();
 
     document.body.addEventListener('htmx:xhr:loadstart', function (evt) {
         showLoader();
@@ -411,6 +444,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.body.addEventListener('htmx:afterSettle', function (evt) {
         loadChoices();
         setEvents();
+        validCep();
         removeLoader();
     });
 

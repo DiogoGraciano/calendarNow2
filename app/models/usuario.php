@@ -91,10 +91,9 @@ final class usuario extends model {
 
     public function getByTipoUsuarioAgenda(int $tipo_usuario,string $id_agenda):array
     {
-        return $this->addJoin(agendamento::table,usuario::table.".id",agendamento::table.".id_usuario")
-                    ->addFilter("tipo_usuario","=",$tipo_usuario)
-                    ->addFilter(agendamento::table.".id_agenda","=",$id_agenda)
+        return $this->addJoin(agendaUsuario::table,usuario::table.".id",agendaUsuario::table.".id_usuario")
                     ->addFilter(usuario::table.".tipo_usuario","=",$tipo_usuario)
+                    ->addFilter(agendaUsuario::table.".id_agenda","=",$id_agenda)
                     ->addGroup(usuario::table.".id")
                     ->selectColumns(self::table.'.id',self::table.'.nome',self::table.'.cpf_cnpj',self::table.'.telefone',self::table.'.senha',self::table.'.email',self::table.'.tipo_usuario',self::table.'.id_empresa');
     }

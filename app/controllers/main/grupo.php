@@ -57,7 +57,7 @@ final class grupo extends controller{
                         "id")
                 ->addPagination(new pagination(
                     $dados->getLastCount("getByFilter"),
-                    $this->url."grupo/index",
+                    "#consulta-admin",
                     limit:$this->getLimit()))
                 ->addFilter($filter)
                 ->show();

@@ -16,7 +16,7 @@ final class menu extends model {
 
     public static function table(){
         return (new table(self::table,comment:"Tabela de menus do adm"))
-                ->addColumn((new column("id","INT"))->isPrimary()->setComment("ID agenda"))
+                ->addColumn((new column("id","INT"))->isPrimary()->setComment("ID menu"))
                 ->addColumn((new column("controller","VARCHAR",50))->setComment("Nome do controller sem o sufixo"))
                 ->addColumn((new column("link","VARCHAR",200))->setComment("link do menu"))
                 ->addColumn((new column("tipo_usuario","JSON"))->setComment("array de tipo de usuarios"))
@@ -125,13 +125,13 @@ final class menu extends model {
             $menu->controller = "encontrar";
             $menu->class_icone = "fa-solid fa-magnifying-glass";
             $menu->tipo_usuario = json_encode([3]);
-            $menu->nome = "Deslogar";
+            $menu->nome = "Encontrar Agenda";
             $menu->ordem = 0;
             $menu->target_blank = 0;
             $menu->ativo = 1;
             $menu->store();
             $menu = new self;
-            $menu->controller = "agendamentos/listagem";
+            $menu->controller = "agendamento/listagem";
             $menu->tipo_usuario = json_encode([1,2,3]);
             $menu->nome = "Agendamentos";
             $menu->class_icone = "fa-solid fa-calendar-days";

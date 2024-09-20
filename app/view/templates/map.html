@@ -1,0 +1,21 @@
+<div id="map"></div>
+<script src="{caminho}assets/js/leaflet.js"> </script>
+<script>
+    function loadMap(){
+	    const map = L.map('map').setView([51.505, -0.09], 13);
+
+
+        //está assim pois o templates substitui tudo que tem {};
+        let url = "https://tile.openstreetmap.org/(z)/(x)/(y).png";
+        const tiles = L.tileLayer(url.replaceAll("(","{").replaceAll(")","}"), {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        const marker = L.marker([51.5, -0.09]).addTo(map);
+    };
+
+    document.addEventListener("DOMContentLoaded", function () {
+        loadMap();
+    });
+</script>

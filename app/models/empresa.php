@@ -74,7 +74,7 @@ final class empresa extends model {
 
     public function getByAgenda($id_agenda):object|bool
     {
-        $empresa = $this->addJoin(agenda::table,self::table.".empresa",agenda::table.".id",$id_agenda)->addLimit(1)->selectColumns("empresa.id,empresa.nome,empresa.email,empresa.telefone,empresa.cnpj,empresa.razao,empresa.fantasia");
+        $empresa = $this->addJoin(agenda::table,agenda::table.".id",$id_agenda)->addLimit(1)->selectColumns("empresa.id,empresa.nome,empresa.email,empresa.telefone,empresa.cnpj,empresa.razao,empresa.fantasia");
 
         if(isset($empresa[0]) && $empresa[0]){
             $empresa = $empresa[0];
@@ -85,7 +85,7 @@ final class empresa extends model {
 
             foreach ($configuracoes as $configuracao){
                 $identificador = $configuracao->identificador;
-                $empresa->configuracoes->$identificador = $configuracao->configuracao;
+                $empresa->configuracoes->$identificador = $configuracao->valor;
             }
 
             return $empresa;

@@ -49,7 +49,7 @@ class empresa extends controller {
                  ->setData($this->url."empresa/manutencao", $this->url."empresa/action", $dados,"id")
                  ->addPagination(new pagination(
                     $empresa::getLastCount("getByFilter"),
-                    $this->url."empresa/index",
+                    "#consulta-admin",
                     limit:$this->getLimit()))
                  ->show();
     }
@@ -214,6 +214,11 @@ class empresa extends controller {
                             $configuracoes->identificador = "hora_almoco_fim";
                             $configuracoes->id_empresa = $empresa->id;
                             $configuracoes->configuracao = "14:00";
+                            $configuracoes->set();
+                            $configuracoes = new configuracoes;
+                            $configuracoes->identificador = "mostrar_endereco";
+                            $configuracoes->id_empresa = $empresa->id;
+                            $configuracoes->configuracao = "N";
                             $configuracoes->set();
                         }
     

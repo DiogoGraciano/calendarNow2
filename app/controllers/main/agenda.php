@@ -52,7 +52,7 @@ final class agenda extends controller{
                     "id")
             ->addPagination(new pagination(
                 $agendaModel::getLastCount("getByFilter"),
-                $this->url."agenda/index",
+                "#consulta-admin",
                 limit:$this->getLimit()))
             ->addFilter($filter)
             ->show();

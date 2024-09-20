@@ -42,7 +42,7 @@ class elements extends pagina{
         return $this->parse();
     }
 
-    public function buttonHtmx(string $label,string $name,string $action,string $target,string $swap = "outerHTML",string $confirmMessage = "",string $includes = "",string $class="btn btn-primary w-100 pt-2 btn-block",string $extra="")
+    public function buttonHtmx(string $label,string $name,string $action,string $target,string $swap = "outerHTML",string $confirmMessage = "",string $includes = "",string $class="btn btn-primary",string $extra="")
     {
         $this->setTemplate("elements.html");
 

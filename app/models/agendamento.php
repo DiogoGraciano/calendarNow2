@@ -19,7 +19,6 @@ final class agendamento extends model {
                 ->addColumn((new column("id","INT"))->isPrimary()->setComment("ID agendamento"))
                 ->addColumn((new column("id_agenda","INT"))->isNotNull()->isForeingKey(agenda::table())->setComment("ID da tabela agenda"))
                 ->addColumn((new column("id_usuario","INT"))->isForeingKey(usuario::table())->setComment("ID da tabela usuario"))
-                ->addColumn((new column("id_cliente","INT"))->isForeingKey(cliente::table())->setComment("ID da tabela cliente"))
                 ->addColumn((new column("id_funcionario","INT"))->isForeingKey(funcionario::table())->setComment("ID da tabela funcionario"))
                 ->addColumn((new column("titulo","VARCHAR",150))->isNotNull()->setComment("titulo do agendamento"))
                 ->addColumn((new column("dt_ini","TIMESTAMP"))->isNotNull()->setComment("Data inicial de agendamento"))
@@ -83,11 +82,10 @@ final class agendamento extends model {
         return $return;
     }
 
-    public function getAgendamentosByfilter($id_empresa,?int $id_usuario = null,?string $dt_ini = null,?string $dt_fim = null,bool $onlyActive = false,?int $id_agenda = null,?int $id_funcionario = null,?int $limit = null,?int $offset = null):array
+    public function getByfilter($id_empresa,?int $id_usuario = null,?string $dt_ini = null,?string $dt_fim = null,bool $onlyActive = false,?int $id_agenda = null,?int $id_funcionario = null,?int $limit = null,?int $offset = null):array
     {
         $this->addJoin(usuario::table,usuario::table.".id",agendamento::table.".id_usuario","LEFT")
             ->addJoin(agenda::table."",agenda::table.".id",agendamento::table.".id_agenda")
-            ->addJoin("cliente","cliente.id",agendamento::table.".id_cliente","LEFT")
             ->addJoin(funcionario::table."",funcionario::table.".id",agendamento::table.".id_funcionario")
             ->addFilter(agenda::table.".id_empresa","=",$id_empresa);
 
@@ -95,8 +93,11 @@ final class agendamento extends model {
             $this->addFilter(usuario::table.".id","=",$id_usuario);
         }
                   
-        if($dt_ini && $dt_fim){
+        if($dt_ini){
             $this->addFilter(agendamento::table.".dt_fim",">=",functions::dateTimeBd($dt_ini));
+        }
+
+        if($dt_fim){
             $this->addFilter(agendamento::table.".dt_fim","<=",functions::dateTimeBd($dt_fim));
         }
 
@@ -122,7 +123,7 @@ final class agendamento extends model {
             $this->addLimit($limit);
         }
 
-        return $this->selectColumns(agendamento::table.".id",usuario::table.".cpf_cnpj","cliente.nome as cli_nome",usuario::table.".nome as usu_nome",usuario::table.".email",usuario::table.".telefone",agenda::table.".nome as age_nome",funcionario::table.".nome as fun_nome",agendamento::table.".id_status","dt_ini","dt_fim");
+        return $this->selectColumns(agendamento::table.".id",usuario::table.".cpf_cnpj",usuario::table.".nome",usuario::table.".email",usuario::table.".telefone",agenda::table.".nome as age_nome",funcionario::table.".nome as fun_nome",agendamento::table.".id_status","dt_ini","dt_fim");
     }
 
     public static function prepareList(array $agendamentos)
@@ -143,12 +144,6 @@ final class agendamento extends model {
             if ($agendamento->telefone){
                 $agendamento->telefone = functions::formatPhone($agendamento->telefone);
             }
-            if (!$agendamento->usu_nome){
-                $agendamento->nome = $agendamento->cli_nome;
-            }
-            if (!$agendamento->cli_nome){
-                $agendamento->nome = $agendamento->usu_nome;
-            }
             if ($agendamento->dt_ini){
                 $agendamento->dt_ini = functions::dateTimeBr($agendamento->dt_ini);
             }
@@ -164,60 +159,41 @@ final class agendamento extends model {
         return $agendamentosFinal;
     }
 
-    public function setTotal(int $id):agendamento|null
+    public function setTotal():agendamento|null
     {
-        $agendamento = $this->get($id);
+        $mensagens = []; 
 
-        $mensagens = [];
-
-        if(!($agendamento->id)){
-            $mensagens[] = agendamento::table." não encontrada";
-        }
-
-        $agendamentosItens = (new agendamentoItem)->getItens($agendamento->id);
+        $agendamentosItens = (new agendamentoItem)->getItens($this->id);
 
         $total = 0;
         foreach ($agendamentosItens as $agendamentosIten){
             $total += $agendamentosIten->total_item;
         }
 
-        if(($agendamento->total = $total) < 0){
+        if(($this->total = $total) < 0){
             $mensagens[] = "Total deve ser maior que 0";
         }
 
         if($mensagens){
             mensagem::setErro(...$mensagens);
-            return false;
+            return null;
         }
 
-        if ($agendamento->store()){
-            mensagem::setSucesso(agendamento::table." salvo com sucesso");
-            return $agendamento;
+        if ($this->store()){
+            mensagem::setSucesso("Agendamento salvo com sucesso");
+            return $this;
         }
 
-        return False;
+        return null;
     }
 
-    public function cancel(int $id):agendamento|null
+    public function cancel():agendamento|null
     {
-        $agendamento = $this->get($id);
+        $this->id_status = 4;
 
-        $mensagens = [];
-
-        if(!$agendamento->id){
-            $mensagens[] = agendamento::table." não encontrada";
-        }
-
-        if($mensagens){
-            mensagem::setErro(...$mensagens);
-            return false;
-        }
-
-        $agendamento->id_status = 4;
-
-        if ($agendamento->store()){
-            mensagem::setSucesso(agendamento::table." salvo com sucesso");
-            return $agendamento;
+        if ($this->store()){
+            mensagem::setSucesso("Agendamento salvo com sucesso");
+            return $this;
         }
          
         return null;
@@ -227,29 +203,20 @@ final class agendamento extends model {
     {
         $mensagens = [];
 
-        if($this->id  && (new self)->get($this->id)->id){
-            $mensagens[] = agendamento::table." não encontrada";
+        if($this->id && !(new self)->get($this->id)->id){
+            $mensagens[] = "Agendamento não encontrada";
         }
 
         if(!$this->id_agenda || !(new agenda)->get($this->id_agenda)->id){
-            $mensagens[] = agenda::table." não encontrada";
+            $mensagens[] = "Agenda não encontrada";
         }
 
-        if(!$this->id_cliente && !$this->id_usuario){
-            $mensagens[] = "Obrigatorio Informar Cliente ou Usuario";
+        if($this->id_usuario && !(new usuario)->get($this->id_usuario)->id){
+            $mensagens[] = "Usuario não encontrado";
         }
-        else{
-            if($this->id_usuario && !(new usuario)->get($this->id_usuario)->id){
-                $mensagens[] = usuario::table." não encontrado";
-            }
-
-            if($this->id_cliente && !(new cliente)->get($this->id_cliente)->id){
-                $mensagens[] = "Cliente não cadastrado";
-            }
-        }
-
+        
         if(!$this->id_funcionario || !(new funcionario)->get($this->id_funcionario)->id){
-            $mensagens[] = funcionario::table." não cadastrado";
+            $mensagens[] = "Funcionario não cadastrado";
         }
 
         if(!$this->titulo = htmlspecialchars(ucwords(strtolower(trim($this->titulo))))){
@@ -268,11 +235,11 @@ final class agendamento extends model {
             $mensagens[] = "Cor invalida";
         }
 
-        if(($this->Total) < 0){
+        if(($this->total) < 0){
             $mensagens[] = "Total deve ser maior que 0";
         }
 
-        if(!($this->id_status) && !(new status)->get($this->id_status)){
+        if(!($this->id_status) || !(new status)->get($this->id_status)){
             $mensagens[] = "Status informado invalido";
         }
 
@@ -285,7 +252,7 @@ final class agendamento extends model {
                 $primeiroDiaSemana = (new \DateTimeImmutable($dt_ini))->modify('monday this week')->format("Y-m-d");
                 $ultimoDiaSemana = (new \DateTimeImmutable($dt_ini))->modify('sunday this week')->format("Y-m-d");
 
-                $agendamentos = (new self)->getAgendamentosByFilter($empresa->id,$this->id_usuario,$primeiroDiaMes,$ultimoDiaMes,true);
+                $agendamentos = (new self)->getByFilter($empresa->id,$this->id_usuario,$primeiroDiaMes,$ultimoDiaMes,true);
 
                 $dia = 0;
                 $semana = 0;

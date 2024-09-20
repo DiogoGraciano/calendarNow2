@@ -19,7 +19,6 @@ final class status extends model {
                 ->addColumn((new column("nome","VARCHAR",250))->isNotNull()->setComment("Status do agendamento"));
     }
 
-
     public function getUsuarioStatus():array|object
     {
         return $this->addFilter("id","IN",[1,4])->selectAll();

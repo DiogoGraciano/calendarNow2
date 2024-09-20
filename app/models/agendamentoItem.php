@@ -92,8 +92,8 @@ final class agendamentoItem extends model {
         }
     }
 
-    public function deleteByIdAgendamento(int $id_agendamento){
-        return $this->addFilter("id_agendamento","=",$id_agendamento)->deleteByFilter();
+    public function removeByIdAgendamento(){
+        return $this->addFilter("id_agendamento","=",$this->id_agendamento)->deleteByFilter();
     }
 
 }

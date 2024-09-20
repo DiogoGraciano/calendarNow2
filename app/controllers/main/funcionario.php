@@ -106,7 +106,7 @@ final class funcionario extends controller
                         "id")
             ->addPagination(new pagination(
                 $funcionario->getLastCount("getByFilter"),
-                $this->url."usuario/index",
+                "#consulta-admin",
                 limit:$this->getLimit()))
             ->addFilter($filter)
             ->show();

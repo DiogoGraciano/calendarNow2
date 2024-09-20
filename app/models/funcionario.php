@@ -31,12 +31,14 @@ final class funcionario extends model {
                 ->addColumn((new column("espacamento_agenda", "INT"))->isNotNull()->setComment("Tamanho do Slot para selecionar na agenda em minutos"));
     }
 
-    public function getByFilter(int $id_empresa,?string $nome = null,?int $id_agenda = null,?int $id_grupo_funcionarios = null,?int $limit = null,?int $offset = null,?bool $asArray = true):array
+    public function getByFilter(?int $id_empresa = null,?string $nome = null,?int $id_agenda = null,?int $id_grupo_funcionarios = null,?int $limit = null,?int $offset = null,?bool $asArray = true):array
     {
         $this->addJoin(funcionarioGrupoFuncionario::table,funcionario::table.".id",funcionarioGrupoFuncionario::table.".id_funcionario","LEFT")
             ->addJoin(agendaFuncionario::table,agendaFuncionario::table.".id_funcionario",funcionario::table.".id","LEFT")  
-            ->addJoin(usuario::table,usuario::table.".id",funcionario::table.".id_usuario")
-           ->addFilter(usuario::table.".id_empresa","=",$id_empresa);
+            ->addJoin(usuario::table,usuario::table.".id",funcionario::table.".id_usuario");
+         
+        if($id_empresa)
+            $this->addFilter(usuario::table.".id_empresa","=",$id_empresa);
 
         if($id_grupo_funcionarios)
             $this->addFilter(funcionarioGrupoFuncionario::table.".id_grupo_funcionario","=",$id_grupo_funcionarios);

@@ -7,11 +7,13 @@ use core\url;
 
 class agenda extends pagina{
 
-    private $buttons;
-    
-    public function set($action,$eventos,$days_off=",seg,ter,qua,qui,sex,",$initial_time = "08:00",$final_time = "19:00",$dinner_start="12:00",$dinner_end="13:00",$slot_duration = 30):self
+    public function __construct()
     {
-        $this->tpl = $this->getTemplate("agenda.html");
+        $this->setTemplate("agenda.html");
+    }
+    
+    public function set(string $action,array $eventos,string $days_off=",seg,ter,qua,qui,sex,",string $initial_time = "08:00",string $final_time = "19:00",string $dinner_start="12:00",string $dinner_end="13:00",int $slot_duration = 30):self
+    {
         $mensagem = new mensagem;
         $this->tpl->mensagem = $mensagem->show(false);
         $this->tpl->action = $action;
@@ -69,16 +71,21 @@ class agenda extends pagina{
         $date = new \DateTimeImmutable();
         $this->tpl->initial_date = $date->format(\DateTimeInterface::ATOM);
 
-        foreach ($this->buttons as $button){
-            $this->tpl->button = $button;
-            $this->tpl->block("BLOCK_BUTTON");
-        }
         $this->tpl->block("BLOCK_CALENDARIO");
   
         return $this;
     }
 
-    public function addButton($button){
-        $this->buttons[] = $button;
+    public function addFilter(Filter $filter):agenda
+    {
+        $this->tpl->filter = $filter->parse();
+        return $this;
+    }
+
+    public function addButton($button):agenda
+    {
+        $this->tpl->button = $button;
+        $this->tpl->block("BLOCK_BUTTON");
+        return $this;
     }
 }

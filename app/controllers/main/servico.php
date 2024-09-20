@@ -100,7 +100,7 @@ class servico extends controller{
                         "id")
                 ->addPagination(new pagination(
                     $servicos->getLastCount("getByFilter"),
-                    $this->url."servico/index",
+                    "#consulta-admin",
                     limit:$this->getLimit()))
                 ->addFilter($filter)
                 ->show();

@@ -2,7 +2,8 @@
 
 namespace core;
 
-use app\controllers\main\errorController;
+use app\controllers\main\error;
+use app\view\layout\head;
 use Exception;
 
 /**
@@ -38,7 +39,8 @@ class method{
         $method = $this->getMethod();
 
         if(!method_exists($controller, $method)){
-            (new errorController)->index();
+            (new head("Erro"))->show();
+            (new error)->index();
             die;
         }
 

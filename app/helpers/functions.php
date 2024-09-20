@@ -48,6 +48,11 @@ class functions{
      */
     public static function dateTimeBd(string $string):string|bool
     {
+        if(!$string){
+            return false;
+        }
+
+        $string = str_replace("/","-",$string);
         $datetime = new \DateTimeImmutable($string);
         if ($datetime !== false)
             return $datetime->format('Y-m-d H:i:s');
@@ -63,6 +68,11 @@ class functions{
      */
     public static function dateTimeBr(string $string):string|bool
     {
+        if(!$string){
+            return false;
+        }
+        
+        $string = str_replace("/","-",$string);
         $datetime = new \DateTimeImmutable($string);
         if ($datetime !== false)
             return $datetime->format('d/m/Y H:i:s');
