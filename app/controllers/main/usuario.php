@@ -288,7 +288,7 @@ final class usuario extends controller {
                     $login = (new login);
                     $user = $login::getLogged();
                    
-                    if($user->tipo_usuario != 3){
+                    if($user && $user->tipo_usuario != 3){
                         $agendas = (new agenda)->getByUsuario($user->id);
 
                         foreach ($agendas as $agenda){

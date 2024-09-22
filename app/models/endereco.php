@@ -5,6 +5,7 @@ use app\db\abstract\model;
 use app\db\migrations\table;
 use app\db\migrations\column;
 use app\helpers\functions;
+use app\helpers\integracaoWs;
 use app\helpers\mensagem;
 
 final class endereco extends model {
@@ -25,7 +26,9 @@ final class endereco extends model {
             ->addColumn((new column("bairro","VARCHAR",300))->isNotNull()->setComment("Bairro"))
             ->addColumn((new column("rua","VARCHAR",300))->isNotNull()->setComment("Rua"))
             ->addColumn((new column("numero","INT"))->isNotNull()->setComment("Numero"))
-            ->addColumn((new column("complemento","VARCHAR",300))->setComment("Complemento do endereço"));
+            ->addColumn((new column("complemento","VARCHAR",300))->setComment("Complemento do endereço"))
+            ->addColumn((new column("latitude","DECIMAL","4,7"))->isNotNull()->setComment("Latitude da empresa"))
+            ->addColumn((new column("longitude","DECIMAL","4,7"))->isNotNull()->isUnique()->setComment("Longitude da empresa"));
     }
 
     public function getbyIdUsuario($id_usuario = ""):array
@@ -77,6 +80,11 @@ final class endereco extends model {
 
         if(($this->id) && !(new self)->get($this->id)->id){
             $mensagens[] = "Endereço não existe";
+        }
+
+        if(!isset($this->latitude) || isset($this->logintude)){
+            $geoCoding = (new integracaoWs())->getGeoCoding($this->rua,$this->bairro,$this->numero);
+            var_dump($geoCoding);
         }
 
         if($mensagens){

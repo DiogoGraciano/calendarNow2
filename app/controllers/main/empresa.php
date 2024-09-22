@@ -9,6 +9,7 @@ use app\view\layout\consulta;
 use app\helpers\functions;
 use app\helpers\mensagem;
 use app\db\transactionManeger;
+use app\helpers\integracaoWs;
 use app\models\cidade;
 use app\models\configuracoes;
 use app\models\empresa as empresaModel;
@@ -225,10 +226,10 @@ class empresa extends controller {
                         mensagem::setSucesso("Usuario empresarial salvo com sucesso");
                         transactionManeger::commit();
 
-                        $login = (new login);
-                        if(!$login->getLogged() && $login->login($usuario->cpf_cnpj,$senha)){
-                            $this->go("agenda");
-                        }
+                        // $login = (new login);
+                        // if(!$login->getLogged() && $login->login($usuario->cpf_cnpj,$senha)){
+                        //     $this->go("agenda");
+                        // }
 
                         $this->manutencao([$usuario->id],$usuario,$endereco,$empresa);
                         return;
@@ -236,15 +237,25 @@ class empresa extends controller {
                 }
             }
         } catch (\Exception $e) {
-            mensagem::setErro("Erro ao Salvar Empresa Tente Novamente");
+            mensagem::setErro("Erro ao Salvar Empresa Tente Novamente",$e->getMessage());
             mensagem::setSucesso(false);
             transactionManeger::rollback();
+            if(!$id_empresa || $id || $id_endereco){
+                $usuario->id = null;
+                $empresa->id = null;
+                $endereco->id = null;
+            }
             $this->manutencao([$usuario->id],$usuario,$endereco,$empresa);
             return;
         }
 
         mensagem::setSucesso(false);
         transactionManeger::rollback();
+        if(!$id_empresa || $id || $id_endereco){
+            $usuario->id = null;
+            $empresa->id = null;
+            $endereco->id = null;
+        }
         $this->manutencao([$usuario->id],$usuario,$endereco,$empresa);
     }
 }

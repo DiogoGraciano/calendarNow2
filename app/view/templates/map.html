@@ -2,8 +2,9 @@
 <script src="{caminho}assets/js/leaflet.js"> </script>
 <script>
     function loadMap(){
-	    const map = L.map('map').setView([51.505, -0.09], 13);
+	    const map = L.map('map').setView([-28.6876245,-49.3592545], 13);
 
+        map.locate({setView: true});
 
         //está assim pois o templates substitui tudo que tem {};
         let url = "https://tile.openstreetmap.org/(z)/(x)/(y).png";
@@ -12,7 +13,20 @@
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
 
-        const marker = L.marker([51.5, -0.09]).addTo(map);
+
+        function onLocationError(e) {
+            alert(e.message);
+        }
+
+        map.on('locationerror', onLocationError);
+
+        let marker = null;
+        <!-- BEGIN BLOCK_MARKER -->
+            marker = L.marker([{latitude},{logitude}]).addTo(map);
+            <!-- BEGIN BLOCK_MENSAGEM -->
+            marker.bindPopup("{mensagem}"){open}
+            <!-- END BLOCK_MENSAGEM -->
+        <!-- END BLOCK_MARKER -->
     };
 
     document.addEventListener("DOMContentLoaded", function () {

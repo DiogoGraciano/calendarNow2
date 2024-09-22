@@ -193,7 +193,7 @@ function validCep(){
 
             showLoader();
 
-            fetch(url_base + "ajax", {
+            fetch("/ajax", {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'Accept': 'application/json'
