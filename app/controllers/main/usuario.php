@@ -176,7 +176,6 @@ final class usuario extends controller {
     public function formUsuario($parameters = [],?usuarioModel $usuario = null,?endereco $endereco = null):form
     {
         $id = null;
-        $location = null;
 
         if ($parameters && array_key_exists(0, $parameters)){
             if (array_key_exists(0, $parameters)){
@@ -184,7 +183,7 @@ final class usuario extends controller {
             }
         }
     
-        $form = new form($this->url."usuario/action/".$location?:"");
+        $form = new form($this->url."usuario/action");
 
         $dado = $usuario?:(new usuarioModel)->get($id);
 

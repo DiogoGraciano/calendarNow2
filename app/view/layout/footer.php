@@ -14,7 +14,7 @@ use core\url;
 class footer extends pagina
 {
 
-    public function __construct(string $logo = "assets\imagens\logo_grande.png",int $tamanho_logo = 4)
+    public function __construct(string $logo = "assets\imagens\logo_grande.webp",int $tamanho_logo = 4)
     {
         $this->setTemplate("footer.html");
         if($logo){

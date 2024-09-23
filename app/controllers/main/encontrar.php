@@ -48,7 +48,7 @@ class encontrar extends controller{
 
         $elements = new elements;
 
-        $agendas = (new agenda())->get($empresa->id,"id_empresa",0);
+        $agendas = (new agenda())->getByFilter($empresa->id);
        
         $form = new form($this->url."actionModal","modal-".$empresa->id);
 
@@ -60,7 +60,7 @@ class encontrar extends controller{
         
         $form->setElement($elements->titulo(4,"Agendas"));
         foreach ($agendas as $agenda){
-            $form->setElement($elements->checkbox("agenda[]",$agenda->nome,value:$agenda->id));
+            $form->setElement($elements->checkbox("agenda[]",$agenda["nome"],value:$agenda["id"]));
         }
 
         $form->setButton($elements->buttonHtmx("Adicionar","adcionar",$this->url."encontrar/actionModal","#form-modal-".$empresa->id,class:"btn btn-primary w-100"));

@@ -9,7 +9,7 @@ use app\models\menu;
 
 class header extends pagina{
 
-    public function __construct(string $pathlogo = "assets\imagens\logo.png")
+    public function __construct(string $pathlogo = "assets\imagens\logo.webp")
     {
         $data = date('D');
         $mes = date('M');

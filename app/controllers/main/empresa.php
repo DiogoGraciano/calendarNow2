@@ -63,7 +63,7 @@ class empresa extends controller {
             $id = intval($parameters[0]); 
         }
       
-        $form = new form($this->url."empresa/action/","empresa");
+        $form = new form($this->url."empresa/action","empresa");
 
         $dado = $usuario?:(new usuario)->get($id);
         $form->setHidden("cd", $dado->id);

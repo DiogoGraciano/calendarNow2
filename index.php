@@ -15,7 +15,7 @@ use core\url;
 
 session::start();
 
-$urlPermitidas = ["/ajax","/login/action","/usuario/manutencao","/usuario/action/","/empresa/manutencao","/empresa/action/"];
+$urlPermitidas = ["/ajax","/login/action","/login/usuario","/usuario/action","/login/empresa","/empresa/action"];
 
 $controller = new Controller;
 
