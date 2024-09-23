@@ -76,17 +76,17 @@ class empresa extends controller {
 
         $elements = new elements();
 
-        $form->setInput($elements->titulo(1,"Cadastro de Empresa"))
-        ->setDoisInputs(
+        $form->setElement($elements->titulo(1,"Cadastro de Empresa"))
+        ->setTwoElements(
             $elements->input("nome", "Nome do Usuario", $dado->nome, true),
             $elements->input("cpf_cnpj", "CPF/CNPJ da Empresa:", $dado->cpf_cnpj?functions::formatCnpjCpf($dado->cpf_cnpj):"", true),
             array("nome", "cpf_cnpj")
-        )->setTresInputs(
+        )->setThreeElements(
             $elements->input("email", "Email", $dado->email, true, false, "", "email"),
             $elements->input("senha", "Senha", "", $dado->senha?false:true, false, "", "password"),
             $elements->input("telefone", "Telefone", functions::formatPhone($dado->telefone), true),
             array("email", "senha", "telefone")
-        )->setTresInputs(
+        )->setThreeElements(
             $elements->input("nome_empresa", "Nome da Empresa", $dadoEmpresa->nome, true),
             $elements->input("fantasia", "Nome Fantasia", $dadoEmpresa->fantasia, true),
             $elements->input("razao", "Razao Social:", $dadoEmpresa->razao, true),
@@ -96,24 +96,24 @@ class empresa extends controller {
         $elements->setOptions((new estado())->getAll(), "id", "nome");
         $estado = $elements->select("id_estado","Estado", $dadoEndereco->id_estado ?: 24, true);
 
-        $form->setDoisInputs(
+        $form->setTwoElements(
             $elements->input("cep", "CEP", $dadoEndereco->cep, true),
             $estado,
             array("cep", "id_estado")
         );
 
         $elements->setOptions((new cidade())->getByEstado($dadoEndereco->id_estado ?: 24), "id", "nome");
-        $form->setDoisInputs(
+        $form->setTwoElements(
             $elements->select("id_cidade","Cidade",$dadoEndereco->id_cidade ?: 4487, true),
             $elements->input("bairro", "Bairro", $dadoEndereco->bairro, true),
             array("bairro", "id_cidade")
         );
 
-        $form->setDoisInputs(
+        $form->setTwoElements(
             $elements->input("rua", "Rua", $dadoEndereco->rua, true),
             $elements->input("numero", "Numero", $dadoEndereco->numero, true, false, "", "number", "form-control", 'min="0" max="999999"'),
             array("rua", "numero")
-        )->setInput($elements->textarea("complemento", "Complemento", $dadoEndereco->complemento), "complemento")
+        )->setElement($elements->textarea("complemento", "Complemento", $dadoEndereco->complemento), "complemento")
         ->setButton($elements->button("Salvar", "submit"))
         ->setButton($elements->button("Voltar", "voltar", "button", "btn btn-primary w-100 pt-2 btn-block", "location.href='".($this->url."empresa")."'"))
         ->show();
@@ -226,10 +226,10 @@ class empresa extends controller {
                         mensagem::setSucesso("Usuario empresarial salvo com sucesso");
                         transactionManeger::commit();
 
-                        // $login = (new login);
-                        // if(!$login->getLogged() && $login->login($usuario->cpf_cnpj,$senha)){
-                        //     $this->go("agenda");
-                        // }
+                        $login = (new login);
+                        if(!$login->getLogged() && $login->login($usuario->cpf_cnpj,$senha)){
+                            $this->go("agenda");
+                        }
 
                         $this->manutencao([$usuario->id],$usuario,$endereco,$empresa);
                         return;

@@ -94,13 +94,13 @@ final class grupo extends controller{
 
         $elements = new elements;
 
-        $form->setInput($elements->titulo(1,"Manutenção Grupo"))->setInput(
+        $form->setElement($elements->titulo(1,"Manutenção Grupo"))->setElement(
             $elements->input("nome","Nome",$dado->nome,true)
         );
 
         if($dado->id && $vinculos = $model->getVinculos($dado->id)){
 
-            $form->setInput($elements->label("Vinculados"));
+            $form->setElement($elements->label("Vinculados"));
 
             $this->isMobile() ? $table = new tabelaMobile() : $table = new tabela();
             
@@ -113,7 +113,7 @@ final class grupo extends controller{
                 $table->addRow($vinculo->getArrayData());
             }
 
-            $form->setInput($table->parse());
+            $form->setElement($table->parse());
         }
 
         $form->setButton($elements->button("Salvar","submit"));

@@ -24,8 +24,8 @@ class configuracoes extends controller{
 
         $form = new form($this->url."configuracoes/action");
 
-        $form->setInput($elements->titulo(1,"Configurações da Empresa"))->
-        setTresInputs($elements->input("max_agendamento_dia","Maximo de Agendamentos por Dia",
+        $form->setElement($elements->titulo(1,"Configurações da Empresa"))->
+        setThreeElements($elements->input("max_agendamento_dia","Maximo de Agendamentos por Dia",
                         $configuracoes->getConfiguracao("max_agendamento_dia",$user->id_empresa)?:2,true,type:"number"),
                         $elements->input("max_agendamento_semana","Maximo de Agendamentos por Semana",
                         $configuracoes->getConfiguracao("max_agendamento_semana",$user->id_empresa)?:3,true,type:"number"),
@@ -33,13 +33,13 @@ class configuracoes extends controller{
                         $configuracoes->getConfiguracao("max_agendamento_mes",$user->id_empresa)?:3,true,type:"number")
                     );
 
-        $form->setDoisInputs(
+        $form->setTwoElements(
             $elements->input("hora_ini", "Hora Inicial de Abertura", functions::removeSecondsTime($configuracoes->getConfiguracao("hora_ini",$user->id_empresa)?:"08:00"), true, false,type:"time"),
             $elements->input("hora_fim", "Hora Final de Abertura", functions::removeSecondsTime($configuracoes->getConfiguracao("hora_fim",$user->id_empresa)?:"18:00"), true, false,type:"time"),
             ["hora_ini", "hora_fim"]
         );
 
-        $form->setDoisInputs(
+        $form->setTwoElements(
             $elements->input("hora_almoco_ini", "Hora Inicial de Almoço", functions::removeSecondsTime($configuracoes->getConfiguracao("hora_almoco_ini",$user->id_empresa)?:"12:00"), true, false,type:"time"),
             $elements->input("hora_almoco_fim", "Hora Final de Almoço", functions::removeSecondsTime($configuracoes->getConfiguracao("hora_almoco_fim",$user->id_empresa)?:"14:00"), true, false,type:"time"),
             ["hora_almoco_ini", "hora_almoco_fim"]
@@ -47,7 +47,7 @@ class configuracoes extends controller{
 
         $elements->addOption("N","Não");
         $elements->addOption("S","Sim");
-        $form->setInput($elements->select("mostrar_endereco","Mostrar Endereço",$configuracoes->getConfiguracao("mostrar_endereco",$user->id_empresa)));
+        $form->setElement($elements->select("mostrar_endereco","Mostrar Endereço",$configuracoes->getConfiguracao("mostrar_endereco",$user->id_empresa)));
 
         $form->setButton($elements->button("Salvar","submit"));
         $form->setButton($elements->button("Voltar","voltar","button","btn btn-primary w-100 btn-block","location.href='".$this->url."opcoes'"));

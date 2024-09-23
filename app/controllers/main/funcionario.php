@@ -51,7 +51,7 @@ final class funcionario extends controller
             }
             $agenda = $elements->select("agenda","Agenda:",$id_agenda);
 
-            $form->setinput($agenda);
+            $form->setElement($agenda);
             $form->setButton($elements->button("Salvar", "submitModalConsulta"));
             $modalAgenda = new modal("modalAgenda","Vincular Funcionario a Agenda",$form->parse());
             $modalAgenda->show();
@@ -71,7 +71,7 @@ final class funcionario extends controller
 
             $form = new form($this->url . "funcionario/massActionGrupoFuncionario/","massActionGrupoFuncionario","#consulta-admin","#consulta-admin");
 
-            $form->setinput($grupo_funcionario);
+            $form->setElement($grupo_funcionario);
             $form->setButton($elements->button("Salvar", "submitModalConsulta"));
             $modalGrupo = new modal("modalGrupo","Vincular Grupo de Funcionario ao Funcionario",$form->parse());
             $modalGrupo->show();
@@ -129,14 +129,14 @@ final class funcionario extends controller
 
         $elements = new elements();
         $form
-        ->setInput($elements->titulo(1,"Manutenção Funcionario"))
-        ->setDoisInputs(
+        ->setElement($elements->titulo(1,"Manutenção Funcionario"))
+        ->setTwoElements(
             $elements->input("nome", "Nome", $dado->nome, true),
             $elements->input("cpf_cnpj", "CPF/CNPJ:", $dado->cpf_cnpj ? functions::formatCnpjCpf($dado->cpf_cnpj) : "", true),
             ["nome", "cpf_cnpj"]
         );
 
-        $form->setTresInputs(
+        $form->setThreeElements(
             $elements->input("email", "Email", $dado->email, true, false, "", "email"),
             $elements->input("senha", "Senha", "", $dado->senha?false:true, false, "", "password"),
             $elements->input("telefone", "Telefone", functions::formatPhone($dado->telefone), true),
@@ -147,7 +147,7 @@ final class funcionario extends controller
 
         if ($dadoFuncionario->id && $agendas = (new agendaFuncionario)->getAgendaByFuncionario($dadoFuncionario->id)) {
 
-            $form->setInput($elements->label("Agendas Vinculadas"));
+            $form->setElement($elements->label("Agendas Vinculadas"));
 
             $table->addColumns("1", "ID", "id");
             $table->addColumns("90", "Nome", "nome");
@@ -158,7 +158,7 @@ final class funcionario extends controller
                 $table->addRow($agenda->getArrayData());
             }
 
-            $form->setInput($table->parse());
+            $form->setElement($table->parse());
         }
 
         $agendas = (new agenda)->getByFilter($user->id_empresa);
@@ -170,7 +170,7 @@ final class funcionario extends controller
 
         $select_agenda = $elements->select("id_agenda","Agenda");
 
-        $form->setDoisInputs(
+        $form->setTwoElements(
             $select_agenda,
             $elements->input("espacamento_agenda","Subdivisão de horario em minutos",$dadoFuncionario->espacamento_agenda?:30,type:"number",min:10,max:500)
         );
@@ -181,7 +181,7 @@ final class funcionario extends controller
 
         if ($dadoFuncionario->id && $grupos_funcionarios = $grupos_funcionario->getVinculos($dadoFuncionario->id)) {
 
-            $form->setInput($elements->label("Grupos de Funcionario Vinculados"));
+            $form->setElement($elements->label("Grupos de Funcionario Vinculados"));
 
             $table->addColumns("1", "ID", "id");
             $table->addColumns("90", "Nome", "nome");
@@ -192,7 +192,7 @@ final class funcionario extends controller
                 $table->addRow($grupo_funcionario->getArrayData());
             }
 
-            $form->setInput($table->parse());
+            $form->setElement($table->parse());
         }
 
         $grupos_funcionarios = $grupos_funcionario->getByFilter($user->id_empresa);
@@ -203,30 +203,30 @@ final class funcionario extends controller
         }
         $id_grupo_funcionario = $elements->select("id_grupo_funcionario","Grupo de Funcionarios");
 
-        $form->setInput($id_grupo_funcionario);
+        $form->setElement($id_grupo_funcionario);
 
-        $form->setDoisInputs(
+        $form->setTwoElements(
             $elements->input("hora_ini", "Hora Inicial de Trabalho", functions::removeSecondsTime($dadoFuncionario->hora_ini ?: "08:00"), true, false,type:"time"),
             $elements->input("hora_fim", "Hora Final de Trabalho", functions::removeSecondsTime($dadoFuncionario->hora_fim ?: "18:00"), true, false,type:"time"),
             ["hora_ini", "hora_fim"]
         );
 
-        $form->setDoisInputs(
+        $form->setTwoElements(
             $elements->input("hora_almoco_ini", "Hora Inicial de Almoço", functions::removeSecondsTime($dadoFuncionario->hora_almoco_ini ?: "12:00"), true, false,type:"time"),
             $elements->input("hora_almoco_fim", "Hora Final de Almoço", functions::removeSecondsTime($dadoFuncionario->hora_almoco_fim ?: "13:30"), true, false,type:"time"),
             ["hora_almoco_ini", "hora_almoco_fim"]
         );
 
-        $form->setInput($elements->label("Dias de trabalho na Semana"));
+        $form->setElement($elements->label("Dias de trabalho na Semana"));
 
         $checkDias = explode(",", $dadoFuncionario->dias ?: "");
         $diasSemana = ["dom" => "Domingo", "seg" => "Segunda", "ter" => "Terça", "qua" => "Quarta", "qui" => "Quinta", "sex" => "Sexta", "sab" => "Sábado"];
 
         foreach ($diasSemana as $key => $value) {
-            $form->addCustomInput(2, $elements->checkbox($key, $value, false, in_array($key, $checkDias), value: $key), $key);
+            $form->addCustomElement(2, $elements->checkbox($key, $value, false, in_array($key, $checkDias), value: $key), $key);
         }
 
-        $form->setCustomInputs();
+        $form->setCustomElements();
         $form->setButton($elements->button("Salvar", "submit"));
         $form->setButton($elements->button("Voltar", "voltar", "button", "btn btn-primary w-100 pt-2 btn-block", "location.href='" . $this->url . "funcionario/index/'"));
         $form->show();

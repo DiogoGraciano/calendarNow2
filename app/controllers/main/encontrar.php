@@ -4,13 +4,14 @@ use app\view\layout\form;
 use app\view\layout\elements;
 use app\helpers\mensagem;
 use app\controllers\abstract\controller;
+use app\helpers\functions;
 use app\models\agenda;
 use app\models\agendaUsuario;
 use app\models\empresa;
 use app\models\login;
+use app\view\layout\div;
 use app\view\layout\map;
 use app\view\layout\modal;
-use app\view\layout\tab;
 
 class encontrar extends controller{
 
@@ -30,42 +31,82 @@ class encontrar extends controller{
 
         $elements = new elements;
 
-        $form->setInput($elements->titulo(1,"Encontrar Agenda"))
-        ->setinput($elements->input("codigo_agenda","Codigo da Agenda",$codigo))
-        ->setButton($elements->button("Adicionar","submit","submit","btn btn-primary w-100 pt-2 btn-block"))
-        ->setButton($elements->button("Voltar","voltar","button","btn btn-primary w-100 pt-2 btn-block","location.href='".$this->url."home"."'"));
+        $form->setElement($elements->titulo(1,"Adicionar Agenda"))
+            ->setElement($elements->input("codigo_agenda","Codigo da Agenda",$codigo))
+            ->setButton($elements->button("Adicionar","submit","submit","btn btn-primary w-100 pt-2 btn-block"));
 
-        $tab = new tab();
-        $tab->addTab("Mapa",$this->loadMap(),true);
-        $tab->addTab("Codigo",$form->parse());
-        $tab->show();
+        $div = new div("modal-empresa","modal fade",'tabindex="-1" aria-labelledby="modal-empresa" aria-hidden="true"');
+        $div->show();
+
+        $div = new div("encontrar");
+        $div->addContent($this->loadMap());
+        $div->addContent($form->parse());
+        $div->show();
     }
 
-    public function loadModal(array $parameters = []){
-        if(isset($parameters[0])){
-            $empresa = (new empresa())->get($parameters[0]);
-            $agendas = (new agenda())->get($empresa->id,"id_empresa",0);
+    private function loadFormModal(empresa $empresa){
 
+        $elements = new elements;
 
+        $agendas = (new agenda())->get($empresa->id,"id_empresa",0);
+       
+        $form = new form($this->url."actionModal","modal-".$empresa->id);
 
-            new modal("empresa-".$empresa->id,"Detalhe da Empresa","")
-
-            foreach ($agendas as $agenda){
-
-            }
+        $form->setHidden("empresa_id",$empresa->id)
+            ->setElement($elements->label("Nome: ".$empresa->nome))
+            ->setElement($elements->label("CPF/CNPJ: ".functions::formatCnpjCpf($empresa->cnpj)))
+            ->setElement($elements->label("Telefone: ".functions::formatPhone($empresa->telefone)))
+            ->setElement($elements->label("Email: ".$empresa->email));
+        
+        $form->setElement($elements->titulo(4,"Agendas"));
+        foreach ($agendas as $agenda){
+            $form->setElement($elements->checkbox("agenda[]",$agenda->nome,value:$agenda->id));
         }
+
+        $form->setButton($elements->buttonHtmx("Adicionar","adcionar",$this->url."encontrar/actionModal","#form-modal-".$empresa->id,class:"btn btn-primary w-100"));
+
+        return $form;
     }
 
     private function loadMap():string
     {
         $map = new map();
-        $empresas = (new empresa())->getAll();
+        $empresas = (new empresa())->getByFilter(asArray:false);
+
+        $elements = new elements;
 
         foreach ($empresas as $empresa){
-            $map->addMarker($empresa->latitude,$empresa->longitude,$empresa->nome,true);
+            $modal = new modal("empresa-".$empresa->id,"Detalhe da Empresa",$this->loadFormModal($empresa)->parse(),"modal fade");
+            $modal->show();
+            $map->addMarker($empresa->latitude,$empresa->longitude,$elements->buttonModal($empresa->nome,$empresa->nome,"#empresa-".$empresa->id,class:"btn btn-link"),true);
         }
            
         return $map->parse();
+    }
+
+    public function actionModal(array $parameters = []):void
+    {
+        $user = login::getLogged();
+
+        $agendas = $this->getValue("agenda");
+
+        if($agendas){
+            foreach ($agendas as $id){
+
+                $agendaUsuario = new agendaUsuario;
+                $agendaUsuario->id_agenda = $id;
+                $agendaUsuario->id_usuario = $user->id;
+
+                if($agendaUsuario->set())
+                    mensagem::setSucesso("Agenda vinculada com sucesso");
+                else 
+                    mensagem::setErro("Agenda não encontrada");
+            }
+        }
+        else 
+            mensagem::setErro("Nenhuma agenda informada");
+
+        $this->loadFormModal((new empresa)->get($this->getValue("empresa_id")))->show();
     }
 
     public function action(array $parameters = []):void
@@ -87,7 +128,7 @@ class encontrar extends controller{
             if($agendaUsuario->set())
                 mensagem::setSucesso("Agenda vinculada com sucesso");
             else 
-                mensagem::setErro("Agenda não encontrar");
+                mensagem::setErro("Agenda não encontrada");
         }
 
         $this->index();

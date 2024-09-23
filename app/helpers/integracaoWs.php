@@ -26,37 +26,29 @@ class integracaoWs{
     public function getGeoCoding(string $rua = "",?string $bairro = "",?string $numero = "",?string $cidade = "",?string $estado = ""){
 
         $query_array = array (
-            'q' => urlencode(strtolower("$rua $bairro $numero $cidade $estado")),
+            'street' => trim(urlencode(strtolower(functions::tirarAcentos("$rua $numero")))),
+            'county' => urlencode(strtolower(functions::tirarAcentos($bairro))),
+            'city' => urlencode(strtolower(functions::tirarAcentos($cidade))),
+            'state' => urlencode(strtolower(functions::tirarAcentos($estado))),
             'format' => 'geojson'
         );
 
         $query = http_build_query($query_array);
 
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-          CURLOPT_URL => 'https://nominatim.openstreetmap.org/search?'.$query,
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_ENCODING => '',
-          CURLOPT_MAXREDIRS => 10,
-          CURLOPT_TIMEOUT => 0,
-          CURLOPT_FOLLOWLOCATION => true,
-          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-          CURLOPT_CUSTOMREQUEST => 'GET',
-        ));
+        $options = [
+            'http' => [
+                'user_agent' => 'diogo.dg691@gmail.com',
+            ],
+        ];
         
-        $response = curl_exec($curl);
-        
-        if($response)
-            return json_decode($response);
-        
-        return ["error"=>curl_error($curl)];
+        return $this->getResult('https://nominatim.openstreetmap.org/search?'.$query,$options);
     }
 
-    private function getResult(string $urlCompleta){
+    private function getResult(string $urlCompleta,array $context = []){
 
         try{
-            $response = file_get_contents($urlCompleta);
+            $context = stream_context_create($context);
+            $response = file_get_contents($urlCompleta,false,$context);
             
             if ($response && $response = json_decode($response))
                 return $response;

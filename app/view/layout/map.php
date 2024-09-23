@@ -7,6 +7,8 @@ use core\url;
 
 class map extends pagina{
 
+    private int $countMaker = 1;
+
     public function __construct()
     {
         $this->setTemplate("map.html");
@@ -18,8 +20,10 @@ class map extends pagina{
     {
         $this->tpl->latitude = $latitude;
         $this->tpl->logitude = $logitude;
+        $this->tpl->count = $this->countMaker;
+        $this->countMaker++;
         if($mensagem){
-            $this->tpl->mensagem = $mensagem;
+            $this->tpl->mensagem = trim($mensagem);
             if($open){
                 $this->tpl->open = ".openPopup()";
             }

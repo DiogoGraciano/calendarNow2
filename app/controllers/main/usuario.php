@@ -192,14 +192,14 @@ final class usuario extends controller {
 
         $form->setHidden("cd",$dado->id);
 
-        $form->setInput($elements->titulo(1,"Cadastro de Usuario"))
-        ->setDoisInputs(
+        $form->setElement($elements->titulo(1,"Cadastro de Usuario"))
+        ->setTwoElements(
             $elements->input("nome", "Nome", $dado->nome, true),
             $elements->input("cpf_cnpj", "CPF/CNPJ", functions::formatCnpjCpf($dado->cpf_cnpj), true),
             array("nome", "cpf_cnpj")
         );
 
-        $form->setTresInputs(
+        $form->setThreeElements(
             $elements->input("email", "Email", $dado->email, true, false, "", "email"),
             $elements->input("senha", "Senha", "", $dado->senha?false:true, false, "", "password"),
             $elements->input("telefone", "Telefone", functions::formatPhone($dado->telefone), true),
@@ -212,26 +212,26 @@ final class usuario extends controller {
         // $elements->setOptions((new ModelsEstado())->getAll(), "id", "nome");
         // $estado = $elements->select("id_estado","Estado",$dadoEndereco->id_estado ?: 24, true);
 
-        // $form->setDoisInputs(
+        // $form->setTwoElements(
         //     $elements->input("cep", "CEP", $dadoEndereco->cep, true),
         //     $estado,
         //     array("cep", "id_estado")
         // );
 
         // $elements->setOptions((new cidade())->getByEstado($dadoEndereco->id_estado ?: 24), "id", "nome");
-        // $form->setDoisInputs(
+        // $form->setTwoElements(
         //     $elements->select("id_cidade","Cidade", $dadoEndereco->id_cidade ?: 4487, true),
         //     $elements->input("bairro", "Bairro", $dadoEndereco->bairro, true),
         //     array("bairro", "id_cidade")
         // );
 
-        // $form->setDoisInputs(
+        // $form->setTwoElements(
         //     $elements->input("rua", "Rua", $dadoEndereco->rua, true),
         //     $elements->input("numero", "Número", $dadoEndereco->numero, true, false, "", "number", "form-control", 'min="0" max="999999"'),
         //     array("rua", "numero")
         // );
 
-        // $form->setInput($elements->textarea("complemento", "Complemento", $dadoEndereco->complemento), "complemento");
+        // $form->setElement($elements->textarea("complemento", "Complemento", $dadoEndereco->complemento), "complemento");
 
         $form->setButton($elements->button("Salvar", "submitUsuario"));
         return $form->setButton($elements->button("Voltar", "voltar", "button", "btn btn-primary w-100 pt-2 btn-block", "location.href='".($this->url.$location?:"login")."'"));

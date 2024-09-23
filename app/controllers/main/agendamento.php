@@ -268,11 +268,11 @@ class agendamento extends controller{
 
             $agenda = $elements->select("agenda","Agenda",$dado->id_agenda?:$id_agenda);
 
-            $form->addCustomInput("1 col-sm-12 mb-2",$elements->input("cor","Cor:",$dado->cor?:"#4267b2",false,false,"",type:"color",class:"form-control form-control-color"))
-                ->addCustomInput("9 col-sm-12 usuario mb-2",$usuario)
-                ->addCustomInput("2 col-sm-12 d-flex align-items-end mb-2",$elements->buttonModal("Novo","novoCliente","#modalUsuario","btn btn-primary w-100"),"w-100")
-                ->addCustomInput(12,$agenda)
-                ->setCustomInputs();
+            $form->addCustomElement("1 col-sm-12 mb-2",$elements->input("cor","Cor:",$dado->cor?:"#4267b2",false,false,"",type:"color",class:"form-control form-control-color"))
+                ->addCustomElement("9 col-sm-12 usuario mb-2",$usuario)
+                ->addCustomElement("2 col-sm-12 d-flex align-items-end mb-2",$elements->buttonModal("Novo","novoCliente","#modalUsuario","btn btn-primary w-100"),"w-100")
+                ->addCustomElement(12,$agenda)
+                ->setCustomElements();
         }
 
         foreach ($statuses as $status){
@@ -281,14 +281,14 @@ class agendamento extends controller{
         $status = $elements->select("status","Status",$dado->id_status);
 
 
-        $form->addCustomInput(12,$status)->setCustomInputs()
-        ->addCustomInput("6",$elements->input("dt_ini","Data Inicial:",functions::dateTimeBd($dado->dt_ini?:$dt_ini),true,true,"",type:"datetime-local",class:"form-control form-control-date"),"dt_ini")
-        ->addCustomInput("6",$elements->input("dt_fim","Data Final:",functions::dateTimeBd($dado->dt_fim?:$dt_fim),true,true,"",type:"datetime-local",class:"form-control form-control-date"),"dt_fim")
-        ->setCustomInputs();
+        $form->addCustomElement(12,$status)->setCustomElements()
+        ->addCustomElement("6",$elements->input("dt_ini","Data Inicial:",functions::dateTimeBd($dado->dt_ini?:$dt_ini),true,true,"",type:"datetime-local",class:"form-control form-control-date"),"dt_ini")
+        ->addCustomElement("6",$elements->input("dt_fim","Data Final:",functions::dateTimeBd($dado->dt_fim?:$dt_fim),true,true,"",type:"datetime-local",class:"form-control form-control-date"),"dt_fim")
+        ->setCustomElements();
 
         $Dadofuncionario = (new funcionario)->get($id_funcionario);
         
-        $form->setInput($elements->label("Serviços"));
+        $form->setElement($elements->label("Serviços"));
 
         $i = 0;
         $servicos = (new servico)->getByFuncionario($Dadofuncionario->id);
@@ -331,17 +331,17 @@ class agendamento extends controller{
                 $i++;
             }
         }
-        $form->setInput($table->parse());
+        $form->setElement($table->parse());
 
         $form->setHidden("qtd_servico",$i);
 
-        $form->setInput($elements->textarea("obs","Observações:",$dado->obs,false,false,"","3","12"));
+        $form->setElement($elements->textarea("obs","Observações:",$dado->obs,false,false,"","3","12"));
 
         $total = $dado->total?:0;
 
-        $form->addCustomInput("1 col-2 d-flex align-items-end mb-2",$elements->label("Total"),"total");
-        $form->addCustomInput("11 col-10",$elements->input("total","",$dado->total?functions::formatCurrency($dado->total):"R$ 0.00",false,true,"","text","form-control",'data-vl-total="'.$total.'"'));
-        $form->setCustomInputs();
+        $form->addCustomElement("1 col-2 d-flex align-items-end mb-2",$elements->label("Total"),"total");
+        $form->addCustomElement("11 col-10",$elements->input("total","",$dado->total?functions::formatCurrency($dado->total):"R$ 0.00",false,true,"","text","form-control",'data-vl-total="'.$total.'"'));
+        $form->setCustomElements();
 
         $form->setButton($elements->button("Salvar","submit"));
         $form->setButton($elements->button("Voltar","voltar","button","btn btn-primary w-100 btn-block","location.href='".$this->url."agendamento/index/".$parameters[0]."/".$parameters[1]."'",));

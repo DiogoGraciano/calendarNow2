@@ -20,11 +20,11 @@
 
         map.on('locationerror', onLocationError);
 
-        let marker = null;
         <!-- BEGIN BLOCK_MARKER -->
-            marker = L.marker([{latitude},{logitude}]).addTo(map);
+            let marker{count} = null;
+            marker{count} = L.marker([{latitude},{logitude}]).addTo(map);
             <!-- BEGIN BLOCK_MENSAGEM -->
-            marker.bindPopup("{mensagem}"){open}
+            marker{count}.bindPopup('{mensagem}'){open}
             <!-- END BLOCK_MENSAGEM -->
         <!-- END BLOCK_MARKER -->
     };

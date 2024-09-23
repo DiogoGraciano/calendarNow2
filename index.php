@@ -15,15 +15,21 @@ use core\url;
 
 session::start();
 
+$urlPermitidas = ["/ajax","/login/action","/usuario/manutencao","/usuario/action/","/empresa/manutencao","/empresa/action/"];
+
 $controller = new Controller;
 
-
-$urlPermitidas = ["/ajax","/usuario/manutencao","/usuario/action/","/empresa/manutencao","/empresa/action/"];
-    
 if (session::get("user") || in_array(url::getUriPath(),$urlPermitidas)){
     $controller = $controller->load();
-}else 
+}else{
+    $head = new head("login");
+    $head->show();
     $controller = $controller->load("login");
+    $controller->index();
+    $footer = new footer();
+    $footer->show();
+    die;
+} 
 
 $namespace = explode("\\",$controller::class);
 $controllerName = $namespace[array_key_last($namespace)];
@@ -45,6 +51,7 @@ try{
         $controller->$method($parameters);
     }
     else{
+
         if($controller::addHead){
             $head = new head($controller::headTitle);
             $head->show();
@@ -56,7 +63,7 @@ try{
         }
 
         $controller->$method($parameters);
-
+            
         if($controller::addFooter){
             $footer = new footer();
             $footer->show();

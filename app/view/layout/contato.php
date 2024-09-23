@@ -71,11 +71,11 @@ class contato extends pagina
         $elements = new elements;
 
         $form = new form(url::getUrlBase()."contato/action","contato",target:"section.contato",hasRecapcha:true);
-        $form->setInput($elements->input("nome","Nome:","",true,max:200))
-             ->setInput($elements->input("email","Email:","",true,max:200,type:"email"))
-             ->setInput($elements->input("telefone","Telefone:","",true,max:12,type:"tel"))
-             ->setInput($elements->input("assunto","Assunto:","",true,max:100))
-             ->setInput($elements->textarea("mensagem_envio","Mensagem:","",true,max:1000))
+        $form->setElement($elements->input("nome","Nome:","",true,max:200))
+             ->setElement($elements->input("email","Email:","",true,max:200,type:"email"))
+             ->setElement($elements->input("telefone","Telefone:","",true,max:12,type:"tel"))
+             ->setElement($elements->input("assunto","Assunto:","",true,max:100))
+             ->setElement($elements->textarea("mensagem_envio","Mensagem:","",true,max:1000))
              ->setButton($elements->button("Enviar","enviar"));
 
         $this->tpl->form = $form->set()->parse();

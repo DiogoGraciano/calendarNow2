@@ -44,7 +44,7 @@ class form extends pagina
         }
     }
 
-    public function setInput(string $input,string $nome = ""):form
+    public function setElement(string $input,string $nome = ""):form
     {
         $tpl = $this->getTemplate("inputs.html");
         $tpl->block_um_input = $input;
@@ -56,7 +56,7 @@ class form extends pagina
         return $this;
     }
 
-    public function setCustomInputs(string $extra_class = ""):form
+    public function setCustomElements(string $extra_class = ""):form
     {
         $tpl = $this->getTemplate("inputs.html",true);
         $tpl->extra_class = $extra_class;
@@ -83,7 +83,7 @@ class form extends pagina
         return $this;
     }
 
-    public function addCustomInput(int|string $tamanho,string|array $input,string $nome = ""):form
+    public function addCustomElement(int|string $tamanho,string|array $input,string $nome = ""):form
     {
         $custom = new stdClass;
         $custom->tamanho = $tamanho;
@@ -93,7 +93,7 @@ class form extends pagina
         return $this;
     }
 
-    public function setDoisInputs(string $input,string $input2, array $nomes = ["", ""]):form
+    public function setTwoElements(string $input,string $input2, array $nomes = ["", ""]):form
     {
         $tpl = $this->getTemplate("inputs.html");
         $tpl->block_dois_input = $input;
@@ -116,7 +116,7 @@ class form extends pagina
         return $this;
     }
 
-    public function setTresInputs(string $input,string $input2,string $input3, array $nomes = ["", "", ""]):form
+    public function setThreeElements(string $input,string $input2,string $input3, array $nomes = ["", "", ""]):form
     {
         $tpl = $this->getTemplate("inputs.html");
         $tpl->block_tres_input = $input;

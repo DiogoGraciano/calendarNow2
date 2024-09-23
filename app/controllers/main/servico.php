@@ -49,7 +49,7 @@ class servico extends controller{
             $funcionarios = $elements->select("funcionario","Funcionario",$id_funcionario);
 
             $form = new form($this->url."servico/massActionFuncionario/","massActionFuncionario","#consulta-admin","#consulta-admin");
-            $form->setinput($funcionarios);
+            $form->setElement($funcionarios);
             $form->setButton($elements->button("Salvar","submitModalConsulta"));
 
             $modalAgenda = new modal("modalFuncionario","Vincular Funcionario a serviço",$form->parse());
@@ -70,7 +70,7 @@ class servico extends controller{
             $grupo_servico = $elements->select("grupo_servico","Grupo Serviço",$id_grupo_servico);
 
             $form = new form($this->url."servico/massActionGrupoServico/","massActionGrupoServico","#consulta-admin","#consulta-admin");
-            $form->setinput($grupo_servico);
+            $form->setElement($grupo_servico);
             $form->setButton($elements->button("Salvar","submitModalConsulta"));
 
             $modalAgenda = new modal("modalGrupo","Vincular Grupo de Serviço a serviço",$form->parse());
@@ -122,8 +122,8 @@ class servico extends controller{
 
         $dado = $servico?:(new ModelsServico)->get($id);
 
-        $form->setInput($elements->titulo(1,"Manutenção Serviço"))
-            ->setinput($elements->input("nome","Nome:",$dado->nome,true),"nome");
+        $form->setElement($elements->titulo(1,"Manutenção Serviço"))
+            ->setElement($elements->input("nome","Nome:",$dado->nome,true),"nome");
 
         $funcionarios = (new funcionario)->getByEmpresa($user->id_empresa);
         $elements->addOption("","Nenhum");
@@ -144,13 +144,13 @@ class servico extends controller{
 
         $select_grupo_servico = $elements->select("grupo_servico","Grupo Serviço:");
 
-        $form->setDoisInputs(
+        $form->setTwoElements(
             $select_funcionarios,
             $select_grupo_servico,
             array("funcionario","grupo_servico")
         );
 
-        $form->setDoisInputs(
+        $form->setTwoElements(
             $elements->input("tempo","Tempo de Trabalho:",$dado->tempo==""?"00:30":functions::removeSecondsTime($dado->tempo),true,false,type:"time"),
             $elements->input("valor","Valor:",$dado->valor?:0.00,true,false,type:"number",min:0,step:0.01),
             array("tempo","valor")
@@ -160,7 +160,7 @@ class servico extends controller{
 
             $this->isMobile() ? $table = new tabelaMobile() : $table = new tabela();
 
-            $form->setInput($elements->label("Grupos de Serviços Vinculados"));
+            $form->setElement($elements->label("Grupos de Serviços Vinculados"));
 
             $table->addColumns("1","ID","id");
             $table->addColumns("90","Nome","nome");
@@ -171,14 +171,14 @@ class servico extends controller{
                 $table->addRow($grupos_servico);
             }
 
-            $form->setInput($table->parse());
+            $form->setElement($table->parse());
         }
 
         if($dado->id && $funcionarios = (new servicoFuncionario)->getByFuncionario($dado->id)){
 
             $this->isMobile() ? $table = new tabelaMobile() : $table = new tabela();
 
-            $form->setInput($elements->label("Funcionarios Vinculados"));
+            $form->setElement($elements->label("Funcionarios Vinculados"));
 
             $table->addColumns("1","ID","id");
             $table->addColumns("90","Nome","nome");
@@ -189,7 +189,7 @@ class servico extends controller{
                 $table->addRow($funcionario->getArrayData());
             }
 
-            $form->setInput($table->parse());
+            $form->setElement($table->parse());
         }
 
         $form->setButton($elements->button("Salvar","submit"));

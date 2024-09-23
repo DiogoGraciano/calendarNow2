@@ -25,8 +25,35 @@ final class empresa extends model {
                 ->addColumn((new column("fantasia","VARCHAR",300))->isNotNull()->setComment("Nome fantasia da empresa"));
     }
 
+    public function get($value="",string $column="id",int $limit = 1):array|object{
+        $retorno = false;
+
+        if($limit){
+            $this->addLimit($limit);
+        }
+
+        $this->addJoin(endereco::table,endereco::table.".id_empresa",self::table.".id");
+
+        if ($value && in_array($column,$this->getColumns()))
+            $retorno = $this->addFilter(self::table.".".$column,"=",$value)->selectColumns(self::table.".id","nome","email","telefone","cnpj","razao","fantasia","id_usuario","id_empresa","cep","id_cidade","id_estado","bairro","rua","numero","complemento","latitude","longitude");
+        
+        if (is_array($retorno) && count($retorno) == 1)
+            return $retorno[0];
+
+        return $retorno?:$this->setObjectNull();
+    }
+    
+    public function getAll():array
+    {
+        $this->addJoin(endereco::table,endereco::table.".id_empresa",self::table.".id");
+
+        return $this->selectColumns(self::table.".id","nome","email","telefone","cnpj","razao","fantasia","id_usuario","id_empresa","cep","id_cidade","id_estado","bairro","rua","numero", "complemento,latitude,longitude");
+    }
+
     public function getByFilter(?string $nome = null,?int $limit = null,?int $offset = null,?bool $asArray = true):array
     {
+        $this->addJoin(endereco::table,endereco::table.".id_empresa",self::table.".id");
+
         if($nome){
             $this->addFilter("nome","LIKE","%".$nome."%");
         }
@@ -45,7 +72,7 @@ final class empresa extends model {
             $this->asArray();
         }
 
-        return $this->selectAll();
+        return $this->selectColumns(self::table.".id","nome","email","telefone","cnpj","razao","fantasia","id_usuario","id_empresa","cep","id_cidade","id_estado","bairro","rua","numero", "complemento,latitude,longitude");
     }
 
     public function prepareData(array $dados):array

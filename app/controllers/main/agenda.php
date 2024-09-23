@@ -72,8 +72,8 @@ final class agenda extends controller{
         
         $dado = $agenda?:(new ModelsAgenda)->get($id);
         
-        $form->setInput($elements->titulo(1,"Manutenção Agenda"));
-        $form->setInput($elements->input("nome","Nome:",$dado->nome,true));
+        $form->setElement($elements->titulo(1,"Manutenção Agenda"));
+        $form->setElement($elements->input("nome","Nome:",$dado->nome,true));
 
         $user = login::getLogged();
 
@@ -81,7 +81,7 @@ final class agenda extends controller{
 
         if($funcionarios){
 
-            $form->setInput($elements->label("Funcionarios Vinculados"));
+            $form->setElement($elements->label("Funcionarios Vinculados"));
 
             if ($this->isMobile()){
                 $table = new tabelaMobile();
@@ -97,7 +97,7 @@ final class agenda extends controller{
                 $table->addRow($funcionario->getArrayData());
             }
 
-            $form->setInput($table->parse());
+            $form->setElement($table->parse());
         }
 
         $funcionarios = (new funcionario)->getByEmpresa($user->id_empresa);
@@ -106,9 +106,9 @@ final class agenda extends controller{
         foreach ($funcionarios as $funcionario){
             $elements->addOption($funcionario->id,$funcionario->nome);
         }
-        $form->setInput($elements->select("funcionario","Funcionario:",""));
+        $form->setElement($elements->select("funcionario","Funcionario:",""));
 
-        $form->setInput($elements->input("codigo","Codigo:",$dado->codigo,false,true));
+        $form->setElement($elements->input("codigo","Codigo:",$dado->codigo,false,true));
 
         $form->setButton($elements->button("Salvar","submit"));
         $form->setButton($elements->button("Voltar","voltar","button","btn btn-primary w-100 btn-block","location.href='".$this->url."agenda'"));

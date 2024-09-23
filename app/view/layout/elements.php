@@ -1,7 +1,6 @@
 <?php
 
 namespace app\view\layout;
-use app\db\model;
 use app\view\layout\abstract\pagina;
 
 /**
@@ -82,6 +81,20 @@ class elements extends pagina{
 
         $this->tpl->tipo = $tipo;
         $this->tpl->titulo = $titulo;
+        $this->tpl->class = $class;
+    
+        $this->tpl->block("BLOCK_TITULO");  
+        
+        return $this->parse();
+    }
+
+    public function link(int $link,string $value,string $target = "",string $class = "link-primary"){
+        $this->setTemplate("elements.html");
+
+        $this->tpl->link = $link;
+        $this->tpl->value = $value;
+        if($target)
+            $this->tpl->target = 'target="'.$target.'"';
         $this->tpl->class = $class;
     
         $this->tpl->block("BLOCK_TITULO");  
