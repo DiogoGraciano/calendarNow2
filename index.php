@@ -19,6 +19,10 @@ $urlPermitidas = ["/ajax","/login/action","/login/usuario","/usuario/action","/l
 
 $controller = new Controller;
 
+if(str_contains(url::getUriPath(),"encontrar/action/")){
+    session::set("url_encontrar",url::getUrlCompleta());
+}
+
 if (session::get("user") || in_array(url::getUriPath(),$urlPermitidas)){
     $controller = $controller->load();
 }else{

@@ -18,7 +18,7 @@ class email{
     public function __construct()
     {
         $this->email = new PHPMailer(true);
-        $this->empresa = empresaModel::get(1);
+        $this->empresa = (new calendarNow)->get(1);
     }
 
     public function addEmailCc(...$emails):email

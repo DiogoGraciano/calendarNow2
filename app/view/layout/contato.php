@@ -18,7 +18,7 @@ class contato extends pagina
     {
         $this->setTemplate("contato.html");
 
-        $empresa = empresaModel::get(1);
+        $empresa = (new calendarNow)->get(1);
         $empresa->cidade = cidadeModel::get($empresa->id_cidade)->nome;
         $empresa->estado = estadoModel::get($empresa->id_estado)->nome;
 

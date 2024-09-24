@@ -16,6 +16,7 @@ use app\models\empresa as empresaModel;
 use app\models\endereco;
 use app\models\estado;
 use app\models\login;
+use app\models\segmento;
 use app\models\usuario;
 use app\view\layout\filter;
 use app\view\layout\pagination;
@@ -76,11 +77,13 @@ class empresa extends controller {
 
         $elements = new elements();
 
+        $elements->setOptions((new segmento)->getAll(),"id","nome");
         $form->setElement($elements->titulo(1,"Cadastro de Empresa"))
-        ->setTwoElements(
+        ->setThreeElements(
             $elements->input("nome", "Nome do Usuario", $dado->nome, true),
             $elements->input("cpf_cnpj", "CPF/CNPJ da Empresa:", $dado->cpf_cnpj?functions::formatCnpjCpf($dado->cpf_cnpj):"", true),
-            array("nome", "cpf_cnpj")
+            $elements->select("segmento", "Segmento:",$dadoEmpresa->id_segmento),
+            array("nome", "cpf_cnpj","segmento")
         )->setThreeElements(
             $elements->input("email", "Email", $dado->email, true, false, "", "email"),
             $elements->input("senha", "Senha", "", $dado->senha?false:true, false, "", "password"),
@@ -133,6 +136,7 @@ class empresa extends controller {
         $email = $this->getValue('email');
         $telefone = $this->getValue('telefone');
         $id_endereco = intval($this->getValue('id_endereco'));
+        $id_segmento = intval($this->getValue('segmento'));
         $cep = $this->getValue('cep');
         $id_estado = intval($this->getValue('id_estado'));
         $id_cidade = intval($this->getValue('id_cidade'));
@@ -158,6 +162,7 @@ class empresa extends controller {
         $empresa->email        = $email;
         $empresa->telefone     = $telefone;
         $empresa->razao        = $razao;
+        $empresa->id_segmento  = $id_segmento;
 
         $endereco              = new endereco;
         $endereco->id          = $id_endereco;

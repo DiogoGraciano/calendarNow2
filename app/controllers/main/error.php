@@ -13,6 +13,8 @@ final class error extends controller
 
     public const addFooter = false;
 
+    public const permitAccess = true;
+
     public function index($parameters = [],$code = 404,$message = "A Pagina que está procurando não existe")
     {
         $error = new lyError;

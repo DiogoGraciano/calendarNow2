@@ -87,7 +87,7 @@ class footer extends pagina
 
     public function setSectionAtendimento(){
         
-        $empresa = empresaModel::get(1);
+        $empresa = (new calendarNow)->get(1);
 
         if($empresa->telefone)
             $this->addLink("tel:".functions::onlynumber($empresa->telefone),'<i class="fa-solid fa-phone me-2 icon"></i> '.$empresa->telefone);

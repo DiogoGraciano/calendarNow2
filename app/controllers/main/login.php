@@ -7,6 +7,9 @@ use app\view\layout\login as lyLogin;
 final class login extends controller{
 
     public const headTitle = "Login";
+
+    public const permitAccess = true;
+    
     public const addHeader = false;
 
     public function index(array $parameters = []){

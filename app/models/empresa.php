@@ -17,6 +17,7 @@ final class empresa extends model {
     public static function table(){
         return (new table(self::table,comment:"Tabela de empresas"))
                 ->addColumn((new column("id","INT"))->isPrimary()->setComment("ID do cliente"))
+                ->addColumn((new column("id_segmento","INT"))->isForeingKey(segmento::table())->isNotNull()->setComment("ID do segmento"))
                 ->addColumn((new column("nome","VARCHAR",300))->isNotNull()->isUnique()->setComment("Nome da empresa"))
                 ->addColumn((new column("email","VARCHAR",300))->isNotNull()->setComment("Email da empresa"))
                 ->addColumn((new column("telefone","VARCHAR",13))->isNotNull()->setComment("Telefone da empresa"))
@@ -35,7 +36,7 @@ final class empresa extends model {
         $this->addJoin(endereco::table,endereco::table.".id_empresa",self::table.".id");
 
         if ($value && in_array($column,$this->getColumns()))
-            $retorno = $this->addFilter(self::table.".".$column,"=",$value)->selectColumns(self::table.".id","nome","email","telefone","cnpj","razao","fantasia","id_usuario","id_empresa","cep","id_cidade","id_estado","bairro","rua","numero","complemento","latitude","longitude");
+            $retorno = $this->addFilter(self::table.".".$column,"=",$value)->selectColumns(self::table.".id","id_segmento","nome","email","telefone","cnpj","razao","fantasia","id_usuario","id_empresa","cep","id_cidade","id_estado","bairro","rua","numero","complemento","latitude","longitude");
         
         if (is_array($retorno) && count($retorno) == 1)
             return $retorno[0];
@@ -47,7 +48,7 @@ final class empresa extends model {
     {
         $this->addJoin(endereco::table,endereco::table.".id_empresa",self::table.".id");
 
-        return $this->selectColumns(self::table.".id","nome","email","telefone","cnpj","razao","fantasia","id_usuario","id_empresa","cep","id_cidade","id_estado","bairro","rua","numero", "complemento,latitude,longitude");
+        return $this->selectColumns(self::table.".id","id_segmento","nome","email","telefone","cnpj","razao","fantasia","id_usuario","id_empresa","cep","id_cidade","id_estado","bairro","rua","numero", "complemento,latitude,longitude");
     }
 
     public function getByFilter(?string $nome = null,?int $limit = null,?int $offset = null,?bool $asArray = true):array
@@ -72,13 +73,14 @@ final class empresa extends model {
             $this->asArray();
         }
 
-        return $this->selectColumns(self::table.".id","nome","email","telefone","cnpj","razao","fantasia","id_usuario","id_empresa","cep","id_cidade","id_estado","bairro","rua","numero", "complemento,latitude,longitude");
+        return $this->selectColumns(self::table.".id","id_segmento","nome","email","telefone","cnpj","razao","fantasia","id_usuario","id_empresa","cep","id_cidade","id_estado","bairro","rua","numero", "complemento,latitude,longitude");
     }
 
     public function prepareData(array $dados):array
     {
         $dadosFinal = [];
         if ($dados){
+            $segmentos = (new segmento)->getAll();
             foreach ($dados as $dado){
 
                 if(is_subclass_of($dado,"app\db\db")){
@@ -157,10 +159,14 @@ final class empresa extends model {
             $mensagens[] = "Email já cadastrado";
         }
 
+        if(!$this->id_segmento || (new segmento)->get($this->id_segmento)->id){
+            $mensagens[] = "Segmento informado invalido";
+        }
+
         if(!($this->telefone = functions::onlynumber($this->telefone?:"")) || !functions::validaTelefone($this->telefone)){
             $mensagens[] = "Telefone Invalido";
         }
-
+        
         if($mensagens){
             mensagem::setErro(...$mensagens);
             return null;

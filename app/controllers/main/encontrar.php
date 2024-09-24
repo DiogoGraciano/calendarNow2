@@ -33,14 +33,14 @@ class encontrar extends controller{
 
         $form->setElement($elements->titulo(1,"Adicionar Agenda"))
             ->setElement($elements->input("codigo_agenda","Codigo da Agenda",$codigo))
-            ->setButton($elements->button("Adicionar","submit","submit","btn btn-primary w-100 pt-2 btn-block"));
+            ->setButton($elements->button("Adicionar","submit","submit","btn btn-primary w-100 mb-4 pt-2 btn-block"));
 
         $div = new div("modal-empresa","modal fade",'tabindex="-1" aria-labelledby="modal-empresa" aria-hidden="true"');
         $div->show();
 
         $div = new div("encontrar");
-        $div->addContent($this->loadMap());
         $div->addContent($form->parse());
+        $div->addContent($this->loadMap());
         $div->show();
     }
 
@@ -78,7 +78,7 @@ class encontrar extends controller{
         foreach ($empresas as $empresa){
             $modal = new modal("empresa-".$empresa->id,"Detalhe da Empresa",$this->loadFormModal($empresa)->parse(),"modal fade");
             $modal->show();
-            $map->addMarker($empresa->latitude,$empresa->longitude,$elements->buttonModal($empresa->nome,$empresa->nome,"#empresa-".$empresa->id,class:"btn btn-link"),true);
+            $map->addMarker($empresa->latitude,$empresa->longitude,$elements->buttonModal($empresa->nome,$empresa->nome,"#empresa-".$empresa->id,class:"btn btn-link"));
         }
            
         return $map->parse();
@@ -113,11 +113,12 @@ class encontrar extends controller{
     {
         $user = login::getLogged();
 
-        $agenda = (new agenda);
-        if(isset($parameters[0]))
-            $agenda->get($parameters[0],"codigo");
-        else
-            $agenda->get($this->getValue("codigo_agenda"),"codigo");
+        $isGo = false;
+        if(isset($parameters[0])){
+            $agenda = (new agenda)->get($parameters[0],"codigo");
+            $isGo = true;
+        }else
+            $agenda = (new agenda)->get($this->getValue("codigo_agenda"),"codigo");
 
         if ($agenda->id){
 
@@ -131,6 +132,6 @@ class encontrar extends controller{
                 mensagem::setErro("Agenda não encontrada");
         }
 
-        $this->index();
+        $isGo ? $this->go("encontrar") : $this->index();
     }
 }

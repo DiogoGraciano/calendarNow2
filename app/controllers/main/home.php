@@ -9,6 +9,8 @@ final class home extends controller{
 
     public const headTitle = "Home";
 
+    public const permitAccess = true;
+
     public function index(array $parameters = []){
 
         $user = login::getLogged();

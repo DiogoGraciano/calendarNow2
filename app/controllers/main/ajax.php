@@ -15,6 +15,8 @@ class ajax extends controller{
     public const addFooter = false;
 
     public const addHead = false;
+    
+    public const permitAccess = true;
 
     public function index(){
         try{

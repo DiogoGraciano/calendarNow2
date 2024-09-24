@@ -1,8 +1,13 @@
 <?php
 namespace app\controllers\abstract;
 
+use app\controllers\main\error;
+use app\models\login;
+use app\models\menu;
+use app\view\layout\head;
 use core\url;
 use core\request;
+use core\controller as controlerUri;
 
 abstract class controller
 {
@@ -20,11 +25,27 @@ abstract class controller
 
     public const addHead = true;
 
+    public const permitAccess = false;
+
     public function __construct()
     {
         $this->url = url::getUrlBase();
         $this->urlQuery = url::getUriQueryArray();
         $this->page = isset($this->urlQuery["page"])?intval($this->urlQuery["page"]):1;
+    
+        $controller = (new controlerUri)->getControllerNotHome();
+
+        if($controller && !get_called_class()::permitAccess){
+            $menu = (new menu())->get($controller,"controller");
+
+            $user = login::getLogged();
+
+            if($menu->id && $user && !in_array($user->tipo_usuario,json_decode($menu->tipo_usuario))){
+                (new head("Error"))->show();
+                (new error)->index();
+                die;
+            }
+        }
     }
 
     protected function getOffset(int $limit = 30):int

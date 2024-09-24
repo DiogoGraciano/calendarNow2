@@ -69,7 +69,7 @@ class controller{
         return $this->instatiateController();
     }
 
-    private function getControllerNotHome(){
+    public function getControllerNotHome(){
 
         if(substr_count($this->uri,'/') > 1){
             list($controller) = array_values(array_filter(explode('/',$this->uri)));

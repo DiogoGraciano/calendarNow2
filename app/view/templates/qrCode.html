@@ -1,0 +1,13 @@
+<div class="qrCode-{name}">
+    <img class="imagem-qrCode-{name} position-absolute z-0" src="/assets/imagens/qrcode_background.png" alt="imagem-qrCode-{name}">
+    <div class="title-qrCode-{name} position-relative w-100 text-title z-1">
+        <h1 class="w-100 text-center">{title}</h1>
+        <h2 class="w-100 text-center">{subtitle}</h2>
+    </div>
+    <div class="qrCode-qrCode-{name} d-flex justify-content-center position-relative w-100"> 
+        <img src="{qrcode}" alt="qrCode-{name}">
+    </div>
+</div>
+<script>
+    window.print();
+</script>

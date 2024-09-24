@@ -20,14 +20,14 @@ final class agenda extends controller{
 
     public const headTitle = "Agenda";
 
-    public function index():void
+    public function index(array $parameters = []):void
     {
         $nome = $this->getValue("nome");
         $codigo = $this->getValue("codigo");
 
         $elements = new elements;
 
-        $filter = new filter($this->url."agenda/index/");
+        $filter = new filter($this->url."index/");
 
         $filter->addbutton($elements->button("Buscar","buscar","submit","btn btn-primary pt-2"))
                 ->addFilter(3,$elements->input("nome","Nome:",$nome))
@@ -57,7 +57,8 @@ final class agenda extends controller{
             ->addFilter($filter)
             ->show();
     }
-    public function manutencao(array $parameters,?ModelsAgenda $agenda = null):void
+
+    public function manutencao(array $parameters = [],?ModelsAgenda $agenda = null):void
     {
         $id = "";
         
@@ -111,6 +112,8 @@ final class agenda extends controller{
         $form->setElement($elements->input("codigo","Codigo:",$dado->codigo,false,true));
 
         $form->setButton($elements->button("Salvar","submit"));
+        if($dado->id)
+            $form->setButton($elements->link($this->url."qrCode/agendaQrCode/".$dado->id,"Gerar QrCode","_blank","btn btn-primary w-100 btn-block"));
         $form->setButton($elements->button("Voltar","voltar","button","btn btn-primary w-100 btn-block","location.href='".$this->url."agenda'"));
         $form->show();
     }

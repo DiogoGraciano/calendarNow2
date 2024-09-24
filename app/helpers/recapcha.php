@@ -13,7 +13,7 @@ class recapcha{
             return false;
         }
 
-        $empresa = empresaModel::get(1);
+        $empresa = (new calendarNow)->get(1);
 
         $url = "https://www.google.com/recaptcha/api/siteverify";
         $data = [

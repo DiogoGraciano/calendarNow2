@@ -13,7 +13,7 @@ class privacidade extends pagina
     {
         $this->setTemplate("privacidade.html");
 
-        $empresa = empresaModel::get(1);
+        $empresa = (new calendarNow)->get(1);
 
         $this->tpl->empresa = $empresa;
 

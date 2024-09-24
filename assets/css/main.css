@@ -317,3 +317,38 @@ button.btn.btn-dark.pt-2.btn-block {
     height: 60vh;
     width: 100%;
 }
+
+.qrCode-Agenda {
+    width: 100vw;
+    height: 100vh;
+}
+
+.imagem-qrCode-Agenda {
+    width: 100vw;
+    height: 100vh;
+}
+
+.title-qrCode-Agenda{
+    top: 100px;
+}
+
+.title-qrCode-Agenda h1 {
+    color: #4267b2;
+    font-size: 50px;
+}
+
+.title-qrCode-Agenda h2 {
+    font-size: 30px;
+}
+
+.qrCode-qrCode-Agenda img {
+    width: 215px;
+}
+
+.qrCode-qrCode-Agenda {
+    top: 45vh;
+}
+
+.navbar-nav .dropdown-menu {
+    position: absolute;
+}
