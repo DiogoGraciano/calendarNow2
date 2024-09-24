@@ -10,6 +10,7 @@ use app\models\agendaUsuario;
 use app\models\empresa;
 use app\models\login;
 use app\view\layout\div;
+use app\view\layout\filter;
 use app\view\layout\map;
 use app\view\layout\modal;
 
@@ -29,14 +30,9 @@ class encontrar extends controller{
 
         $form = new form($this->url."encontrar/action");
 
-        $elements = new elements;
-
         $form->setElement($elements->titulo(1,"Adicionar Agenda"))
             ->setElement($elements->input("codigo_agenda","Codigo da Agenda",$codigo))
             ->setButton($elements->button("Adicionar","submit","submit","btn btn-primary w-100 mb-4 pt-2 btn-block"));
-
-        $div = new div("modal-empresa","modal fade",'tabindex="-1" aria-labelledby="modal-empresa" aria-hidden="true"');
-        $div->show();
 
         $div = new div("encontrar");
         $div->addContent($form->parse());

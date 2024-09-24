@@ -159,7 +159,7 @@ final class empresa extends model {
             $mensagens[] = "Email já cadastrado";
         }
 
-        if(!$this->id_segmento || (new segmento)->get($this->id_segmento)->id){
+        if(!$this->id_segmento || !(new segmento)->get($this->id_segmento)->id){
             $mensagens[] = "Segmento informado invalido";
         }
 
