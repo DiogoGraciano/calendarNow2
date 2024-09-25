@@ -233,7 +233,7 @@ final class usuario extends controller {
         // $form->setElement($elements->textarea("complemento", "Complemento", $dadoEndereco->complemento), "complemento");
 
         $form->setButton($elements->button("Salvar", "submitUsuario"));
-        return $form->setButton($elements->button("Voltar", "voltar", "button", "btn btn-primary w-100 pt-2 btn-block", "location.href='".($this->url.$location?:"login")."'"));
+        return $form->setButton($elements->button("Voltar", "voltar", "button", "btn btn-primary w-100 pt-2 btn-block", "location.href='".($this->url."home")."'"));
     }
 
     public function action($parameters = []):void

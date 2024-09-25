@@ -52,7 +52,16 @@ class header extends pagina{
 
         foreach ($menus as $menu)
         {
-            $ativo = explode("/",url::getUriPath())[1] == $menu["controller"];
+
+            $path = explode("/",url::getUriPath());
+
+            $controler = explode("/",$menu["controller"]);
+
+            $ativo = $path[1] == $controler[0];
+
+            if(isset($controler[2]) && isset($path[3])){
+                $ativo = $path[3] == $controler[2];
+            }
 
             $user = login::getLogged();
 

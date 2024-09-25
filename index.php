@@ -19,11 +19,20 @@ $urlPermitidas = ["/ajax","/login/action","/login/usuario","/usuario/action","/l
 
 $controller = new Controller;
 
-if(str_contains(url::getUriPath(),"encontrar/action/")){
-    session::set("url_encontrar",url::getUrlCompleta());
+$user = session::get("user");
+
+if(!$user && str_contains(url::getUriPath(),"encontrar/action/")){
+    session::set("url_encontrar",url::getUriPath());
 }
 
-if (session::get("user") || in_array(url::getUriPath(),$urlPermitidas)){
+echo session::get("url_encontrar");
+
+if($user && $encontrar = session::get("url_encontrar")){
+    session::set("url_encontrar",false);
+    url::go(ltrim($encontrar,"/"));
+}
+
+if ($user || in_array(url::getUriPath(),$urlPermitidas)){
     $controller = $controller->load();
 }else{
     $head = new head("login");

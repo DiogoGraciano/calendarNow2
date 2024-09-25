@@ -17,7 +17,7 @@ final class configuracoes extends model {
         return (new table(self::table,comment:"Tabela de selfurações"))
                 ->addColumn((new column("id","INT"))->isPrimary()->setComment("ID self"))
                 ->addColumn((new column("id_empresa","INT"))->isNotNull()->isForeingKey(empresa::table(),"id")->setComment("ID da tabela empresa"))
-                ->addColumn((new column("identificador","VARCHAR",30))->isNotNull()->isUnique()->setComment("Identificador da selfuração"))
+                ->addColumn((new column("identificador","VARCHAR",30))->isNotNull()->setComment("Identificador da selfuração"))
                 ->addColumn((new column("valor","BLOB"))->isNotNull()->setComment("selfuração"));
     }
 

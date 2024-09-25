@@ -33,4 +33,10 @@ class url
     public static function getUrlCompleta(){
         return rtrim(self::getUrlBase(),"/").$_SERVER['REQUEST_URI'];
     }
+
+    public static function go(string $caminho):void
+    {
+        echo '<meta http-equiv="refresh" content="0;url='.self::getUrlBase().$caminho.'">';
+        exit;
+    }
 }    

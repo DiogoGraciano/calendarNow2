@@ -65,8 +65,7 @@ abstract class controller
 
     protected function go(string $caminho):void
     {
-        echo '<meta http-equiv="refresh" content="0;url=' . $this->url . $caminho . '">';
-        exit;
+       url::go($caminho);
     }
 
     protected function isMobile():bool

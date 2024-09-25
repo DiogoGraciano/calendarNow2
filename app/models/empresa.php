@@ -36,7 +36,7 @@ final class empresa extends model {
         $this->addJoin(endereco::table,endereco::table.".id_empresa",self::table.".id");
 
         if ($value && in_array($column,$this->getColumns()))
-            $retorno = $this->addFilter(self::table.".".$column,"=",$value)->selectColumns(self::table.".id","id_segmento","nome","email","telefone","cnpj","razao","fantasia","id_usuario","id_empresa","cep","id_cidade","id_estado","bairro","rua","numero","complemento","latitude","longitude");
+            $retorno = $this->addFilter(self::table.".".$column,"=",$value)->selectColumns(self::table.".id","id_segmento","nome","email","telefone","cnpj","razao","fantasia","id_usuario","cep","id_cidade","id_estado","bairro","rua","numero","complemento","latitude","longitude");
         
         if (is_array($retorno) && count($retorno) == 1)
             return $retorno[0];
@@ -48,7 +48,7 @@ final class empresa extends model {
     {
         $this->addJoin(endereco::table,endereco::table.".id_empresa",self::table.".id");
 
-        return $this->selectColumns(self::table.".id","id_segmento","nome","email","telefone","cnpj","razao","fantasia","id_usuario","id_empresa","cep","id_cidade","id_estado","bairro","rua","numero", "complemento,latitude,longitude");
+        return $this->selectColumns(self::table.".id","id_segmento","nome","email","telefone","cnpj","razao","fantasia","id_usuario","cep","id_cidade","id_estado","bairro","rua","numero", "complemento,latitude,longitude");
     }
 
     public function getByFilter(?string $nome = null,?int $limit = null,?int $offset = null,?bool $asArray = true):array
@@ -73,7 +73,7 @@ final class empresa extends model {
             $this->asArray();
         }
 
-        return $this->selectColumns(self::table.".id","id_segmento","nome","email","telefone","cnpj","razao","fantasia","id_usuario","id_empresa","cep","id_cidade","id_estado","bairro","rua","numero", "complemento,latitude,longitude");
+        return $this->selectColumns(self::table.".id","id_segmento","nome","email","telefone","cnpj","razao","fantasia","id_usuario","id_empresa","cep","id_cidade","id_estado","bairro","rua","numero","complemento","latitude","longitude");
     }
 
     public function prepareData(array $dados):array
@@ -103,7 +103,10 @@ final class empresa extends model {
 
     public function getByAgenda($id_agenda):object|bool
     {
-        $empresa = $this->addJoin(agenda::table,agenda::table.".id",$id_agenda)->addLimit(1)->selectColumns("empresa.id,empresa.nome,empresa.email,empresa.telefone,empresa.cnpj,empresa.razao,empresa.fantasia");
+        $empresa = $this->addJoin(agenda::table,agenda::table.".id_empresa",self::table.".id")
+                        ->addJoin(endereco::table,endereco::table.".id_empresa",self::table.".id")
+                        ->addFilter(agenda::table.".id","=",$id_agenda)
+                        ->selectColumns(self::table.".id","id_segmento",self::table.".nome","email","telefone","cnpj","razao","fantasia","id_usuario","cep","id_cidade","id_estado","bairro","rua","numero","complemento","latitude","longitude");
 
         if(isset($empresa[0]) && $empresa[0]){
             $empresa = $empresa[0];

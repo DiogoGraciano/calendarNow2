@@ -9,6 +9,7 @@ use app\models\agenda;
 use app\models\agendaUsuario;
 use app\models\empresa;
 use app\models\login;
+use app\models\segmento;
 use app\view\layout\div;
 use app\view\layout\filter;
 use app\view\layout\map;
@@ -20,6 +21,7 @@ class encontrar extends controller{
 
     public function index(array $parameters = []):void
     {
+        $segmento = intval($this->getValue("segmento"));
         $codigo = "";
 
         if ($parameters && array_key_exists(0,$parameters)){
@@ -34,9 +36,15 @@ class encontrar extends controller{
             ->setElement($elements->input("codigo_agenda","Codigo da Agenda",$codigo))
             ->setButton($elements->button("Adicionar","submit","submit","btn btn-primary w-100 mb-4 pt-2 btn-block"));
 
+        $filter = new filter($this->url."encontrar/index","#encontrar");
+        $elements->setOptions((new segmento)->getAll(),"id","nome");
+        $filter->addFilter(3,$elements->select("segmento","Segmento:",$segmento))
+               ->addbutton($elements->button("Buscar","buscar","submit","btn btn-primary pt-2"));
+            
         $div = new div("encontrar");
         $div->addContent($form->parse());
-        $div->addContent($this->loadMap());
+        $div->addContent($filter->parse());
+        $div->addContent($this->loadMap($segmento));
         $div->show();
     }
 
@@ -64,7 +72,7 @@ class encontrar extends controller{
         return $form;
     }
 
-    private function loadMap():string
+    private function loadMap(int $id_segmento = 0):string
     {
         $map = new map();
         $empresas = (new empresa())->getByFilter(asArray:false);
