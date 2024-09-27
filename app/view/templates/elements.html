@@ -7,10 +7,12 @@
     <!-- END BLOCK_INPUT -->
 
     <!-- BEGIN BLOCK_LINK -->
-        <a {target} class="{class}" href="{link}">
-            {value}
-        </a>
+        <a class="{class}" href="{link}" {extra}>{value}</a>
     <!-- END BLOCK_LINK -->
+
+    <!-- BEGIN BLOCK_P -->
+        <p class="{class}" {extra}>{value}</p>
+    <!-- END BLOCK_P -->
 
     <!-- BEGIN BLOCK_BUTTON -->
         <button type="{type}" name="{name}" id="{name}" class="{class}" onclick="{action}" {extra}>{label}</button> 

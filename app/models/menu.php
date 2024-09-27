@@ -203,6 +203,15 @@ final class menu extends model {
             $menu->ativo = 1;
             $menu->store();
             $menu = new self;
+            $menu->controller = "relatorio";
+            $menu->tipo_usuario = json_encode([1]);
+            $menu->nome = "Relatorios";
+            $menu->class_icone = "fa-solid fa-chart-pie";
+            $menu->ordem = 8;
+            $menu->target_blank = 0;
+            $menu->ativo = 1;
+            $menu->store();
+            $menu = new self;
             $menu->controller = "cadastro";
             $menu->tipo_usuario = json_encode([1,2,3]);
             $menu->nome = "Cadastro";

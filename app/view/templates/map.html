@@ -1,4 +1,4 @@
-<div id="map"></div>
+<div id="map" class="z-1 position-relative"></div>
 <script src="{caminho}assets/js/leaflet.js"> </script>
 <script>
     function loadMap(){
@@ -30,6 +30,10 @@
     };
 
     document.addEventListener("DOMContentLoaded", function () {
+        loadMap();
+    });
+
+    document.body.addEventListener('htmx:afterSettle', function (evt) {
         loadMap();
     });
 </script>

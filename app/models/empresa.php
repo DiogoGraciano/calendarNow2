@@ -51,12 +51,16 @@ final class empresa extends model {
         return $this->selectColumns(self::table.".id","id_segmento","nome","email","telefone","cnpj","razao","fantasia","id_usuario","cep","id_cidade","id_estado","bairro","rua","numero", "complemento,latitude,longitude");
     }
 
-    public function getByFilter(?string $nome = null,?int $limit = null,?int $offset = null,?bool $asArray = true):array
+    public function getByFilter(?string $nome = null,?int $id_segmento = null,?int $limit = null,?int $offset = null,?bool $asArray = true):array
     {
         $this->addJoin(endereco::table,endereco::table.".id_empresa",self::table.".id");
 
         if($nome){
             $this->addFilter("nome","LIKE","%".$nome."%");
+        }
+
+        if($id_segmento){
+            $this->addFilter("id_segmento","=",$id_segmento);
         }
 
         if($limit && $offset){

@@ -10,7 +10,7 @@ class elements extends pagina{
 
     private $options = []; 
 
-    public function button(string $label,string $name,string $type="submit",string $class="btn btn-primary w-100 pt-2 btn-block",string $action="",string $extra="")
+    public function button(string $label,string $name,string $type="submit",string $class="btn btn-primary w-100 pt-2 btn-block",string $action="",string $extra=""):string
     {
         $this->setTemplate("elements.html");
 
@@ -26,7 +26,7 @@ class elements extends pagina{
         return $this->parse();
     }
 
-    public function buttonModal(string $label,string $name,string $Idmodal,string $class="btn btn-primary",string $extra="")
+    public function buttonModal(string $label,string $name,string $Idmodal,string $class="btn btn-primary",string $extra=""):string
     {
         $this->setTemplate("elements.html");
 
@@ -41,7 +41,7 @@ class elements extends pagina{
         return $this->parse();
     }
 
-    public function buttonHtmx(string $label,string $name,string $action,string $target,string $swap = "outerHTML",string $confirmMessage = "",string $includes = "",string $class="btn btn-primary",string $extra="")
+    public function buttonHtmx(string $label,string $name,string $action,string $target,string $swap = "outerHTML",string $confirmMessage = "",string $includes = "",string $class="btn btn-primary",string $extra=""):string
     {
         $this->setTemplate("elements.html");
 
@@ -65,7 +65,8 @@ class elements extends pagina{
         return $this->parse();
     }
 
-    public function label(string $titulo,string $class = ""){
+    public function label(string $titulo,string $class = ""):string
+    {
         $this->setTemplate("elements.html");
 
         $this->tpl->titulo = $titulo;
@@ -76,7 +77,8 @@ class elements extends pagina{
         return $this->parse();
     }
 
-    public function titulo(int $tipo,string $titulo,string $class = "fw-normal text-title"){
+    public function titulo(int $tipo,string $titulo,string $class = "fw-normal text-title"):string
+    {
         $this->setTemplate("elements.html");
 
         $this->tpl->tipo = $tipo;
@@ -88,22 +90,37 @@ class elements extends pagina{
         return $this->parse();
     }
 
-    public function link(string $link,string $value,string $target = "",string $class = "link-primary"){
+    public function link(string $link,string $value,string $target = "",string $class = "link-primary",string $extra = ""):string
+    {
         $this->setTemplate("elements.html");
 
         $this->tpl->link = $link;
         $this->tpl->value = $value;
         if($target)
-            $this->tpl->target = 'target="'.$target.'"';
+            $extra = 'target="'.$target.'" '.$extra;
         $this->tpl->class = $class;
+        $this->tpl->extra = $extra;
     
         $this->tpl->block("BLOCK_LINK");  
         
         return $this->parse();
     }
 
-    public function checkbox(string $name,string $label="",bool $required=false,bool $checked=false,bool $readonly=false,string|int|float|null $value = 1,string $type="checkbox",string $class="form-check-input",string $extra=""){
+    public function p(string $value,string $class = "text-right mb-2",string $extra = ""):string
+    {
+        $this->setTemplate("elements.html");
 
+        $this->tpl->value = $value;
+        $this->tpl->class = $class;
+        $this->tpl->extra = $extra;
+    
+        $this->tpl->block("BLOCK_P");  
+        
+        return $this->parse();
+    }
+
+    public function checkbox(string $name,string $label="",bool $required=false,bool $checked=false,bool $readonly=false,string|int|float|null $value = 1,string $type="checkbox",string $class="form-check-input",string $extra=""):string
+    {
         $this->setTemplate("elements.html");
 
         $this->tpl->type = $type;
@@ -130,8 +147,8 @@ class elements extends pagina{
         return $this->parse();
     }
     
-    public function input(string $name,string $label,string|int|float|null $value="",bool $required=false,bool $readonly=false,string $placeholder="",int|float|string $max = 1000,int|float|string $min = 1,string $type="text",float $step = 1,string $class="form-control",string $extra=""){
-
+    public function input(string $name,string $label,string|int|float|null $value="",bool $required=false,bool $readonly=false,string $placeholder="",int|float|string $max = 1000,int|float|string $min = 1,string $type="text",float $step = 1,string $class="form-control",string $extra=""):string
+    {
         $this->setTemplate("elements.html");
 
         $type = strtolower($type);
@@ -178,8 +195,8 @@ class elements extends pagina{
         return $this->parse();
     }
 
-    public function textarea(string $name,string $label,string|int|float|null $value = "",bool $required=false,bool $readonly=false,string $placeholder="",int $rows = 0,int $cols = 0,int $max = 0,int $min = 0,string $class="form-control",string $extra=""){
-
+    public function textarea(string $name,string $label,string|int|float|null $value = "",bool $required=false,bool $readonly=false,string $placeholder="",int $rows = 0,int $cols = 0,int $max = 0,int $min = 0,string $class="form-control",string $extra=""):string
+    {
         $this->setTemplate("elements.html");
 
         if ($label){
@@ -216,8 +233,8 @@ class elements extends pagina{
         return $this->parse();
     }
 
-    public function select(string $name,string $label,string|int|float|null $value="",bool $required=false,string $class="form-select",string $extra=""){
-
+    public function select(string $name,string $label,string|int|float|null $value="",bool $required=false,string $class="form-select",string $extra=""):string
+    {
         $this->setTemplate("elements.html");
 
         if ($label){
@@ -249,8 +266,8 @@ class elements extends pagina{
         return $this->parse();
     }
 
-    public function datalist(string $label,string $name,string|int|float|null $value="",bool $required=false,string $class="form-control",string $extra=""){
-
+    public function datalist(string $label,string $name,string|int|float|null $value="",bool $required=false,string $class="form-control",string $extra=""):string
+    {
         $this->setTemplate("elements.html");
 
         if ($label){
@@ -281,7 +298,7 @@ class elements extends pagina{
         return $this->parse();
     }
 
-    public function img(string $img,string $alt,string $extra = "")
+    public function img(string $img,string $alt,string $extra = ""):string
     {
         $this->setTemplate("elements.html");
         $this->tpl->img = $img;
@@ -291,7 +308,7 @@ class elements extends pagina{
         return $this->parse();
     }
 
-    public function embed(string $caminho,string $type = "application/pdf",string $extra = "")
+    public function embed(string $caminho,string $type = "application/pdf",string $extra = ""):string
     {
         $this->setTemplate("elements.html");
         $this->tpl->caminho = $caminho;
@@ -301,7 +318,8 @@ class elements extends pagina{
         return $this->parse();
     }
 
-    public function setOptions(array $dados,$coluna_vl,$coluna_nm){
+    public function setOptions(array $dados,$coluna_vl,$coluna_nm):self
+    {
         if ($dados){
             foreach ($dados as $dado){
                 if(is_subclass_of($dado,"app\db\db")){
@@ -311,9 +329,12 @@ class elements extends pagina{
                     $this->addOption($dado[$coluna_vl],$dado[$coluna_nm]);
             }
         }
+
+        return $this;
     }
 
-    public function addOption(string|int|float|null $value,string $label,string $extra_option=""){
+    public function addOption(string|int|float|null $value,string $label,string $extra_option=""):self
+    {
         if (is_int($value) || is_float($value))
             $this->options[] = json_decode('{"value":'.$value.',"label":"'.$label.'","extra_option":"'.$extra_option.'"}');
         else

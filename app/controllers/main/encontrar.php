@@ -32,19 +32,20 @@ class encontrar extends controller{
 
         $form = new form($this->url."encontrar/action");
 
-        $form->setElement($elements->titulo(1,"Adicionar Agenda"))
-            ->setElement($elements->input("codigo_agenda","Codigo da Agenda",$codigo))
+        $form->setElement($elements->input("codigo_agenda","Codigo da Agenda",$codigo))
             ->setButton($elements->button("Adicionar","submit","submit","btn btn-primary w-100 mb-4 pt-2 btn-block"));
 
         $filter = new filter($this->url."encontrar/index","#encontrar");
+        $elements->addOption(0,"Todos/Selecione");
         $elements->setOptions((new segmento)->getAll(),"id","nome");
-        $filter->addFilter(3,$elements->select("segmento","Segmento:",$segmento))
+        $filter->addFilter(12,$elements->titulo(1,"Adicionar Agenda"));
+        $filter->addFilter(4,$elements->select("segmento","Segmento:",$segmento))
                ->addbutton($elements->button("Buscar","buscar","submit","btn btn-primary pt-2"));
             
         $div = new div("encontrar");
-        $div->addContent($form->parse());
         $div->addContent($filter->parse());
         $div->addContent($this->loadMap($segmento));
+        $div->addContent($form->parse());
         $div->show();
     }
 
@@ -75,7 +76,7 @@ class encontrar extends controller{
     private function loadMap(int $id_segmento = 0):string
     {
         $map = new map();
-        $empresas = (new empresa())->getByFilter(asArray:false);
+        $empresas = (new empresa())->getByFilter(id_segmento:$id_segmento,asArray:false);
 
         $elements = new elements;
 

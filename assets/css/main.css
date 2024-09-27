@@ -352,3 +352,7 @@ button.btn.btn-dark.pt-2.btn-block {
 .navbar-nav .dropdown-menu {
     position: absolute;
 }
+
+.choices__list{
+    z-index: 4!important;
+}

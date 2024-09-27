@@ -53,9 +53,6 @@ final class segmento extends model {
             $object->nome = "Restaurantes e Eventos";
             $object->store();
             $object = new self;
-            $object->nome = "Consultoria e Profissionais Liberais";
-            $object->store();
-            $object = new self;
             $object->nome = "Serviços Domésticos";
             $object->store();
             $object = new self;

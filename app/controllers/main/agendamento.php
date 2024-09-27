@@ -139,9 +139,10 @@ class agendamento extends controller{
                 ->addColumns("15","Email","email")
                 ->addColumns("10","Telefone","telefone")
                 ->addColumns("10","Agenda","agenda")
-                ->addColumns("10","Funcionario","agenda")
+                ->addColumns("10","Funcionario","fun_nome")
                 ->addColumns("12","Data Inicial","dt_ini")
                 ->addColumns("12","Data Final","dt_fim")
+                ->addColumns("12","Total","total")
                 ->addColumns("10","Status","status");
 
         $agendamento = new ModelsAgendamento;

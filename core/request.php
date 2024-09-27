@@ -26,8 +26,8 @@ class request
             return $_POST[$var];
         elseif (isset($_GET[$var]))
             return $_GET[$var];
-        elseif (session::get($var))
-            return session::get($var);
+        elseif (isset($_SESSION[$var]))
+            return $_SESSION[$var];
         elseif (isset($_COOKIE[$var]))
             return $_COOKIE[$var];
         elseif (isset($_SERVER[$var]))

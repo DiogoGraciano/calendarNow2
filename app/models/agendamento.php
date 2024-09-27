@@ -123,7 +123,7 @@ final class agendamento extends model {
             $this->addLimit($limit);
         }
 
-        return $this->selectColumns(agendamento::table.".id",usuario::table.".cpf_cnpj",usuario::table.".nome",usuario::table.".email",usuario::table.".telefone",agenda::table.".nome as age_nome",funcionario::table.".nome as fun_nome",agendamento::table.".id_status","dt_ini","dt_fim");
+        return $this->selectColumns(agendamento::table.".id",agendamento::table.".total",usuario::table.".cpf_cnpj",usuario::table.".nome",usuario::table.".email",usuario::table.".telefone",agenda::table.".nome as age_nome",funcionario::table.".nome as fun_nome",agendamento::table.".id_status","dt_ini","dt_fim");
     }
 
     public static function prepareList(array $agendamentos)
@@ -137,24 +137,40 @@ final class agendamento extends model {
         }
 
         $agendamentosFinal = [];
+        $totalGeral = 0;
+        $i = 0;
         foreach ($agendamentos as $agendamento){
-            if ($agendamento->cpf_cnpj){
-                $agendamento->cpf_cnpj = functions::formatCnpjCpf($agendamento->cpf_cnpj);
+            $i++;
+            if(is_subclass_of($agendamento,"app\db\db")){
+                $agendamento = $agendamento->getArrayData();
             }
-            if ($agendamento->telefone){
-                $agendamento->telefone = functions::formatPhone($agendamento->telefone);
+
+            if ($agendamento["cpf_cnpj"]){
+                $agendamento["cpf_cnpj"] = functions::formatCnpjCpf($agendamento["cpf_cnpj"]);
             }
-            if ($agendamento->dt_ini){
-                $agendamento->dt_ini = functions::dateTimeBr($agendamento->dt_ini);
+            if ($agendamento["telefone"]){
+                $agendamento["telefone"] = functions::formatPhone($agendamento["telefone"]);
             }
-            if ($agendamento->dt_fim){
-                $agendamento->dt_fim = functions::dateTimeBr($agendamento->dt_fim);
+            if ($agendamento["dt_ini"]){
+                $agendamento["dt_ini"]= functions::dateTimeBr($agendamento["dt_ini"]);
             }
-            if ($agendamento->id_status){
-                $agendamento->status = $statusHashMap[$agendamento->id_status];
+            if ($agendamento["dt_fim"]){
+                $agendamento["dt_fim"] = functions::dateTimeBr($agendamento["dt_fim"]);
+            }
+            if ($agendamento["id_status"]){
+                $agendamento["status"] = $statusHashMap[$agendamento["id_status"]];
+            }
+            if ($agendamento["total"]){
+                $totalGeral += $agendamento["total"];
+                $agendamento["total"] = functions::formatCurrency($agendamento["total"]);
             }
             $agendamentosFinal[] = $agendamento;
         }
+
+        $agendamentosFinal["total_agendamentos"] = $i;
+        $agendamentosFinal["total_geral"] = functions::formatCurrency($totalGeral);
+        if($totalGeral)
+            $agendamentosFinal["ticket_medio"] = functions::formatCurrency($totalGeral/$i);
 
         return $agendamentosFinal;
     }

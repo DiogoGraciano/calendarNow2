@@ -4,8 +4,6 @@ namespace app\view\layout;
 
 use app\view\layout\abstract\pagina;
 use app\helpers\mensagem;
-use app\helpers\functions;
-use core\url;
 use app\view\layout\elements;
 
 class consulta extends pagina
@@ -67,7 +65,7 @@ class consulta extends pagina
                     $data = $data->getArrayData();
                 }
 
-                if(array_key_exists($coluna_action,$data)){
+                if(is_array($data) && array_key_exists($coluna_action,$data)){
                     if($this->massaction)
                         $data["massaction"] = $elements->checkbox("massaction[]", false, false, false, false, $data[$coluna_action]);
 
@@ -75,7 +73,8 @@ class consulta extends pagina
                     $data["acoes"] .= $elements->buttonHtmx("Excluir","excluir",$pagina_action.'/'.$data[$coluna_action],"#consulta-admin",class:"btn btn-primary",confirmMessage:"Deseja realmente Excluir?");
                 }
 
-                $this->table->addRow($data);
+                if(is_array($data))
+                    $this->table->addRow($data);
             }
             $this->tpl->table = $this->table->parse();
 
