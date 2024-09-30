@@ -25,6 +25,11 @@
                     <script src="{caminho}assets/js/bootstrap.bundle.min.js"></script>
                     <script src="{caminho}assets/js/choices.min.js"></script>
                     <script src="{caminho}assets/js/main.js"></script>
+                    <script>
+                        if ('serviceWorker' in navigator) {
+                            navigator.serviceWorker.register("{caminho}assets/app/sw.js");
+                        }
+                    </script>
                 </div>
             </div>
         </main>
