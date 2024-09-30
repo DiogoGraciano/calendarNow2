@@ -6,7 +6,7 @@ use core\session;
 
 class mensagem extends pagina{
 
-    public function __construct(string $localizacao="")
+    public function load(string $localizacao="")
     {
         $this->setTemplate("mensagem.html");
 
@@ -73,6 +73,18 @@ class mensagem extends pagina{
     public static function setSucesso(...$Sucessos):void
     {
         session::set("Sucessos",$Sucessos);
+    }
+
+    public function parse():string
+    {
+        $this->load();
+        return $this->tpl->parse();
+    }
+
+    public function show():void
+    {
+        $this->load();
+        $this->tpl->show();
     }
 }
 ?>
