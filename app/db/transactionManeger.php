@@ -45,10 +45,8 @@ class transactionManeger
     public static function commit(): void
     {
         try {
-            echo self::$pdo->inTransaction();
             if (self::$pdo->inTransaction()) {
                 self::$pdo->commit();
-                echo "hehe";
             }
         } catch (\PDOException $e) {
             throw new Exception("Erro ao confirmar a transação: " . $e->getMessage());

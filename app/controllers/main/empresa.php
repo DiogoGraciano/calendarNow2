@@ -10,6 +10,7 @@ use app\helpers\functions;
 use app\helpers\mensagem;
 use app\db\transactionManeger;
 use app\helpers\integracaoWs;
+use app\helpers\logger;
 use app\models\cidade;
 use app\models\configuracoes;
 use app\models\empresa as empresaModel;
@@ -242,7 +243,8 @@ class empresa extends controller {
                 }
             }
         } catch (\Exception $e) {
-            mensagem::setErro("Erro ao Salvar Empresa Tente Novamente",$e->getMessage());
+            mensagem::setErro("Erro ao Salvar Empresa Tente Novamente");
+            logger::error($e->getMessage()." ".$e->getTraceAsString());
             mensagem::setSucesso(false);
             transactionManeger::rollback();
             if(!$id_empresa || $id || $id_endereco){
