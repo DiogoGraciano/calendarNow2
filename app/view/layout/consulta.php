@@ -3,7 +3,6 @@
 namespace app\view\layout;
 
 use app\view\layout\abstract\pagina;
-use app\helpers\mensagem;
 use app\view\layout\elements;
 
 class consulta extends pagina
@@ -50,9 +49,6 @@ class consulta extends pagina
 
     public function setData(string $pagina_manutencao,string $pagina_action,null|bool|array $dados,string $coluna_action = "id"):consulta
     {
-        $mensagem = new mensagem;
-        $this->tpl->mensagem = $mensagem->parse();
-
         foreach ($this->buttons as $button) {
             $this->tpl->button = $button;
             $this->tpl->block("BLOCK_BUTTONS");

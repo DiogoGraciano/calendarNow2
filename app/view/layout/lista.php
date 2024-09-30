@@ -2,7 +2,6 @@
 
 namespace app\view\layout;
 use app\view\layout\abstract\pagina;
-use app\helpers\mensagem;
 
 class lista extends pagina{
 
@@ -15,8 +14,6 @@ class lista extends pagina{
 
     public function setLista(string $titulo){
         $this->tpl->titulo = $titulo;
-        $mensagem = new mensagem;
-        $this->tpl->mensagem = $mensagem->parse();
         if($this->lista){
             foreach ($this->lista as $objeto){
                 $this->tpl->url_objeto = $objeto->url_objeto;

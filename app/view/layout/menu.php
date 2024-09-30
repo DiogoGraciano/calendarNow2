@@ -2,7 +2,6 @@
 
 namespace app\view\layout;
 use app\view\layout\abstract\pagina;
-use app\helpers\mensagem;
 
 class menu extends pagina{
 
@@ -14,8 +13,6 @@ class menu extends pagina{
     }
 
     public function setLista(){
-        $mensagem = new mensagem;
-        $this->tpl->mensagem = $mensagem->parse();
         foreach ($this->elements as $element){
             $this->tpl->element = $element;
             $this->tpl->block("BLOCK_MENU");

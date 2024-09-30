@@ -3,7 +3,6 @@ namespace app\view\layout;
 
 use app\helpers\functions;
 use app\view\layout\abstract\pagina;
-use app\helpers\mensagem;
 use stdClass;
 
 /**
@@ -16,8 +15,6 @@ class form extends pagina
     public function __construct(string $action,$nome = "manutencao",string $include = "",string $target = "",bool $hasRecapcha = false)
     {
         $this->setTemplate("form.html");
-        $mensagem = new mensagem;
-        $this->tpl->mensagem = $mensagem->parse();
         $this->tpl->form_nome = functions::createNameId($nome);
         $this->tpl->action = $action;
 
