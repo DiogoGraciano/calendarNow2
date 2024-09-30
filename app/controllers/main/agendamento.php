@@ -52,6 +52,20 @@ class agendamento extends controller{
             $funcionarios = (new funcionario)->getByFilter($user->id_empresa,id_agenda:$id_agenda,asArray:false);
         }
 
+        if(!$funcionarios){
+            mensagem::setErro("Nenhum funcionario cadastrado na agenda");
+            if ($user->tipo_usuario == 3){
+                $this->go("encontrar");
+            }
+            elseif($user->tipo_usuario == 1)
+            {
+                $this->go("funcionario");
+            }
+            else{
+                $this->go("home");
+            }
+        }
+
         $i = 1;
         $firstFuncionario = "";
         foreach ($funcionarios as $funcionario){
