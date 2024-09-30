@@ -454,5 +454,6 @@
     "start_url": "/",
     "display": "standalone",
     "theme_color": "#0d6efd",
-    "background_color": "#ffffff"
+    "background_color": "#ffffff",
+    "form_factor": "wide"
 }
