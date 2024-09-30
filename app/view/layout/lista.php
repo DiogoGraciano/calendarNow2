@@ -11,12 +11,12 @@ class lista extends pagina{
     public function __construct()
     {
         $this->setTemplate("lista.html");
+        $mensagem = new mensagem;
+        $this->tpl->mensagem = $mensagem->parse();
     }
 
     public function setLista(string $titulo){
         $this->tpl->titulo = $titulo;
-        $mensagem = new mensagem;
-        $this->tpl->mensagem = $mensagem->parse();
         if($this->lista){
             foreach ($this->lista as $objeto){
                 $this->tpl->url_objeto = $objeto->url_objeto;

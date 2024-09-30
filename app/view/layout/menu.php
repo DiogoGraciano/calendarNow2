@@ -10,12 +10,13 @@ class menu extends pagina{
 
     public function __construct()
     {
-        $this->setTemplate("../templates/menu.html");
+        $this->setTemplate("menu.html");
+
+        $mensagem = new mensagem;
+        $this->tpl->mensagem = $mensagem->parse();
     }
 
     public function setLista(){
-        $mensagem = new mensagem;
-        $this->tpl->mensagem = $mensagem->parse();
         foreach ($this->elements as $element){
             $this->tpl->element = $element;
             $this->tpl->block("BLOCK_MENU");
