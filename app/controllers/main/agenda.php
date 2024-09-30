@@ -9,6 +9,7 @@ use app\view\layout\tabelaMobile;
 use app\helpers\mensagem;
 use app\view\layout\filter;
 use app\db\transactionManeger;
+use app\helpers\logger;
 use app\models\agenda as ModelsAgenda;
 use app\models\agendaFuncionario;
 use app\models\agendaUsuario;
@@ -181,6 +182,7 @@ final class agenda extends controller{
         }catch (\exception $e){
             mensagem::setSucesso(false);
             transactionManeger::rollBack();
+            logger::error($e->getMessage()." ".$e->getTraceAsString());
             mensagem::setErro("Erro ao cadastrar agenda, tente novamente");
             $this->manutencao([$agenda->id],$agenda); 
             return;
