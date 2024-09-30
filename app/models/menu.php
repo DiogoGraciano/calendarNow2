@@ -168,7 +168,7 @@ final class menu extends model {
             $menu->store();
             $menu = new self;
             $menu->controller = "servico";
-            $menu->tipo_usuario = json_encode([1,2]);
+            $menu->tipo_usuario = json_encode([1]);
             $menu->nome = "Serviços";
             $menu->class_icone = "fa-solid fa-bell-concierge";
             $menu->ordem = 4;

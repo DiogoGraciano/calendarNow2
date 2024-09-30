@@ -319,7 +319,6 @@ class agendamento extends controller{
         $table->addColumns("10","Tempo","tempo_item");
         $table->addColumns("12","Total","total_item");
 
-        $exists = false;
         if($servicos){
             foreach ($servicos as $servico){
                 
@@ -344,6 +343,20 @@ class agendamento extends controller{
                     $table->addRow($servico->getArrayData()); 
                 }
                 $i++;
+            }
+        }else{
+            mensagem::setErro("Nenhum serviço vinculado ao funcionario");
+            if ($user->tipo_usuario == 3)
+            {
+                $this->go("encontrar");
+            }
+            elseif($user->tipo_usuario == 1)
+            {
+                $this->go("servico");
+            }
+            else
+            {
+                $this->go("home");
             }
         }
         $form->setElement($table->parse());
