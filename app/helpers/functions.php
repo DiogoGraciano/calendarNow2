@@ -507,7 +507,7 @@ class functions{
      */
     public static function genereteCode($number):string
     {
-        return strtoupper(substr(bin2hex(random_bytes($number)), 1));
+        return substr(strtoupper(substr(bin2hex(random_bytes($number)), 1)),0,$number);
     }
 
     /**
