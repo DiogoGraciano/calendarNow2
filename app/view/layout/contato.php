@@ -78,6 +78,6 @@ class contato extends pagina
              ->setElement($elements->textarea("mensagem_envio","Mensagem:","",true,max:1000))
              ->setButton($elements->button("Enviar","enviar"));
 
-        $this->tpl->form = $form->parse();
+        $this->tpl->form = $form->set()->parse();
     }
 }

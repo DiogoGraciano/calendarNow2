@@ -2,6 +2,7 @@
 
 namespace app\view\layout;
 use app\view\layout\abstract\pagina;
+use app\helpers\mensagem;
 use core\url;
 
 class agenda extends pagina{
@@ -13,6 +14,8 @@ class agenda extends pagina{
     
     public function set(string $action,array $eventos,string $days_off=",seg,ter,qua,qui,sex,",string $initial_time = "08:00",string $final_time = "19:00",string $dinner_start="12:00",string $dinner_end="13:00",int $slot_duration = 30):self
     {
+        $mensagem = new mensagem;
+        $this->tpl->mensagem = $mensagem->show(false);
         $this->tpl->action = $action;
         $this->tpl->caminho = url::getUrlBase();
         $this->tpl->initial_time = $initial_time;

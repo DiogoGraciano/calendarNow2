@@ -25,6 +25,8 @@ if(!$user && str_contains(url::getUriPath(),"encontrar/action/")){
     session::set("url_encontrar",url::getUriPath());
 }
 
+echo session::get("url_encontrar");
+
 if($user && $encontrar = session::get("url_encontrar")){
     session::set("url_encontrar",false);
     url::go(ltrim($encontrar,"/"));
