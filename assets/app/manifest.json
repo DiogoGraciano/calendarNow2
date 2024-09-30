@@ -466,7 +466,7 @@
     {
         "src": "screenshots/home_mobile.png",
         "sizes": "430x932",
-        "type": "image/webp",
+        "type": "image/png",
         "form_factor": "narrow",
         "label": "Homescreen"
     }
