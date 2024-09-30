@@ -40,7 +40,7 @@ final class endereco extends model {
 
         $mensagens = [];
 
-        if(!functions::validaCep(functions::onlynumber($this->cep))){
+        if(!functions::validaCep($this->cep = functions::onlynumber($this->cep))){
             $mensagens[] = "CEP é invalido";
         }
 
