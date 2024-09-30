@@ -121,10 +121,10 @@ class calendarNow extends model {
     }
 
     public static function seed(){
-        $empresa = new empresa;
-        if(!$empresa->addLimit(1)->selectColumns("id")){
-            $empresa->ativo = 1;
-            $empresa->store();
+        $calendarNow = new self;
+        if(!$calendarNow->addLimit(1)->selectColumns("id")){
+            $calendarNow->ativo = 1;
+            $calendarNow->store();
         }
     }
 }
