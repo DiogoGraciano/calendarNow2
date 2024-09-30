@@ -26,6 +26,9 @@ class consulta extends pagina
         $this->setTemplate("consulta.html");
 
         $this->tpl->titulo = $titulo;
+
+        $mensagem = new mensagem;
+        $this->tpl->mensagem = $mensagem->parse();
     }
 
     public function addFilter(filter $filter){
@@ -50,9 +53,6 @@ class consulta extends pagina
 
     public function setData(string $pagina_manutencao,string $pagina_action,null|bool|array $dados,string $coluna_action = "id"):consulta
     {
-        $mensagem = new mensagem;
-        $this->tpl->mensagem = $mensagem->parse();
-
         foreach ($this->buttons as $button) {
             $this->tpl->button = $button;
             $this->tpl->block("BLOCK_BUTTONS");
