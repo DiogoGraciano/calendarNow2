@@ -455,5 +455,20 @@
     "display": "standalone",
     "theme_color": "#0d6efd",
     "background_color": "#ffffff",
-    "form_factor": "wide"
+    "screenshots" : [
+    {
+        "src": "screenshots/home.png",
+        "sizes": "1280x720",
+        "type": "image/png",
+        "form_factor": "wide",
+        "label": "Homescreen"
+    },
+    {
+        "src": "screenshots/home_mobile.png",
+        "sizes": "430x932",
+        "type": "image/webp",
+        "form_factor": "narrow",
+        "label": "Homescreen"
+    }
+    ]
 }
