@@ -465,7 +465,7 @@
     },
     {
         "src": "screenshots/home_mobile.png",
-        "sizes": "430x932",
+        "sizes": "374x820",
         "type": "image/png",
         "form_factor": "narrow",
         "label": "Homescreen"
