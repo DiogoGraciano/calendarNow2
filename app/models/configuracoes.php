@@ -1,9 +1,9 @@
 <?php
 namespace app\models;
 
-use app\db\abstract\model;
-use app\db\migrations\table;
-use app\db\migrations\column;
+use diogodg\neoorm\abstract\model;
+use diogodg\neoorm\migrations\table;
+use diogodg\neoorm\migrations\column;
 use app\helpers\mensagem;
 
 final class configuracoes extends model {

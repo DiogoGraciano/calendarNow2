@@ -1,10 +1,10 @@
 <?php
 namespace app\models;
 
-use app\db\abstract\model;
-use app\db\migrations\table;
-use app\db\migrations\column;
-use app\db\transactionManeger;
+use diogodg\neoorm\abstract\model;
+use diogodg\neoorm\migrations\table;
+use diogodg\neoorm\migrations\column;
+use diogodg\neoorm\transactionManeger;
 use app\helpers\functions;
 use app\helpers\logger;
 use app\helpers\mensagem;

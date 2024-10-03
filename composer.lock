@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8c7ba3cd90718af47c52d91aceffe78b",
+    "content-hash": "d815cda2cbb3f4a03e02e8e4c38fe897",
     "packages": [
         {
             "name": "chillerlan/php-qrcode",
@@ -165,6 +165,43 @@
                 }
             ],
             "time": "2024-07-16T11:13:48+00:00"
+        },
+        {
+            "name": "diogodg/neoorm",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DiogoGraciano/NeoORM.git",
+                "reference": "0cad00faad1f5b7053aa6d1c4e0e2f9019c0822d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DiogoGraciano/NeoORM/zipball/0cad00faad1f5b7053aa6d1c4e0e2f9019c0822d",
+                "reference": "0cad00faad1f5b7053aa6d1c4e0e2f9019c0822d",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "diogodg\\neoorm\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Diogo Graciano",
+                    "email": "138625607+DiogoGraciano@users.noreply.github.com"
+                }
+            ],
+            "description": "NeoORM é uma classe para mapeamento de um banco de dados Mysql/Pgsql",
+            "support": {
+                "issues": "https://github.com/DiogoGraciano/NeoORM/issues",
+                "source": "https://github.com/DiogoGraciano/NeoORM/tree/v1.0.0"
+            },
+            "time": "2024-10-03T18:44:11+00:00"
         },
         {
             "name": "phpmailer/phpmailer",

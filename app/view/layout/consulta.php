@@ -61,7 +61,7 @@ class consulta extends pagina
         if ($dados) {
             $elements = (new elements);
             foreach ($dados as $data) {
-                if(is_subclass_of($data,"app\db\db")){
+                if(is_subclass_of($data,"diogodg\\neoorm\db")){
                     $data = $data->getArrayData();
                 }
 

@@ -8,7 +8,7 @@ use app\controllers\abstract\controller;
 use app\view\layout\consulta;
 use app\helpers\functions;
 use app\helpers\mensagem;
-use app\db\transactionManeger;
+use diogodg\neoorm\transactionManeger;
 use app\helpers\integracaoWs;
 use app\helpers\logger;
 use app\models\cidade;

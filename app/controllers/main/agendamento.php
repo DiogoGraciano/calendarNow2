@@ -5,7 +5,7 @@ use app\view\layout\agenda;
 use app\view\layout\consulta;
 use app\controllers\abstract\controller;
 use app\controllers\main\usuario as MainUsuario;
-use app\db\transactionManeger;
+use diogodg\neoorm\transactionManeger;
 use app\view\layout\elements;
 use app\view\layout\filter;
 use app\view\layout\tabela;

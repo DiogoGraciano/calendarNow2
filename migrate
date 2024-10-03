@@ -4,6 +4,6 @@ $recrete = $argv[1]??null;
 
 require 'bootstrap.php';
 
-use app\db\migrations\migrate;
+use diogodg\neoorm\migrations\migrate;
 
 migrate::execute(!empty($recrete));

@@ -8,7 +8,7 @@ use app\view\layout\tabela;
 use app\view\layout\tabelaMobile;
 use app\helpers\mensagem;
 use app\view\layout\filter;
-use app\db\transactionManeger;
+use diogodg\neoorm\transactionManeger;
 use app\helpers\logger;
 use app\models\agenda as ModelsAgenda;
 use app\models\agendaFuncionario;

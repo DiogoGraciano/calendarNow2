@@ -1,9 +1,9 @@
 <?php
 namespace app\models;
 
-use app\db\abstract\model;
-use app\db\migrations\table;
-use app\db\migrations\column;
+use diogodg\neoorm\abstract\model;
+use diogodg\neoorm\migrations\table;
+use diogodg\neoorm\migrations\column;
 use app\helpers\functions;
 use app\helpers\mensagem;
 
@@ -141,7 +141,7 @@ final class agendamento extends model {
         $i = 0;
         foreach ($agendamentos as $agendamento){
             $i++;
-            if(is_subclass_of($agendamento,"app\db\db")){
+            if(is_subclass_of($agendamento,"diogodg\neoorm\db")){
                 $agendamento = $agendamento->getArrayData();
             }
 

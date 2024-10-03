@@ -12,7 +12,7 @@ use app\helpers\mensagem;
 use app\view\layout\tabela;
 use app\view\layout\tabelaMobile;
 use app\view\layout\modal;
-use app\db\transactionManeger;
+use diogodg\neoorm\transactionManeger;
 use app\models\agenda;
 use app\models\agendaFuncionario;
 use app\models\funcionario as funcionarioModel;

@@ -9,7 +9,7 @@ use app\controllers\abstract\controller;
 use app\view\layout\consulta;
 use app\helpers\mensagem;
 use app\view\layout\filter;
-use app\db\transactionManeger;
+use diogodg\neoorm\transactionManeger;
 use app\models\agenda;
 use app\models\agendaUsuario;
 use app\models\endereco;

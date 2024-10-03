@@ -9,7 +9,7 @@ use app\helpers\functions;
 use app\view\layout\filter;
 use app\view\layout\tabela;
 use app\view\layout\tabelaMobile;
-use app\db\transactionManeger;
+use diogodg\neoorm\transactionManeger;
 use app\helpers\mensagem;
 use app\models\funcionario;
 use app\models\grupoServico;

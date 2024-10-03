@@ -322,7 +322,7 @@ class elements extends pagina{
     {
         if ($dados){
             foreach ($dados as $dado){
-                if(is_subclass_of($dado,"app\db\db")){
+                if(is_subclass_of($dado,"diogodg\\neoorm\db")){
                     $dado = $dado->getArrayData();
                 }
                 if(isset($dado[$coluna_vl]) && isset($dado[$coluna_nm]))

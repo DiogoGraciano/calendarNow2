@@ -1,9 +1,9 @@
 <?php
 namespace app\models;
 
-use app\db\abstract\model;
-use app\db\migrations\table;
-use app\db\migrations\column;
+use diogodg\neoorm\abstract\model;
+use diogodg\neoorm\migrations\table;
+use diogodg\neoorm\migrations\column;
 use app\helpers\functions;
 use app\helpers\mensagem;
 
@@ -71,7 +71,7 @@ final class usuario extends model {
         if ($dados){
             foreach ($dados as $dado){
 
-                if(is_subclass_of($dado,"app\db\db")){
+                if(is_subclass_of($dado,"diogodg\neoorm\db")){
                     $dado = $dado->getArrayData();
                 }
 

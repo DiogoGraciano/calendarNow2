@@ -5,7 +5,7 @@ use app\helpers\mensagem;
 use app\helpers\functions;
 use app\controllers\abstract\controller;
 use app\view\layout\form;
-use app\db\transactionManeger;
+use diogodg\neoorm\transactionManeger;
 use app\models\configuracoes as ModelsConfiguracoes;
 use app\models\login;
 use core\request;

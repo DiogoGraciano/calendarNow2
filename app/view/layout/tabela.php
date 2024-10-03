@@ -19,7 +19,7 @@ class tabela extends pagina{
         if($this->rows){
             $i = 1;
             foreach ($this->rows as $row){
-                if(is_subclass_of($row,"app\db\db")){
+                if(is_subclass_of($row,"diogodg\\neoorm\db")){
                     $row = $row->getArrayData();
                 }
                 foreach ($this->columns as $column){
