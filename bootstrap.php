@@ -12,5 +12,7 @@ define("DBNAME","agenda");
 define("DBCHARSET","utf8mb4");
 define("DBUSER","root");
 define("DBPASSWORD","");
+define("PATH_MODEL",__DIR__."/app/models");
+define("MODEL_NAMESPACE","app\models");
 
 ?>
