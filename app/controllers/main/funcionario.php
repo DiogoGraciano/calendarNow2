@@ -131,15 +131,15 @@ final class funcionario extends controller
         $form
         ->setElement($elements->titulo(1,"Manutenção Funcionario"))
         ->setTwoElements(
-            $elements->input("nome", "Nome", $dado->nome, true),
-            $elements->input("cpf_cnpj", "CPF/CNPJ:", $dado->cpf_cnpj ? functions::formatCnpjCpf($dado->cpf_cnpj) : "", true),
+            $elements->input("nome","Nome",$dado->nome,true),
+            $elements->input("cpf_cnpj","CPF/CNPJ:",$dado->cpf_cnpj ? functions::formatCnpjCpf($dado->cpf_cnpj) : "",true),
             ["nome", "cpf_cnpj"]
         );
 
         $form->setThreeElements(
-            $elements->input("email", "Email", $dado->email, true, false, "", "email"),
-            $elements->input("senha", "Senha", "", $dado->senha?false:true, false, "", "password"),
-            $elements->input("telefone", "Telefone", functions::formatPhone($dado->telefone), true),
+            $elements->input("email","Email",$dado->email,false,false,type:"email"),
+            $elements->input("senha","Senha","",$dado->senha?false:true,false,type:"password"),
+            $elements->input("telefone","Telefone",functions::formatPhone($dado->telefone),true,type:"tel"),
             ["email", "senha", "telefone"]
         );
 

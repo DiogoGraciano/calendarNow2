@@ -6,6 +6,7 @@ use app\view\layout\form;
 use app\view\layout\elements;
 use app\helpers\functions;
 use app\controllers\abstract\controller;
+use app\helpers\logger;
 use app\view\layout\consulta;
 use app\helpers\mensagem;
 use app\view\layout\filter;
@@ -169,11 +170,11 @@ final class usuario extends controller {
         $this->index();
     }
 
-    public function manutencao($parameters = [],?usuarioModel $usuario = null,?endereco $endereco = null){
-       $this->formUsuario($parameters,$usuario,$endereco)->show();
+    public function manutencao($parameters = [],?usuarioModel $usuario = null,?endereco $endereco = null,int $tipo_usuario = null){
+       $this->formUsuario($parameters,$usuario,$endereco,$tipo_usuario)->show();
     }
 
-    public function formUsuario($parameters = [],?usuarioModel $usuario = null,?endereco $endereco = null):form
+    public function formUsuario($parameters = [],?usuarioModel $usuario = null,?endereco $endereco = null,int $tipo_usuario = null):form
     {
         $id = null;
 
@@ -183,7 +184,7 @@ final class usuario extends controller {
             }
         }
     
-        $form = new form($this->url."usuario/action");
+        $form = new form($this->url."usuario/action/".$tipo_usuario);
 
         $dado = $usuario?:(new usuarioModel)->get($id);
 
@@ -193,15 +194,15 @@ final class usuario extends controller {
 
         $form->setElement($elements->titulo(1,"Cadastro de Usuario"))
         ->setTwoElements(
-            $elements->input("nome", "Nome", $dado->nome, true),
-            $elements->input("cpf_cnpj", "CPF/CNPJ", functions::formatCnpjCpf($dado->cpf_cnpj), true),
+            $elements->input("nome","Nome",$dado->nome,true),
+            $elements->input("cpf_cnpj","CPF/CNPJ",functions::formatCnpjCpf($dado->cpf_cnpj),$tipo_usuario != 4),
             array("nome", "cpf_cnpj")
         );
 
         $form->setThreeElements(
-            $elements->input("email", "Email", $dado->email, true, false, "", "email"),
-            $elements->input("senha", "Senha", "", $dado->senha?false:true, false, "", "password"),
-            $elements->input("telefone", "Telefone", functions::formatPhone($dado->telefone), true),
+            $elements->input("email","Email",$dado->email,$tipo_usuario != 4,type:"email"),
+            $elements->input("senha","Senha","",$dado->senha?false:$tipo_usuario != 4,type:"password"),
+            $elements->input("telefone","Telefone", functions::formatPhone($dado->telefone),$tipo_usuario != 4,type:"tel"),
             array("email", "senha", "telefone")
         );
 
@@ -238,6 +239,12 @@ final class usuario extends controller {
 
     public function action($parameters = []):void
     {
+        $tipo_usuario = 3;
+
+        if(isset($parameters[0])){
+            $tipo_usuario = intval($parameters[0]);
+        }
+
         $id = intval($this->getValue('cd'));
         $nome = $this->getValue('nome');
         $cpf_cnpj = $this->getValue('cpf_cnpj');
@@ -259,7 +266,7 @@ final class usuario extends controller {
         $usuario->cpf_cnpj     = $cpf_cnpj;
         $usuario->senha        = $senha;
         $usuario->email        = $email;
-        $usuario->tipo_usuario = 3;
+        $usuario->tipo_usuario = $tipo_usuario;
         $usuario->telefone     = functions::onlynumber($telefone);
 
         // $endereco              = new endereco;
@@ -271,10 +278,6 @@ final class usuario extends controller {
         // $endereco->rua         = $rua;
         // $endereco->numero      = $numero;
         // $endereco->complemento = $complemento;
-
-        if (array_key_exists(0, $parameters)){
-            $id = intval(($parameters[1])); 
-        }
 
         transactionManeger::init();
         transactionManeger::beginTransaction();
@@ -305,20 +308,21 @@ final class usuario extends controller {
                         $this->go("home");
                     }
 
-                    $this->manutencao([$usuario->id],$usuario);//,$endereco);
+                    $this->manutencao([$usuario->id],$usuario,tipo_usuario:$usuario->tipo_usuario);//,$endereco);
                     return;
                 // }
             }
         } catch (\Exception $e) {
-            mensagem::setErro("Erro ao salvar usuário",$e->getMessage());
+            mensagem::setErro("Erro ao salvar usuário");
+            logger::error($e->getMessage());
             transactionManeger::rollback();
-            $this->manutencao([$usuario->id],$usuario);//,$endereco);
+            $this->manutencao([$usuario->id],$usuario,tipo_usuario:$usuario->tipo_usuario);//,$endereco);
             return;
         }
 
         mensagem::setSucesso(false);
         transactionManeger::rollback();
-        $this->manutencao([$usuario->id],$usuario);//,$endereco);
+        $this->manutencao([$usuario->id],$usuario,tipo_usuario:$usuario->tipo_usuario);//,$endereco);
     }
 }
 

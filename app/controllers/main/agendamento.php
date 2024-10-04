@@ -226,7 +226,7 @@ class agendamento extends controller{
         $id_funcionario = "";
         $id_agenda = "";
 
-        $modal = new modal("modalUsuario","",(new MainUsuario)->formUsuario()->parse(),"modal modal-xl fade");
+        $modal = new modal("modalUsuario","",(new MainUsuario)->formUsuario(tipo_usuario:4)->parse(),"modal modal-xl fade");
         $modal->show();
 
         $form = new form($this->url."agendamento/action/","agendamento");
@@ -261,7 +261,7 @@ class agendamento extends controller{
 
             $statuses = (new status)->getAll();
 
-            $usuarios = (new usuario)->getByTipoUsuarioAgenda(3,$id_agenda);
+            $usuarios = (new usuario)->getByTipoUsuarioAgenda([3,4],$id_agenda);
 
             $elements->addOption("","Selecionar/Vazio");
             foreach ($usuarios as $usuario){

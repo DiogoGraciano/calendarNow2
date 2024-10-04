@@ -86,9 +86,9 @@ class empresa extends controller {
             $elements->select("segmento", "Segmento:",$dadoEmpresa->id_segmento),
             array("nome", "cpf_cnpj","segmento")
         )->setThreeElements(
-            $elements->input("email", "Email", $dado->email, true, false, "", "email"),
-            $elements->input("senha", "Senha", "", $dado->senha?false:true, false, "", "password"),
-            $elements->input("telefone", "Telefone", functions::formatPhone($dado->telefone), true),
+            $elements->input("email","Email",$dado->email, true, false,"",type:"email"),
+            $elements->input("senha","Senha","",$dado->senha?false:true,false,type:"password"),
+            $elements->input("telefone", "Telefone",functions::formatPhone($dado->telefone),true,type:"tel"),
             array("email", "senha", "telefone")
         )->setThreeElements(
             $elements->input("nome_empresa", "Nome da Empresa", $dadoEmpresa->nome, true),
@@ -103,7 +103,7 @@ class empresa extends controller {
         $form->setTwoElements(
             $elements->input("cep", "CEP", $dadoEndereco->cep, true),
             $estado,
-            array("cep", "id_estado")
+            array("cep","id_estado")
         );
 
         $elements->setOptions((new cidade())->getByEstado($dadoEndereco->id_estado ?: 24), "id", "nome");
@@ -114,8 +114,8 @@ class empresa extends controller {
         );
 
         $form->setTwoElements(
-            $elements->input("rua", "Rua", $dadoEndereco->rua, true),
-            $elements->input("numero", "Numero", $dadoEndereco->numero, true, false, "", "number", "form-control", 'min="0" max="999999"'),
+            $elements->input("rua","Rua",$dadoEndereco->rua,true),
+            $elements->input("numero","Numero",$dadoEndereco->numero,true,false,type:"number",min:0,max:99999),
             array("rua", "numero")
         )->setElement($elements->textarea("complemento", "Complemento", $dadoEndereco->complemento), "complemento")
         ->setButton($elements->button("Salvar", "submit"))

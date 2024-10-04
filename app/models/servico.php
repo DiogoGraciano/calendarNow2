@@ -64,7 +64,7 @@ final class servico extends model {
 
         if ($values){
             foreach ($values as $value){
-                if(is_subclass_of($value,"diogodg\neoorm\db")){
+                if(is_subclass_of($value,"diogodg\\neoorm\db")){
                     $value = $value->getArrayData();
                 }
 
