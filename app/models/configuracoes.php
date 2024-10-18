@@ -14,11 +14,11 @@ final class configuracoes extends model {
     }
 
     public static function table(){
-        return (new table(self::table,comment:"Tabela de selfurações"))
+        return (new table(self::table,comment:"Tabela de configurações"))
                 ->addColumn((new column("id","INT"))->isPrimary()->setComment("ID self"))
                 ->addColumn((new column("id_empresa","INT"))->isNotNull()->isForeingKey(empresa::table(),"id")->setComment("ID da tabela empresa"))
-                ->addColumn((new column("identificador","VARCHAR",30))->isNotNull()->setComment("Identificador da selfuração"))
-                ->addColumn((new column("valor","BLOB"))->isNotNull()->setComment("selfuração"));
+                ->addColumn((new column("identificador","VARCHAR",30))->isNotNull()->setComment("Identificador da configurações"))
+                ->addColumn((new column("valor","BLOB"))->isNotNull()->setComment("configurações"));
     }
 
     public function getByEmpresa(int $id_empresa):array

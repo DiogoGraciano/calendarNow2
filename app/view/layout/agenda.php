@@ -15,7 +15,7 @@ class agenda extends pagina{
         $this->tpl->mensagem = $mensagem->parse();
     }
     
-    public function set(string $action,array $eventos,string $days_off=",seg,ter,qua,qui,sex,",string $initial_time = "08:00",string $final_time = "19:00",string $dinner_start="12:00",string $dinner_end="13:00",int $slot_duration = 30):self
+    public function set(string $action,array|string $eventos,string $days_on=",seg,ter,qua,qui,sex,",string $initial_time = "08:00",string $final_time = "19:00",int $slot_duration = 30):self
     {
         $this->tpl->action = $action;
         $this->tpl->caminho = url::getUrlBase();
@@ -33,39 +33,28 @@ class agenda extends pagina{
         else 
             $this->tpl->slot_duration = "00:".$slot_duration;
 
+        $days_on = str_replace("dom",0,$days_on);
+        $days_on = str_replace("seg",1,$days_on);
+        $days_on = str_replace("ter",2,$days_on);
+        $days_on = str_replace("qua",3,$days_on);
+        $days_on = str_replace("qui",4,$days_on);
+        $days_on = str_replace("sex",5,$days_on);
+        $days_on = str_replace("sab",6,$days_on);
 
-        $days_off = str_replace("dom",0,$days_off);
-        $days_off = str_replace("seg",1,$days_off);
-        $days_off = str_replace("ter",2,$days_off);
-        $days_off = str_replace("qua",3,$days_off);
-        $days_off = str_replace("qui",4,$days_off);
-        $days_off = str_replace("sex",5,$days_off);
-        $days_off = str_replace("sab",6,$days_off);
-
-        $days = explode(",",$days_off);
+        $days = explode(",",$days_on);
 
         $daysOffFinal = [];
-        $daysOn = [];
 
         foreach ($days as $key => $value){
             $alldays = [0,1,2,3,4,5,6];
             if (!in_array($value,$alldays))
                 $daysOffFinal[] = $alldays[$key];
-            else 
-                $daysOn[] = $alldays[$key];
         } 
 
-        $dinnerStop = [];
-
-        $dinnerStop[] =  [
-            'daysOfWeek' => $daysOn, 
-            'startTime' => $dinner_start,
-            'endTime' => $dinner_end,
-            'title' => "Almoço",
-            'color' => "#000",
-        ];
-
-        $this->tpl->events = json_encode(array_merge($eventos,$dinnerStop));
+        if(is_array($eventos))
+            $this->tpl->events = json_encode(array_merge($eventos));
+        else
+            $this->tpl->events = '"/'.$eventos.'"';
 
         $this->tpl->days_off = json_encode($daysOffFinal);
 

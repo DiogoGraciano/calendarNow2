@@ -4,17 +4,9 @@ namespace app\view\layout\abstract;
 use app\view\layout\template;
 use app\helpers\functions;
 
-/**
- * Classe base para páginas, contendo métodos comuns para a construção de páginas web.
- */
 abstract class pagina{
 
-    /**
-     * Objeto template para manipulação de templates.
-     *
-     * @var template
-     */
-    protected $tpl;
+    protected template $tpl;
 
     public function setTemplate(string $caminho,bool $accurate=false)
     {
@@ -26,11 +18,6 @@ abstract class pagina{
         return new template(Functions::getRaiz()."/app/view/templates/".$caminho,$accurate); 
     }
 
-    /**
-     * Verifica se o usuário está acessando via dispositivo móvel.
-     *
-     * @return bool  Retorna true se o acesso for via dispositivo móvel; caso contrário, false.
-     */
     public function isMobile():bool
     {
         $useragent = $_SERVER['HTTP_USER_AGENT'];

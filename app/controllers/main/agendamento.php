@@ -26,6 +26,8 @@ use app\view\layout\pagination;
 class agendamento extends controller{
 
     public const headTitle = "Agendamento";
+
+    public const methods = ["loadEventos" => ["addHead" => false,"addHeader" => false,"addFooter" => false]];
   
     public function index(array $parameters = []):void
     {
@@ -84,18 +86,28 @@ class agendamento extends controller{
         $agenda->addButton($elements->button("Voltar","voltar","button","btn btn-primary w-100 btn-block","location.href='".$this->url."home'"));
         $agenda->set(
             $this->url."agendamento/manutencao/".$parameters[0]."/".(!$id_funcionario?$firstFuncionario:$id_funcionario)."/",
-            (new ModelsAgendamento)->getEventsbyFilter(
-                date("Y-m-d H:i:s",strtotime("-1 Year")),
-                date("Y-m-d H:i:s",strtotime("+1 Year")),
-                $id_agenda,
-                $Dadofuncionario->id
-            ),
+            "agendamento/loadEventos/".$id_agenda."/".$Dadofuncionario->id,
             $Dadofuncionario->dias?:"seg,ter,qua,qui,sex",
             $Dadofuncionario->hora_ini?:"08:00",
-            $Dadofuncionario->hora_fim?:"18:00",
-            $Dadofuncionario->hora_almoco_ini?:"12:00",
-            $Dadofuncionario->hora_almoco_fim?:"13:30"
+            $Dadofuncionario->hora_fim?:"18:00"
         )->addFilter($filter)->show();
+    }
+
+    public function loadEventos(array $parameters = []):void
+    {
+        if(isset($this->urlQuery["start"],$this->urlQuery["end"],$parameters[0],$parameters[1])){
+            $eventos = (new ModelsAgendamento)->getEventsbyFilter(
+                        functions::dateTimeBd($this->urlQuery["start"]),
+                        functions::dateTimeBd($this->urlQuery["end"]),
+                        $parameters[0],
+                        $parameters[1]
+                    );
+                    
+            echo json_encode($eventos);
+            return;
+        }
+
+        echo json_encode([]);
     }
 
     public function listagem(array $parameters = []):void

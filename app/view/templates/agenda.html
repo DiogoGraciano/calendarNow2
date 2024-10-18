@@ -45,21 +45,21 @@
                 selectOverlap:false,
                 eventOverlap:false,
                 select: function(arg) {
-                let dataAtual = new Date();
-                if (arg.start > dataAtual)
-                    window.location.href = "{action}" + btoa(arg.start).toString().replace("/","@") + "/" + btoa(arg.end).toString().replace("/","@");
-                else{
-                    mensagem("Data menor que a data atual")
-                    window.scroll({
-                    top: 0,
-                    left: 0,
-                    behavior: "smooth",
-                    });
-                }
+                    let dataAtual = new Date();
+                    if (arg.start > dataAtual)
+                        window.location.href = "{action}" + btoa(arg.start).toString().replace("/","@") + "/" + btoa(arg.end).toString().replace("/","@");
+                    else{
+                        mensagem("Data menor que a data atual")
+                        window.scroll({
+                        top: 0,
+                        left: 0,
+                        behavior: "smooth",
+                        });
+                    }
                 },
                 eventClick: function(arg) {
-                if (arg.event.id)
-                    window.location.href = "{action}" + arg.event.id;
+                    if (arg.event.id)
+                        window.location.href = "{action}" + arg.event.id;
                 }, 
                 events: {events}
             });

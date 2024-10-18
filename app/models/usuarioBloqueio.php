@@ -35,7 +35,6 @@ final class usuarioBloqueio extends model {
         return false;
     }
 
-   
     public function remove():bool
     {
         return $this->addFilter("id_usuario","=",$this->id_usuario)

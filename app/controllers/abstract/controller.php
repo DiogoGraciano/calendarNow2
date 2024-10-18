@@ -27,6 +27,8 @@ abstract class controller
 
     public const permitAccess = false;
 
+    public const methods = [];
+
     public function __construct()
     {
         $this->url = url::getUrlBase();

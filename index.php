@@ -62,22 +62,43 @@ try{
         $controller->$method($parameters);
     }
     else{
-
-        if($controller::addHead){
-            $head = new head($controller::headTitle);
-            $head->show();
+        if(!$controller::methods || !array_key_exists($method,$controller::methods)){
+            if($controller::addHead){
+                $head = new head($controller::headTitle);
+                $head->show();
+            }
+    
+            if($controller::addHeader){
+                $header = new header();
+                $header->show();
+            }
+    
+            $controller->$method($parameters);
+                
+            if($controller::addFooter){
+                $footer = new footer();
+                $footer->show();
+            }
         }
+        else{
+            $methodConfig = $controller::methods[$method];
 
-        if($controller::addHeader){
-            $header = new header();
-            $header->show();
-        }
-
-        $controller->$method($parameters);
-            
-        if($controller::addFooter){
-            $footer = new footer();
-            $footer->show();
+            if(isset($methodConfig["addHead"]) && $methodConfig["addHead"]){
+                $head = new head($controller::headTitle);
+                $head->show();
+            }
+    
+            if(isset($methodConfig["addHeader"]) && $methodConfig["addHeader"]){
+                $header = new header();
+                $header->show();
+            }
+    
+            $controller->$method($parameters);
+              
+            if(isset($methodConfig["addFooter"]) && $methodConfig["addFooter"]){
+                $footer = new footer();
+                $footer->show();
+            }
         }
     }
 

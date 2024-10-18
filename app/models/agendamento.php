@@ -32,14 +32,39 @@ final class agendamento extends model {
 
     public function getEventsbyFilter(?string $dt_inicio = null,?string $dt_fim = null,?int $id_agenda = null,?int $id_funcionario = null,?int $isnotstatus = 4):array
     {
+        $dinnerStop = [];
+        
         if($dt_inicio)
             $this->addFilter("dt_ini",">=",functions::dateTimeBd($dt_inicio));
         if($dt_fim)
             $this->addFilter("dt_fim","<=",functions::dateTimeBd($dt_fim));
         if($id_agenda)
             $this->addFilter("id_agenda","=",intval($id_agenda));
-        if($id_funcionario)
-            $this->addFilter("id_funcionario ","=",intval($id_funcionario));
+        if($id_funcionario){
+
+            $funcionario = (new funcionario)->get(intval($id_funcionario));
+
+            $this->addFilter("id_funcionario ","=",$funcionario->id);
+
+            $days_on = $funcionario->dias;
+
+            $days_on = str_replace("dom",0,$days_on);
+            $days_on = str_replace("seg",1,$days_on);
+            $days_on = str_replace("ter",2,$days_on);
+            $days_on = str_replace("qua",3,$days_on);
+            $days_on = str_replace("qui",4,$days_on);
+            $days_on = str_replace("sex",5,$days_on);
+            $days_on = str_replace("sab",6,$days_on);
+
+            $dinnerStop[] =  [
+                'daysOfWeek' => $days_on, 
+                'startTime' => $funcionario->hora_almoco_ini?:"12:00",
+                'endTime' => $funcionario->hora_almoco_fim?:"13:30",
+                'title' => "Almoço",
+                'color' => "#000",
+            ];
+            
+        }
         if($isnotstatus)
             $this->addFilter("id_status","!=",intval($isnotstatus));
                       
@@ -79,7 +104,7 @@ final class agendamento extends model {
                 }
             }
         }
-        return $return;
+        return array_merge($return,$dinnerStop);
     }
 
     public function getByfilter($id_empresa,?int $id_usuario = null,?string $dt_ini = null,?string $dt_fim = null,bool $onlyActive = false,?int $id_agenda = null,?int $id_funcionario = null,?int $limit = null,?int $offset = null):array
@@ -141,7 +166,7 @@ final class agendamento extends model {
         $i = 0;
         foreach ($agendamentos as $agendamento){
             $i++;
-            if(is_subclass_of($agendamento,"diogodg\neoorm\db")){
+            if(is_subclass_of($agendamento,"diogodg\\neoorm\db")){
                 $agendamento = $agendamento->getArrayData();
             }
 
