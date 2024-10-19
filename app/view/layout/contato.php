@@ -2,16 +2,12 @@
 namespace app\view\layout;
 
 use app\helpers\functions;
-use app\models\main\cidadeModel;
-use app\models\main\empresaModel;
-use app\models\main\estadoModel;
+use app\models\calendarNow;
+use app\models\cidade;
+use app\models\estado;
 use app\view\layout\abstract\pagina;
-use core\request;
 use core\url;
 
-/**
- * Classe footer é responsável por exibir o rodapé de uma página usando um template HTML.
- */
 class contato extends pagina
 {
     public function __construct()
@@ -19,8 +15,8 @@ class contato extends pagina
         $this->setTemplate("contato.html");
 
         $empresa = (new calendarNow)->get(1);
-        $empresa->cidade = cidadeModel::get($empresa->id_cidade)->nome;
-        $empresa->estado = estadoModel::get($empresa->id_estado)->nome;
+        $empresa->cidade = (new cidade)->get($empresa->id_cidade)->nome;
+        $empresa->estado = (new estado)->get($empresa->id_estado)->nome;
 
         if($empresa->telefone){
             $empresa->__TELEFONE__ = functions::onlynumber($empresa->telefone);
@@ -78,6 +74,6 @@ class contato extends pagina
              ->setElement($elements->textarea("mensagem_envio","Mensagem:","",true,max:1000))
              ->setButton($elements->button("Enviar","enviar"));
 
-        $this->tpl->form = $form->set()->parse();
+        $this->tpl->form = $form->parse();
     }
 }

@@ -232,9 +232,18 @@ final class menu extends model {
             $menu = new self;
             $menu->controller = "calendarNow";
             $menu->tipo_usuario = json_encode([0]);
-            $menu->nome = "Configurações CalendarNow";
+            $menu->nome = "CalendarNow";
             $menu->class_icone = "fa-solid fa-building";
             $menu->ordem = 11;
+            $menu->target_blank = 0;
+            $menu->ativo = 1;
+            $menu->store();
+            $menu = new self;
+            $menu->controller = "contatos";
+            $menu->tipo_usuario = json_encode([0]);
+            $menu->nome = "Contato";
+            $menu->class_icone = "fa-solid fa-envelope";
+            $menu->ordem = 12;
             $menu->target_blank = 0;
             $menu->ativo = 1;
             $menu->store();
@@ -243,7 +252,7 @@ final class menu extends model {
             $menu->class_icone = "fa-solid fa-right-from-bracket";
             $menu->tipo_usuario = json_encode([1,2,3]);
             $menu->nome = "Deslogar";
-            $menu->ordem = 12;
+            $menu->ordem = 13;
             $menu->target_blank = 0;
             $menu->ativo = 1;
             $menu->store();

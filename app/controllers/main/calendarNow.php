@@ -85,7 +85,7 @@ final class calendarNow extends controller{
                 $elements->input("recaptcha_minimal_score", "Score Minimo", $dado->recaptcha_minimal_score?:6,type:"number",max:10,min:1)
             )
             ->setButton($elements->button("Salvar","submit"))
-            ->setButton($elements->button("Voltar","voltar","button","btn btn-primary w-100 btn-block","location.href='".$this->url."banner'"))
+            ->setButton($elements->button("Voltar","voltar","button","btn btn-primary w-100 btn-block","location.href='".$this->url."'"))
             ->show();
     }
 
