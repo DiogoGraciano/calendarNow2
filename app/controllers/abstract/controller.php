@@ -38,8 +38,9 @@ abstract class controller
         $controller = (new controlerUri)->getControllerNotHome();
 
         if($controller && !get_called_class()::permitAccess){
+            
             $menu = (new menu())->get($controller,"controller");
-
+        
             $user = login::getLogged();
 
             if($menu->id && $user && !in_array($user->tipo_usuario,json_decode($menu->tipo_usuario))){

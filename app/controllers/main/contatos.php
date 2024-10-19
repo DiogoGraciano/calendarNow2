@@ -1,5 +1,6 @@
 <?php 
-namespace app\controllers\admin;
+namespace app\controllers\main;
+
 use app\view\layout\form;
 use app\view\layout\consulta;
 use app\controllers\abstract\controller;

@@ -9,7 +9,8 @@ use app\view\layout\contato as LayoutContato;
 final class contato extends controller{
 
     public const headTitle = "Contato";
-    public const typeBanner = 1;
+
+    public const permitAccess = true;
 
     public function index(array $parameters = []):void
     {

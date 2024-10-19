@@ -4,6 +4,7 @@ namespace app\view\layout;
 use app\helpers\functions;
 use app\view\layout\abstract\pagina;
 use app\helpers\mensagem;
+use app\models\calendarNow;
 use stdClass;
 
 /**

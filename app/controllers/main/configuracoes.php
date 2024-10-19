@@ -10,7 +10,7 @@ use app\models\configuracoes as ModelsConfiguracoes;
 use app\models\login;
 use core\request;
 
-class configuracoes extends controller{
+final class configuracoes extends controller{
 
     public const headTitle = "Configurações";
 

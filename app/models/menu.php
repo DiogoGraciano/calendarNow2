@@ -241,7 +241,7 @@ final class menu extends model {
             $menu = new self;
             $menu->controller = "contatos";
             $menu->tipo_usuario = json_encode([0]);
-            $menu->nome = "Contato";
+            $menu->nome = "Contatos";
             $menu->class_icone = "fa-solid fa-envelope";
             $menu->ordem = 12;
             $menu->target_blank = 0;
@@ -250,7 +250,7 @@ final class menu extends model {
             $menu = new self;
             $menu->controller = "login\deslogar";
             $menu->class_icone = "fa-solid fa-right-from-bracket";
-            $menu->tipo_usuario = json_encode([1,2,3]);
+            $menu->tipo_usuario = json_encode([0,1,2,3]);
             $menu->nome = "Deslogar";
             $menu->ordem = 13;
             $menu->target_blank = 0;
