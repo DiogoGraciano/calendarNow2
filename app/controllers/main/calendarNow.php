@@ -14,7 +14,7 @@ final class calendarNow extends controller{
 
     public function index(array $parameters = [],?ModelsCalendarNow $calendarNow = null):void
     {
-        $form = new form($this->url."empresa/action/");
+        $form = new form($this->url."calendarNow/action/");
 
         $elements = new elements;
         

@@ -111,7 +111,6 @@ class calendarNow extends model {
         $this->recaptcha_site_key = htmlspecialchars(trim($this->recaptcha_site_key));
         $this->recaptcha_secret_key = htmlspecialchars(trim($this->recaptcha_secret_key));
         
-
         if ($this->store()){
             mensagem::setSucesso("Empresa salva com sucesso");
             return $this;
