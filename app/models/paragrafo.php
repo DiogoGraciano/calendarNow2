@@ -6,8 +6,8 @@ use diogodg\neoorm\abstract\model;
 use diogodg\neoorm\migrations\table;
 use diogodg\neoorm\migrations\column;
 
-class paginas extends model {
-    public const table = "paginas";
+class paragrafo extends model {
+    public const table = "paragrafo";
 
     public function __construct() {
         parent::__construct(self::table,get_class($this));

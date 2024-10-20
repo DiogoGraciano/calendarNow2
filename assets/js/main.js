@@ -449,74 +449,80 @@ function loadEditor(){
         Undo
     } = CKEDITOR;
 
-    ClassicEditor
-        .create( document.querySelector('#editor'), {
-            plugins: [ClassicEditor,
-                    EditorWatchdog,
-                    Alignment,
-                    Autoformat,
-                    AutoLink,
-                    Autosave,
-                    BlockQuote,
-                    Bold,
-                    Essentials,
-                    FontSize,
-                    FontFamily,
-                    Heading,
-                    Highlight,
-                    Italic,
-                    Link,
-                    List,
-                    Mention,
-                    Paragraph,
-                    PasteFromOffice,
-                    RemoveFormat,
-                    Strikethrough,
-                    Table,
-                    TableCaption,
-                    TableCellProperties,
-                    TableColumnResize,
-                    TableProperties,
-                    TableToolbar,
-                    Underline,
-                    Undo
-                ],
-            toolbar: {
-                items: [
-                   'undo',
-                    'redo',
-                    '|',
-                    'heading',
-                    '|',
-                    'fontSize',
-                    'fontFamily',
-                    '|',
-                    'bold',
-                    'italic',
-                    'underline',
-                    'strikethrough',
-                    'removeFormat',
-                    '|',
-                    'link',
-                    'insertTable',
-                    'highlight',
-                    'blockQuote',
-                    '|',
-                    'alignment',
-                    '|',
-                    'bulletedList',
-                    'numberedList',
-                    '|',
-                    'accessibilityHelp'
-                ],
-                shouldNotGroupWhenFull: false
-            },
-            language: {
-                ui: 'pt-br',
-                content: 'pt-br'
-            }
-        } )
-        .catch();
+    let editores = document.querySelectorAll('textarea#editor')
+    
+    if(editores)
+        editores.forEach(function(element){
+            ClassicEditor
+            .create(element,{
+                plugins: [ClassicEditor,
+                        EditorWatchdog,
+                        Alignment,
+                        Autoformat,
+                        AutoLink,
+                        Autosave,
+                        BlockQuote,
+                        Bold,
+                        Essentials,
+                        FontSize,
+                        FontFamily,
+                        Heading,
+                        Highlight,
+                        Italic,
+                        Link,
+                        List,
+                        Mention,
+                        Paragraph,
+                        PasteFromOffice,
+                        RemoveFormat,
+                        Strikethrough,
+                        Table,
+                        TableCaption,
+                        TableCellProperties,
+                        TableColumnResize,
+                        TableProperties,
+                        TableToolbar,
+                        Underline,
+                        Undo
+                    ],
+                toolbar: {
+                    items: [
+                       'undo',
+                        'redo',
+                        '|',
+                        'heading',
+                        '|',
+                        'fontSize',
+                        'fontFamily',
+                        '|',
+                        'bold',
+                        'italic',
+                        'underline',
+                        'strikethrough',
+                        'removeFormat',
+                        '|',
+                        'link',
+                        'insertTable',
+                        'highlight',
+                        'blockQuote',
+                        '|',
+                        'alignment',
+                        '|',
+                        'bulletedList',
+                        'numberedList',
+                        '|',
+                        'accessibilityHelp'
+                    ],
+                    shouldNotGroupWhenFull: false
+                },
+                language: {
+                    ui: 'pt-br',
+                    content: 'pt-br'
+                }
+            } )
+            .catch();
+        }
+    )
 }
 
 document.addEventListener("DOMContentLoaded", function () {
