@@ -453,8 +453,11 @@ function loadEditor(){
     
     if(editores)
         editores.forEach(function(element){
-            ClassicEditor
-            .create(element,{
+            if(element.classList.contains("loaded")){
+                return;
+            }
+            element.classList.add("loaded");
+            ClassicEditor.create(element,{
                 plugins: [ClassicEditor,
                         EditorWatchdog,
                         Alignment,
@@ -519,10 +522,8 @@ function loadEditor(){
                     ui: 'pt-br',
                     content: 'pt-br'
                 }
-            } )
-            .catch();
-        }
-    )
+        }).catch();
+    });
 }
 
 document.addEventListener("DOMContentLoaded", function () {

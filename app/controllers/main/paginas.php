@@ -20,6 +20,15 @@ final class paginas extends controller{
         $tabs->show();
     }
 
+    public function editar(array $parameters = []){
+        if(isset($parameters[0],$parameters[1])){
+            $this->loadForm([$parameters[1]],pagina:$parameters[0])->show();
+            return;
+        }
+
+        $this->go("paginas");
+    }
+
     public function loadForm(array $parameters = [],?paragrafo $paragrafo = null,string $pagina = ""):form
     {
         $id = 0;
@@ -42,7 +51,7 @@ final class paginas extends controller{
             ->setElement($elements->input("titulo","Titulo:",$dado->titulo,true,max:250))
             ->setTwoElements($elements->select("efeito","Efeito:",$dado->efeito),
                             $elements->input("ordem","Ordem:",$dado->ordem,type:"number",min:1))
-            ->setElement($elements->textarea("editor","Descrição:",$dado->descricao,max:10000,class:"form-control editor"));
+            ->setElement($elements->textarea("editor","Descrição:",$dado->descricao,max:10000));
 
         $form->setButton($elements->button("Salvar","submit"));
 
@@ -50,10 +59,10 @@ final class paginas extends controller{
         
         foreach ($paragrafos as $paragrafo)
         {
-            $form->addCustomElement(6,$elements->titulo(3,$pagina["titulo"])."<br>".$pagina["descricao"]);
+            $form->addCustomElement(6,$elements->titulo(3,$paragrafo["titulo"])."<br>".$paragrafo["descricao"]);
             $form->addCustomElement(6,[
-                $elements->buttonHtmx("Editar Paragrafo","editarParagrafo",$this->url."paginas/loadForm/".$paragrafo["id"],"#form-pagina-".$pagina,class:"btn btn-primary w-100 mt-1 pt-2 btn-block"),
-                $elements->buttonHtmx("Excluir Paragrafo","excluirParagrafo",$this->url."paginas/action/".$paragrafo["id"],"#form-pagina-".$pagina,confirmMessage:"Tem certeza que desaja excluir?",class:"btn btn-primary w-100 mt-1 pt-2 btn-block")
+                $elements->buttonHtmx("Editar Paragrafo","editarParagrafo",$this->url."paginas/editar/".$pagina."/".$paragrafo["id"],"#form-pagina-".$pagina,class:"btn btn-primary w-100 mt-1 pt-2 btn-block"),
+                $elements->buttonHtmx("Excluir Paragrafo","excluirParagrafo",$this->url."paginas/action/".$pagina."/".$paragrafo["id"],"#form-pagina-".$pagina,confirmMessage:"Tem certeza que desaja excluir?",class:"btn btn-primary w-100 mt-1 pt-2 btn-block")
                 ]
             );
             $form->setCustomElements("align-items-center");
@@ -64,11 +73,11 @@ final class paginas extends controller{
 
     public function action(array $parameters = []):void
     {
-        if ($parameters){
+        if (isset($parameters[0],$parameters[1])){
             $paragrafo = new paragrafo;
-            $paragrafo->id = $parameters[0];
+            $paragrafo->id = $parameters[1];
             $paragrafo->remove();
-            $this->loadForm([])->show();
+            $this->loadForm([],pagina:$parameters[0])->show();
             return;
         }
 
@@ -82,12 +91,12 @@ final class paginas extends controller{
         $paragrafo->ordem             = $this->getValue('ordem')?:1;
 
         if ($paragrafo->set()){ 
-            $this->go("paginas");
+            $this->loadForm([],pagina:$paragrafo->pagina)->show();
             return;
         }
 
         mensagem::setSucesso(false);
-        $this->loadForm($parameters,$paragrafo)->show();
+        $this->loadForm([],pagina:$paragrafo->pagina)->show();
         return;
     }
 }
