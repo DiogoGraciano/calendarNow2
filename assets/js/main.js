@@ -416,6 +416,109 @@ function setEvents() {
     });
 }
 
+function loadEditor(){
+    const {
+        ClassicEditor,
+        EditorWatchdog,
+        Alignment,
+        Autoformat,
+        AutoLink,
+        Autosave,
+        BlockQuote,
+        Bold,
+        Essentials,
+        FontSize,
+        FontFamily,
+        Heading,
+        Highlight,
+        Italic,
+        Link,
+        List,
+        Mention,
+        Paragraph,
+        PasteFromOffice,
+        RemoveFormat,
+        Strikethrough,
+        Table,
+        TableCaption,
+        TableCellProperties,
+        TableColumnResize,
+        TableProperties,
+        TableToolbar,
+        Underline,
+        Undo
+    } = CKEDITOR;
+
+    ClassicEditor
+        .create( document.querySelector('#editor'), {
+            plugins: [ClassicEditor,
+                    EditorWatchdog,
+                    Alignment,
+                    Autoformat,
+                    AutoLink,
+                    Autosave,
+                    BlockQuote,
+                    Bold,
+                    Essentials,
+                    FontSize,
+                    FontFamily,
+                    Heading,
+                    Highlight,
+                    Italic,
+                    Link,
+                    List,
+                    Mention,
+                    Paragraph,
+                    PasteFromOffice,
+                    RemoveFormat,
+                    Strikethrough,
+                    Table,
+                    TableCaption,
+                    TableCellProperties,
+                    TableColumnResize,
+                    TableProperties,
+                    TableToolbar,
+                    Underline,
+                    Undo
+                ],
+            toolbar: {
+                items: [
+                   'undo',
+                    'redo',
+                    '|',
+                    'heading',
+                    '|',
+                    'fontSize',
+                    'fontFamily',
+                    '|',
+                    'bold',
+                    'italic',
+                    'underline',
+                    'strikethrough',
+                    'removeFormat',
+                    '|',
+                    'link',
+                    'insertTable',
+                    'highlight',
+                    'blockQuote',
+                    '|',
+                    'alignment',
+                    '|',
+                    'bulletedList',
+                    'numberedList',
+                    '|',
+                    'accessibilityHelp'
+                ],
+                shouldNotGroupWhenFull: false
+            },
+            language: {
+                ui: 'pt-br',
+                content: 'pt-br'
+            }
+        } )
+        .catch();
+}
+
 document.addEventListener("DOMContentLoaded", function () {
 
     var url_atual = window.location.href;
@@ -436,6 +539,7 @@ document.addEventListener("DOMContentLoaded", function () {
     loadChoices();
     setEvents();
     validCep();
+    loadEditor();
 
     document.body.addEventListener('htmx:xhr:loadstart', function (evt) {
         showLoader();
@@ -446,6 +550,7 @@ document.addEventListener("DOMContentLoaded", function () {
         setEvents();
         validCep();
         removeLoader();
+        loadEditor();
     });
 
     const sidebarToggle = document.body.querySelector('#sidebarToggle');
