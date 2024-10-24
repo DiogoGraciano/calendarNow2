@@ -107,12 +107,15 @@ final class agendamento extends model {
         return array_merge($return,$dinnerStop);
     }
 
-    public function getByfilter($id_empresa,?int $id_usuario = null,?string $dt_ini = null,?string $dt_fim = null,bool $onlyActive = false,?int $id_agenda = null,?int $id_funcionario = null,?int $limit = null,?int $offset = null):array
+    public function getByfilter(?int $id_empresa = null,?int $id_usuario = null,?string $dt_ini = null,?string $dt_fim = null,bool $onlyActive = false,?int $id_agenda = null,?int $id_funcionario = null,?int $limit = null,?int $offset = null):array
     {
         $this->addJoin(usuario::table,usuario::table.".id",agendamento::table.".id_usuario","LEFT")
             ->addJoin(agenda::table."",agenda::table.".id",agendamento::table.".id_agenda")
-            ->addJoin(funcionario::table."",funcionario::table.".id",agendamento::table.".id_funcionario")
-            ->addFilter(agenda::table.".id_empresa","=",$id_empresa);
+            ->addJoin(funcionario::table."",funcionario::table.".id",agendamento::table.".id_funcionario");
+
+        if($id_empresa){
+            $this->addFilter(agenda::table.".id_empresa","=",$id_empresa);
+        }
 
         if($id_usuario){
             $this->addFilter(usuario::table.".id","=",$id_usuario);

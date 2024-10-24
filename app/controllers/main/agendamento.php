@@ -172,7 +172,7 @@ class agendamento extends controller{
                 ->addColumns("10","Status","status");
 
         $agendamento = new ModelsAgendamento;
-        $dados = $agendamento->prepareList($agendamento->getByfilter($user->id_empresa,$user->id != 3?null:$user->id,$dt_ini,$dt_fim,false,$id_agenda,$id_funcionario,$this->getLimit(),$this->getOffset()));
+        $dados = $agendamento->prepareList($agendamento->getByfilter($user->tipo_usuario == 3?null:$user->id_empresa,$user->tipo_usuario == 1?null:$user->id,$dt_ini,$dt_fim,false,$id_agenda,$id_funcionario,$this->getLimit(),$this->getOffset()));
        
         $cadastro->setData($this->url."agendamento/manutencao",$this->url."agendamento/action",$dados,"id")
         ->addPagination(new pagination(

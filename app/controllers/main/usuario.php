@@ -170,7 +170,7 @@ final class usuario extends controller {
         $this->index();
     }
 
-    public function manutencao($parameters = [],?usuarioModel $usuario = null,?endereco $endereco = null,int $tipo_usuario = null){
+    public function manutencao($parameters = [],?usuarioModel $usuario = null,?endereco $endereco = null,int $tipo_usuario = 3){
        $this->formUsuario($parameters,$usuario,$endereco,$tipo_usuario)->show();
     }
 

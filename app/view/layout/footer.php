@@ -2,8 +2,8 @@
 namespace app\view\layout;
 
 use app\helpers\functions;
+use app\models\calendarNow;
 use app\models\login;
-use app\models\main\empresaModel;
 use app\view\layout\abstract\pagina;
 use app\models\menu;
 use core\url;
@@ -60,7 +60,7 @@ class footer extends pagina
                 if($menu["controller"])
                     $this->addLink(url::getUrlBase().$menu["controller"],$menu["nome"]);
 
-                if($i == 6 && !$this->isMobile()){
+                if($i == 7 && !$this->isMobile()){
                     $this->setSection($titulo,2);
                     $titulo = "&nbsp;";
                     $i = 1;
