@@ -71,7 +71,7 @@ final class usuario extends model {
         if ($dados){
             foreach ($dados as $dado){
 
-                if(is_subclass_of($dado,"diogodg\neoorm\db")){
+                if(is_subclass_of($dado,"diogodg\\neoorm\db")){
                     $dado = $dado->getArrayData();
                 }
 

@@ -37,7 +37,7 @@ final class login extends controller{
     }
 
     public function usuario(){
-        (new usuario)->manutencao();
+        (new usuario)->manutencao(tipo_usuario:3);
     }
 
     public function deslogar(array $parameters = []){

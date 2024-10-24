@@ -174,7 +174,7 @@ final class usuario extends controller {
        $this->formUsuario($parameters,$usuario,$endereco,$tipo_usuario)->show();
     }
 
-    public function formUsuario($parameters = [],?usuarioModel $usuario = null,?endereco $endereco = null,int $tipo_usuario = null):form
+    public function formUsuario($parameters = [],?usuarioModel $usuario = null,?endereco $endereco = null,int $tipo_usuario = 3):form
     {
         $id = null;
 
@@ -184,13 +184,13 @@ final class usuario extends controller {
             }
         }
     
-        $form = new form($this->url."usuario/action/".$tipo_usuario);
+        $form = new form($this->url."usuario/action");
 
         $dado = $usuario?:(new usuarioModel)->get($id);
 
         $elements = new elements();
 
-        $form->setHidden("cd",$dado->id);
+        $form->setHidden("cd",$dado->id)->setHidden("tipo_usuario",$tipo_usuario);
 
         $form->setElement($elements->titulo(1,"Cadastro de Usuario"))
         ->setTwoElements(
@@ -237,47 +237,27 @@ final class usuario extends controller {
         return $form->setButton($elements->button("Voltar", "voltar", "button", "btn btn-primary w-100 pt-2 btn-block", "location.href='".($this->url."home")."'"));
     }
 
-    public function action($parameters = []):void
+    public function action(array $parameters = []):void
     {
-        $tipo_usuario = 3;
-
-        if(isset($parameters[0])){
-            $tipo_usuario = intval($parameters[0]);
-        }
-
-        $id = intval($this->getValue('cd'));
-        $nome = $this->getValue('nome');
-        $cpf_cnpj = $this->getValue('cpf_cnpj');
-        $senha = $this->getValue('senha');
-        $email = $this->getValue('email');
-        $telefone = $this->getValue('telefone');
-        // $id_endereco = intval($this->getValue('id_endereco'));
-        // $cep = $this->getValue('cep');
-        // $id_estado = intval($this->getValue('id_estado'));
-        // $id_cidade = intval($this->getValue('id_cidade'));
-        // $bairro = $this->getValue('bairro');
-        // $rua = $this->getValue('rua');
-        // $numero = $this->getValue('numero');
-        // $complemento = $this->getValue('complemento');
-
-        $usuario = new usuarioModel;
-        $usuario->id           = $id;
-        $usuario->nome         = $nome;
-        $usuario->cpf_cnpj     = $cpf_cnpj;
+        $usuario               = new usuarioModel;
+        $usuario->id           = intval($this->getValue('cd'));
+        $usuario->nome         = $this->getValue('nome');
+        $usuario->cpf_cnpj     = $this->getValue('cpf_cnpj');
+        $senha                 = $this->getValue('senha');
         $usuario->senha        = $senha;
-        $usuario->email        = $email;
-        $usuario->tipo_usuario = $tipo_usuario;
-        $usuario->telefone     = functions::onlynumber($telefone);
+        $usuario->email        = $this->getValue('email');
+        $usuario->tipo_usuario = $this->getValue('tipo_usuario')?:3;
+        $usuario->telefone     = functions::onlynumber($this->getValue('telefone'));
 
         // $endereco              = new endereco;
-        // $endereco->id          = $id_endereco;
-        // $endereco->cep         = $cep;
-        // $endereco->id_estado   = $id_estado;
-        // $endereco->id_cidade   = $id_cidade;
-        // $endereco->bairro      = $bairro;
-        // $endereco->rua         = $rua;
-        // $endereco->numero      = $numero;
-        // $endereco->complemento = $complemento;
+        // $endereco->id          = intval($this->getValue('id_endereco'));
+        // $endereco->cep         = $this->getValue('cep');
+        // $endereco->id_estado   = intval($this->getValue('id_estado'));
+        // $endereco->id_cidade   = intval($this->getValue('id_cidade'));
+        // $endereco->bairro      = $this->getValue('bairro');
+        // $endereco->rua         = $this->getValue('rua');
+        // $endereco->numero      = $this->getValue('numero');
+        // $endereco->complemento = $this->getValue('complemento');
 
         transactionManeger::init();
         transactionManeger::beginTransaction();
