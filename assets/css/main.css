@@ -356,3 +356,7 @@ button.btn.btn-dark.pt-2.btn-block {
 .choices__list{
     z-index: 4!important;
 }
+
+.buttons-consulta button {
+    margin-top: 5px;
+}
