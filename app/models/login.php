@@ -7,11 +7,14 @@ use core\session;
 
 final class login{
 
-    public static function login(string $cpf_cnpj,string $senha):bool
+    public static function login(string $usuario,string $senha):bool
     {
-        $login = (new usuario)->get(functions::onlynumber($cpf_cnpj),"cpf_cnpj");
+        if(functions::validaEmail($usuario))
+            $login = (new usuario)->get($usuario,"email");
+        else
+            $login = (new usuario)->get(functions::onlynumber($usuario),"cpf_cnpj");
         
-        if ($login->id){
+        if ($login->id && ($login->ativo && strtotime($login->criado) > strtotime('+1 days'))){
             if (password_verify($senha, $login->senha)){
                 $login->senha = $senha;
                 session::set("user",(object)$login->getArrayData());

@@ -6,9 +6,11 @@ use app\view\layout\form;
 use app\view\layout\elements;
 use app\helpers\functions;
 use app\controllers\abstract\controller;
+use app\helpers\email;
 use app\helpers\logger;
 use app\view\layout\consulta;
 use app\helpers\mensagem;
+use app\helpers\recapcha;
 use app\view\layout\filter;
 use diogodg\neoorm\transactionManeger;
 use app\models\agenda;
@@ -18,6 +20,7 @@ use app\models\funcionario;
 use app\models\login;
 use app\models\usuario as usuarioModel;
 use app\models\usuarioBloqueio;
+use app\view\layout\email as LayoutEmail;
 use app\view\layout\pagination;
 
 final class usuario extends controller {
@@ -242,7 +245,7 @@ final class usuario extends controller {
         $recapcha = (new recapcha())->siteverify($this->getValue("g-recaptcha-usuario-response"));
 
         if(!$recapcha){
-            $this->formUsuario(tipoUsuario:$this->getValue('tipo_usuario')?:3);
+            $this->formUsuario(tipo_usuario:$this->getValue('tipo_usuario')?:3);
             return;
         }
 
@@ -255,6 +258,10 @@ final class usuario extends controller {
         $usuario->email        = $this->getValue('email');
         $usuario->tipo_usuario = $this->getValue('tipo_usuario')?:3;
         $usuario->telefone     = functions::onlynumber($this->getValue('telefone'));
+        if($usuario->tipo_usuario == 4)
+            $usuario->ativo        = 1;
+        else 
+            $usuario->ativo        = 0;
 
         // $endereco              = new endereco;
         // $endereco->id          = intval($this->getValue('id_endereco'));
@@ -292,6 +299,14 @@ final class usuario extends controller {
                     transactionManeger::commit();
 
                     if(!$user && $login->login($usuario->cpf_cnpj,$senha)){
+                        $email = new email;
+                        $email->addEmail($usuario->email);
+    
+                        $redefinir = new LayoutEmail();
+                        $redefinir->setEmailBtn("usuario/sendConfirmacao/".functions::encrypt($usuario->id),"Confirmação de cadastro","Clique no botão a baixo para confirmar seu cadastro, caso não foi você que solicitou essa ação, pode excluir esse email sem problemas.");
+    
+                        $email->send("Confirmação de cadastro",$redefinir->parse(),true);
+                        mensagem::setMensagem("Verifique seu email para confirmação de cadastro");
                         $this->go("home");
                     }
 

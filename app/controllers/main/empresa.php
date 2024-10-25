@@ -11,6 +11,7 @@ use app\helpers\mensagem;
 use diogodg\neoorm\transactionManeger;
 use app\helpers\integracaoWs;
 use app\helpers\logger;
+use app\helpers\recapcha;
 use app\models\cidade;
 use app\models\configuracoes;
 use app\models\empresa as empresaModel;
@@ -128,7 +129,7 @@ class empresa extends controller {
         $recapcha = (new recapcha())->siteverify($this->getValue("g-recaptcha-usuario-response"));
 
         if(!$recapcha){
-            $this->manutencao(tipoUsuario:$this->getValue('tipo_usuario')?:3);
+            $this->manutencao();
             return;
         }
 
@@ -137,16 +138,20 @@ class empresa extends controller {
         $telefone = $this->getValue('telefone');
 
         $usuario               = new usuario;
-        $usuario->id           = intval($this->getValue('cd'));
+        $id                    = intval($this->getValue('cd'));
+        $usuario->id           = $id;
         $usuario->nome         = $this->getValue('nome');
         $usuario->cpf_cnpj     = $cpf_cnpj;
-        $usuario->senha        = $this->getValue('senha');
+        $senha                 = $this->getValue('senha');
+        $usuario->senha        = $senha;
         $usuario->email        = $email;
         $usuario->telefone     = $telefone;
         $usuario->tipo_usuario = 1;
+        $usuario->ativo        = 0;
 
         $empresa               = new empresaModel;
-        $empresa->id           = intval($this->getValue('id_empresa'));
+        $id_empresa            = intval($this->getValue('id_empresa'));
+        $empresa->id           = $id_empresa;
         $empresa->nome         = $this->getValue('nome_empresa');
         $empresa->cpf_cnpj     = $cpf_cnpj;
         $empresa->fantasia     = $this->getValue('fantasia');
@@ -156,7 +161,8 @@ class empresa extends controller {
         $empresa->id_segmento  = intval($this->getValue('segmento'));
 
         $endereco              = new endereco;
-        $endereco->id          = intval($this->getValue('id_endereco'));
+        $id_endereco           = intval($this->getValue('id_endereco'));
+        $endereco->id          = $id_endereco;
         $endereco->cep         = $this->getValue('cep');
         $endereco->id_estado   = intval($this->getValue('id_estado'));
         $endereco->id_cidade   = intval($this->getValue('id_cidade'));

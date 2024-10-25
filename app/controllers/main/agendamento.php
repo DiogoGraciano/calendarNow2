@@ -183,7 +183,7 @@ class agendamento extends controller{
         ->show();
     }
 
-    public function massCancel($parameters = []):void
+    public function massCancel(array $parameters = []):void
     {
         try{
 
