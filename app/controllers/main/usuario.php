@@ -184,7 +184,7 @@ final class usuario extends controller {
             }
         }
     
-        $form = new form($this->url."usuario/action");
+        $form = new form($this->url."usuario/action","usuario",hasRecapcha:true);
 
         $dado = $usuario?:(new usuarioModel)->get($id);
 
@@ -239,6 +239,13 @@ final class usuario extends controller {
 
     public function action(array $parameters = []):void
     {
+        $recapcha = (new recapcha())->siteverify($this->getValue("g-recaptcha-usuario-response"));
+
+        if(!$recapcha){
+            $this->formUsuario(tipoUsuario:$this->getValue('tipo_usuario')?:3);
+            return;
+        }
+
         $usuario               = new usuarioModel;
         $usuario->id           = intval($this->getValue('cd'));
         $usuario->nome         = $this->getValue('nome');

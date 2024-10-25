@@ -33,12 +33,22 @@ final class usuario extends model {
         return $usuario[0] ?? false;
     }
 
-    public function getByFilter(int $id_empresa,?string $nome = null,?int $id_funcionario = null,?int $tipo_usuario = null,?int $limit = null,?int $offset = null,?bool $asArray = true):array
+    public function getByFilter(?int $id_empresa = null,?string $nome = null,?int $id_funcionario = null,?int $tipo_usuario = null,?string $email = null,?string $cpf_cnpj = null,?int $limit = null,?int $offset = null,?bool $asArray = true):array
     {
-        $this->addFilter("id_empresa", "=", $id_empresa);
+        if($id_empresa){
+            $this->addFilter("id_empresa", "=", $id_empresa);
+        }
 
         if($nome){
             $this->addFilter("nome","LIKE","%".$nome."%");
+        }
+
+        if($email){
+            $this->addFilter("email","LIKE","%".$email."%");
+        }
+
+        if($cpf_cnpj){
+            $this->addFilter("cpf_cnpj","LIKE","%".functions::onlynumber($cpf_cnpj)."%");
         }
 
         if($id_funcionario){

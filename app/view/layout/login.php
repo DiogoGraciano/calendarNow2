@@ -4,6 +4,7 @@ namespace app\view\layout;
 use app\view\layout\abstract\pagina;
 use app\helpers\mensagem;
 use core\url;
+use app\models\calendarNow;
 
 /**
  * Classe para gerar a página de login.
@@ -25,5 +26,11 @@ class login extends pagina{
         $this->tpl->action_cadastro_usuario = "login/usuario";
         $this->tpl->action_cadastro_empresa = "login/empresa";
         $this->tpl->action_esqueci = "login/esqueci";
+
+        $empresa = (new calendarNow)->get(1);
+        $recapcha = $this->getTemplate("recapcha.html");
+        $recapcha->element_id = "g-recaptcha-login-response";
+        $recapcha->empresa = $empresa;
+        $this->tpl->recapcha = $recapcha->parse();
     }
 }

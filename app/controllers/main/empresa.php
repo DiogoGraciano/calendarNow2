@@ -65,7 +65,7 @@ class empresa extends controller {
             $id = intval($parameters[0]); 
         }
       
-        $form = new form($this->url."empresa/action","empresa");
+        $form = new form($this->url."empresa/action","empresa",hasRecapcha:true);
 
         $dado = $usuario?:(new usuario)->get($id);
         $form->setHidden("cd", $dado->id);
@@ -125,55 +125,45 @@ class empresa extends controller {
 
     public function action($parameters = []):void
     {
-        $id = intval($this->getValue('cd'));
-        $id_empresa = intval($this->getValue('id_empresa'));
-        $id_endereco = intval($this->getValue('id_endereco'));
-        $nome = $this->getValue('nome');
-        $nome_empresa = $this->getValue('nome_empresa');
-        $fantasia = $this->getValue('fantasia');
-        $razao = $this->getValue('razao');
+        $recapcha = (new recapcha())->siteverify($this->getValue("g-recaptcha-usuario-response"));
+
+        if(!$recapcha){
+            $this->manutencao(tipoUsuario:$this->getValue('tipo_usuario')?:3);
+            return;
+        }
+
         $cpf_cnpj = $this->getValue('cpf_cnpj');
-        $senha = $this->getValue('senha');
         $email = $this->getValue('email');
         $telefone = $this->getValue('telefone');
-        $id_endereco = intval($this->getValue('id_endereco'));
-        $id_segmento = intval($this->getValue('segmento'));
-        $cep = $this->getValue('cep');
-        $id_estado = intval($this->getValue('id_estado'));
-        $id_cidade = intval($this->getValue('id_cidade'));
-        $bairro = $this->getValue('bairro');
-        $rua = $this->getValue('rua');
-        $numero = $this->getValue('numero');
-        $complemento = $this->getValue('complemento');
 
         $usuario               = new usuario;
-        $usuario->id           = $id;
-        $usuario->nome         = $nome;
+        $usuario->id           = intval($this->getValue('cd'));
+        $usuario->nome         = $this->getValue('nome');
         $usuario->cpf_cnpj     = $cpf_cnpj;
-        $usuario->senha        = $senha;
+        $usuario->senha        = $this->getValue('senha');
         $usuario->email        = $email;
         $usuario->telefone     = $telefone;
         $usuario->tipo_usuario = 1;
 
         $empresa               = new empresaModel;
-        $empresa->id           = $id_empresa;
-        $empresa->nome         = $nome_empresa;
+        $empresa->id           = intval($this->getValue('id_empresa'));
+        $empresa->nome         = $this->getValue('nome_empresa');
         $empresa->cpf_cnpj     = $cpf_cnpj;
-        $empresa->fantasia     = $fantasia;
+        $empresa->fantasia     = $this->getValue('fantasia');
         $empresa->email        = $email;
         $empresa->telefone     = $telefone;
-        $empresa->razao        = $razao;
-        $empresa->id_segmento  = $id_segmento;
+        $empresa->razao        = $this->getValue('razao');
+        $empresa->id_segmento  = intval($this->getValue('segmento'));
 
         $endereco              = new endereco;
-        $endereco->id          = $id_endereco;
-        $endereco->cep         = $cep;
-        $endereco->id_estado   = $id_estado;
-        $endereco->id_cidade   = $id_cidade;
-        $endereco->bairro      = $bairro;
-        $endereco->rua         = $rua;
-        $endereco->numero      = $numero;
-        $endereco->complemento = $complemento;
+        $endereco->id          = intval($this->getValue('id_endereco'));
+        $endereco->cep         = $this->getValue('cep');
+        $endereco->id_estado   = intval($this->getValue('id_estado'));
+        $endereco->id_cidade   = intval($this->getValue('id_cidade'));
+        $endereco->bairro      = $this->getValue('bairro');
+        $endereco->rua         = $this->getValue('rua');
+        $endereco->numero      = $this->getValue('numero');
+        $endereco->complemento = $this->getValue('complemento');
 
         try {
 

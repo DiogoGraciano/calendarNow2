@@ -9,11 +9,12 @@
         <div class="row w-100 mt-5">
             <form method="POST" action="{caminho}{action_login}">
                 <div class="col-md-12">
-                    <label for="cpf_cnpj">CPF/CNPJ:</label>
-                    <input type="text" class="form-control mt-1" name="cpf_cnpj" id="cpf_cnpj" value="{usuario}" required/>     
+                    <input type="hidden" name="g-recaptcha-login-response" value="">
+                    <label for="usuario">CPF/CNPJ ou E-mail:</label>
+                    <input type="text" class="form-control mt-1" name="usuario" id="usuario" value="{usuario}" required/>     
                     <label for="senha">Senha:</label>
                     <input type="password" class="form-control mt-1" name="senha"  id="senha" value="{senha}" required/>
-                    <!-- <a href="{caminho}{action_esqueci}">Esqueci minha senha</a> -->
+                    <a href="{caminho}{action_esqueci}">Esqueci minha senha</a>
                 </div>
                 <div class="col-md-12 mt-5 d-flex justify-content-center">
                     <div class="row w-50">
@@ -24,4 +25,5 @@
             </form>  
         </div>
     </div>
+    {recapcha}
 </section>
