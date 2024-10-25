@@ -9,7 +9,7 @@ use app\helpers\functions;
 use app\view\layout\filter;
 use app\view\layout\tabela;
 use app\view\layout\tabelaMobile;
-use diogodg\neoorm\transactionManeger;
+use diogodg\neoorm\connection;
 use app\helpers\mensagem;
 use app\models\funcionario;
 use app\models\grupoServico;
@@ -279,9 +279,9 @@ class servico extends controller{
     public function massActionFuncionario(){
         try{
 
-            transactionManeger::init();
+            
 
-            transactionManeger::beginTransaction();
+            connection::beginTransaction();
 
             $ids = $this->getValue("massaction");
             $id_funcionario = $this->getValue("funcionario");
@@ -307,19 +307,19 @@ class servico extends controller{
         }catch(\Exception $e){
             mensagem::setSucesso(false);
             mensagem::setErro("Erro inesperado ocorreu, tente novamente");
-            transactionManeger::rollback();
+            connection::rollback();
         }
 
-        transactionManeger::commit();
+        connection::commit();
         $this->index();
     }
 
     public function massActionGrupoServico(){
         try{
 
-            transactionManeger::init();
+            
 
-            transactionManeger::beginTransaction();
+            connection::beginTransaction();
 
             $ids = $this->getValue("massaction");
             $id_grupo_servico = $this->getValue("grupo_servico");
@@ -347,10 +347,10 @@ class servico extends controller{
         }catch(\Exception $e){
             mensagem::setSucesso(false);
             mensagem::setErro("Erro inesperado ocorreu, tente novamente");
-            transactionManeger::rollback();
+            connection::rollback();
         }
 
-        transactionManeger::commit();
+        connection::commit();
         $this->index();
     }
 }

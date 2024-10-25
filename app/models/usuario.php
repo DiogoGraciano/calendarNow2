@@ -24,7 +24,7 @@ final class usuario extends model {
                 ->addColumn((new column("email", "VARCHAR", 200))->isUnique()->setComment("Email do usuário"))
                 ->addColumn((new column("tipo_usuario","INT"))->isNotNull()->setComment("Tipo de usuário: 0 -> ADM, 1 -> empresa, 2 -> funcionario, 3 -> usuário, 4 -> cliente cadastrado"))
                 ->addColumn((new column("id_empresa","INT"))->isForeingKey(empresa::table())->setComment("ID da empresa"))
-                ->addColumn((new column("criado","TIMESTAMP"))->isNotNull()->setDefaut("CURRENT_TIMESTAMP"))
+                ->addColumn((new column("criado","TIMESTAMP"))->isNotNull()->setDefaut("CURRENT_TIMESTAMP",true))
                 ->addColumn((new column("ativo","TINYINT"))->isNotNull()->setDefaut(0));
     }
 

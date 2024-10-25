@@ -12,7 +12,7 @@ use app\helpers\mensagem;
 use app\view\layout\tabela;
 use app\view\layout\tabelaMobile;
 use app\view\layout\modal;
-use diogodg\neoorm\transactionManeger;
+use diogodg\neoorm\connection;
 use app\models\agenda;
 use app\models\agendaFuncionario;
 use app\models\funcionario as funcionarioModel;
@@ -312,9 +312,9 @@ final class funcionario extends controller
         $funcionario->email                = $email;
         $funcionario->telefone             = $telefone;
 
-        transactionManeger::init();
+        
 
-        transactionManeger::beginTransaction();
+        connection::beginTransaction();
 
         try {
             if ($usuario->set()) 
@@ -336,7 +336,7 @@ final class funcionario extends controller
                     }
 
                     mensagem::setSucesso("Funcionario salvo com sucesso");
-                    transactionManeger::commit();
+                    connection::commit();
 
                     $this->manutencao([$funcionario->id],$funcionario,$usuario);
                     return;
@@ -344,13 +344,13 @@ final class funcionario extends controller
             }
         } catch (\Exception $e) {
             mensagem::setSucesso(false);
-            transactionManeger::rollback();
+            connection::rollback();
             $this->manutencao([$funcionario->id],$funcionario,$usuario);
             return;
         }
 
         mensagem::setSucesso(false);
-        transactionManeger::rollback();
+        connection::rollback();
         $this->manutencao([$funcionario->id],$funcionario,$usuario);
     }
 
@@ -358,9 +358,9 @@ final class funcionario extends controller
     {
         try {
 
-            transactionManeger::init();
+            
 
-            transactionManeger::beginTransaction();
+            connection::beginTransaction();
 
             $ids = $this->getValue("massaction")??[];
             $id_agenda = $this->getValue("agenda");
@@ -384,14 +384,14 @@ final class funcionario extends controller
                 if ($mensagem_erro != "Funcionario não vinculados: ")
                     mensagem::setErro($mensagem_erro);
 
-                transactionManeger::commit();
+                connection::commit();
             } else {
                 mensagem::setErro("Não foi informado a agenda");
             }
         } catch (\Exception $e) {
             mensagem::setSucesso(false);
             mensagem::setErro("Erro inesperado ocorreu, tente novamente");
-            transactionManeger::rollback();
+            connection::rollback();
         }
 
         $this->index();
@@ -401,9 +401,9 @@ final class funcionario extends controller
     {
         try {
 
-            transactionManeger::init();
+            
 
-            transactionManeger::beginTransaction();
+            connection::beginTransaction();
 
             $ids = $this->getValue("massaction")??[];
             $id_grupo_funcionario = $this->getValue("grupo_funcionario");
@@ -427,14 +427,14 @@ final class funcionario extends controller
                 if ($mensagem_erro != "Funcionario não vinculados: ")
                     mensagem::setErro($mensagem_erro);
 
-                transactionManeger::commit();
+                connection::commit();
             } else {
                 mensagem::setErro("Não foi informado a agenda");
             }
         } catch (\Exception $e) {
             mensagem::setSucesso(false);
             mensagem::setErro("Erro inesperado ocorreu, tente novamente");
-            transactionManeger::rollback();
+            connection::rollback();
         }
 
         $this->index();

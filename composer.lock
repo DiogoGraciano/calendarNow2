@@ -172,12 +172,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/DiogoGraciano/NeoORM.git",
-                "reference": "243a70d08c9a2806c5cfa49879dae52bf976dc73"
+                "reference": "abd243cd151ac39a7b4a5d91c6fbf2f9f0373d5d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DiogoGraciano/NeoORM/zipball/243a70d08c9a2806c5cfa49879dae52bf976dc73",
-                "reference": "243a70d08c9a2806c5cfa49879dae52bf976dc73",
+                "url": "https://api.github.com/repos/DiogoGraciano/NeoORM/zipball/abd243cd151ac39a7b4a5d91c6fbf2f9f0373d5d",
+                "reference": "abd243cd151ac39a7b4a5d91c6fbf2f9f0373d5d",
                 "shasum": ""
             },
             "type": "library",
@@ -201,7 +201,7 @@
                 "issues": "https://github.com/DiogoGraciano/NeoORM/issues",
                 "source": "https://github.com/DiogoGraciano/NeoORM/tree/v1.0.0"
             },
-            "time": "2024-10-17T19:34:45+00:00"
+            "time": "2024-10-25T21:25:57+00:00"
         },
         {
             "name": "phpmailer/phpmailer",

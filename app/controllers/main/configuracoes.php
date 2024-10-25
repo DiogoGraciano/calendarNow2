@@ -5,7 +5,7 @@ use app\helpers\mensagem;
 use app\helpers\functions;
 use app\controllers\abstract\controller;
 use app\view\layout\form;
-use diogodg\neoorm\transactionManeger;
+use diogodg\neoorm\connection;
 use app\models\configuracoes as ModelsConfiguracoes;
 use app\models\login;
 use core\request;
@@ -59,9 +59,9 @@ final class configuracoes extends controller{
         $user = login::getLogged();
 
         try {
-            transactionManeger::init();
+            
 
-            transactionManeger::beginTransaction();
+            connection::beginTransaction();
 
             $request = new request;
 
@@ -76,10 +76,10 @@ final class configuracoes extends controller{
                 $configuracao->set();
             }
 
-            transactionManeger::commit();
+            connection::commit();
             mensagem::setSucesso("Configuracões salvas com sucesso");
         } catch (\Exception $e) {
-            transactionManeger::rollBack();
+            connection::rollBack();
             mensagem::setSucesso(false);
             mensagem::setErro("Erro ao salvar configuracões");
         }

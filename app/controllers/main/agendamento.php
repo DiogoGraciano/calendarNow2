@@ -5,7 +5,7 @@ use app\view\layout\agenda;
 use app\view\layout\consulta;
 use app\controllers\abstract\controller;
 use app\controllers\main\usuario as MainUsuario;
-use diogodg\neoorm\transactionManeger;
+use diogodg\neoorm\connection;
 use app\view\layout\elements;
 use app\view\layout\filter;
 use app\view\layout\tabela;
@@ -187,9 +187,9 @@ class agendamento extends controller{
     {
         try{
 
-            transactionManeger::init();
+            
 
-            transactionManeger::beginTransaction();
+            connection::beginTransaction();
 
             $ids = $this->getValue("massaction");
 
@@ -216,7 +216,7 @@ class agendamento extends controller{
         }catch(\Exception $e){
             mensagem::setSucesso(false);
             mensagem::setErro("Erro inesperado ocorreu, tente novamente",$e->getMessage());
-            transactionManeger::rollback();
+            connection::rollback();
         }
 
         if($mensagem)
@@ -225,7 +225,7 @@ class agendamento extends controller{
         if($mensagem_erro)
             mensagem::setErro("Agendamentos não cancelados: <br>".$mensagem_erro);
 
-        transactionManeger::commit();
+        connection::commit();
 
         $this->listagem();
     }

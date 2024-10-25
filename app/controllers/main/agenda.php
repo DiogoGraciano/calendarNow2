@@ -8,7 +8,7 @@ use app\view\layout\tabela;
 use app\view\layout\tabelaMobile;
 use app\helpers\mensagem;
 use app\view\layout\filter;
-use diogodg\neoorm\transactionManeger;
+use diogodg\neoorm\connection;
 use app\helpers\logger;
 use app\models\agenda as ModelsAgenda;
 use app\models\agendaFuncionario;
@@ -156,8 +156,8 @@ final class agenda extends controller{
         $agenda->nome             = $this->getValue('nome');
 
         try{
-            transactionManeger::init();
-            transactionManeger::beginTransaction();
+            
+            connection::beginTransaction();
 
             if ($agenda->set()){ 
 
@@ -174,14 +174,14 @@ final class agenda extends controller{
                 }
 
                 mensagem::setSucesso("Agenda salva com sucesso");
-                transactionManeger::commit();
+                connection::commit();
                 $this->manutencao([$agenda->id],$agenda); 
                 return;
             }
 
         }catch (\exception $e){
             mensagem::setSucesso(false);
-            transactionManeger::rollBack();
+            connection::rollBack();
             logger::error($e->getMessage()." ".$e->getTraceAsString());
             mensagem::setErro("Erro ao cadastrar agenda, tente novamente");
             $this->manutencao([$agenda->id],$agenda); 

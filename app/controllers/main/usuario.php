@@ -12,7 +12,7 @@ use app\view\layout\consulta;
 use app\helpers\mensagem;
 use app\helpers\recapcha;
 use app\view\layout\filter;
-use diogodg\neoorm\transactionManeger;
+use diogodg\neoorm\connection;
 use app\models\agenda;
 use app\models\agendaUsuario;
 use app\models\endereco;
@@ -81,9 +81,9 @@ final class usuario extends controller {
     {
         try{
 
-            transactionManeger::init();
+            
 
-            transactionManeger::beginTransaction();
+            connection::beginTransaction();
 
             $qtd_list = $this->getValue("qtd_list");
 
@@ -116,21 +116,21 @@ final class usuario extends controller {
         }catch(\Exception $e){
             mensagem::setSucesso(false);
             mensagem::setErro("Erro inesperado ocorreu, tente novamente");
-            transactionManeger::rollback();
+            connection::rollback();
             $this->index();
             return;
         }
 
-        transactionManeger::commit();
+        connection::commit();
         $this->index();
     }
 
     public function desbloquear($parameters = []){
         try{
 
-            transactionManeger::init();
+            
 
-            transactionManeger::beginTransaction();
+            connection::beginTransaction();
 
             $qtd_list = $this->getValue("qtd_list");
 
@@ -163,12 +163,12 @@ final class usuario extends controller {
         }catch(\Exception $e){
             mensagem::setSucesso(false);
             mensagem::setErro("Erro inesperado ocorreu, tente novamente");
-            transactionManeger::rollback();
+            connection::rollback();
             $this->index();
             return;
         }
 
-        transactionManeger::commit();
+        connection::commit();
 
         $this->index();
     }
@@ -273,8 +273,8 @@ final class usuario extends controller {
         // $endereco->numero      = $this->getValue('numero');
         // $endereco->complemento = $this->getValue('complemento');
 
-        transactionManeger::init();
-        transactionManeger::beginTransaction();
+        
+        connection::beginTransaction();
 
         try {
             if ($usuario->set()){
@@ -296,7 +296,7 @@ final class usuario extends controller {
                     }
 
                     mensagem::setSucesso("Usuário salvo com sucesso");
-                    transactionManeger::commit();
+                    connection::commit();
 
                     if(!$user && $login->login($usuario->cpf_cnpj,$senha)){
                         $email = new email;
@@ -317,13 +317,13 @@ final class usuario extends controller {
         } catch (\Exception $e) {
             mensagem::setErro("Erro ao salvar usuário");
             logger::error($e->getMessage());
-            transactionManeger::rollback();
+            connection::rollback();
             $this->manutencao([$usuario->id],$usuario,tipo_usuario:$usuario->tipo_usuario);//,$endereco);
             return;
         }
 
         mensagem::setSucesso(false);
-        transactionManeger::rollback();
+        connection::rollback();
         $this->manutencao([$usuario->id],$usuario,tipo_usuario:$usuario->tipo_usuario);//,$endereco);
     }
 }

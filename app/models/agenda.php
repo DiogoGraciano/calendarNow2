@@ -4,7 +4,7 @@ namespace app\models;
 use diogodg\neoorm\abstract\model;
 use diogodg\neoorm\migrations\table;
 use diogodg\neoorm\migrations\column;
-use diogodg\neoorm\transactionManeger;
+use diogodg\neoorm\connection;
 use app\helpers\functions;
 use app\helpers\logger;
 use app\helpers\mensagem;
@@ -109,8 +109,8 @@ final class agenda extends model {
     {
         try {
 
-            transactionManeger::init();
-            transactionManeger::beginTransaction();
+            
+            connection::beginTransaction();
 
             $agendaUsuario = (new agendaUsuario);
             $agendaUsuario->id_agenda = $this->id;
@@ -122,18 +122,18 @@ final class agenda extends model {
 
             if($this->delete($this->id)){
                 mensagem::setSucesso(agenda::table." deletada com sucesso");
-                transactionManeger::commit();
+                connection::commit();
                 return true;
             }
 
             mensagem::setErro("Erro ao deletar agenda");
-            transactionManeger::rollBack();
+            connection::rollBack();
             return false;
 
         }catch (\exception $e){
             logger::error(agenda::table."Model->remove(): ".$e->getMessage()." ".$e->getTraceAsString());
             mensagem::setErro("Erro ao deletar agenda");
-            transactionManeger::rollBack();
+            connection::rollBack();
             return false;
         }
     }

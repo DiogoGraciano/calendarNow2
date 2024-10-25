@@ -4,7 +4,7 @@ namespace app\models;
 use diogodg\neoorm\abstract\model;
 use diogodg\neoorm\migrations\table;
 use diogodg\neoorm\migrations\column;
-use diogodg\neoorm\transactionManeger;
+use diogodg\neoorm\connection;
 use app\helpers\functions;
 use app\helpers\mensagem;
 
@@ -129,8 +129,8 @@ final class servico extends model {
 
     public function remove():bool{
         try {
-            transactionManeger::init();
-            transactionManeger::beginTransaction();
+            
+            connection::beginTransaction();
 
             $servicoFuncionario = new servicoFuncionario;
             $servicoFuncionario->id_servico = $this->id;
@@ -142,16 +142,16 @@ final class servico extends model {
 
             if($this->delete($this->id)){
                 mensagem::setSucesso("Servico deletado com sucesso");
-                transactionManeger::commit();
+                connection::commit();
                 return true;
             }
 
             mensagem::setErro("Erro ao deletar agenda");
-            transactionManeger::rollBack();
+            connection::rollBack();
             return false;
         }catch (\exception $e){
             mensagem::setErro("Erro ao deletar agenda");
-            transactionManeger::rollBack();
+            connection::rollBack();
             return false;
         }
     }

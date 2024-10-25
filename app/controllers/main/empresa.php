@@ -8,7 +8,7 @@ use app\controllers\abstract\controller;
 use app\view\layout\consulta;
 use app\helpers\functions;
 use app\helpers\mensagem;
-use diogodg\neoorm\transactionManeger;
+use diogodg\neoorm\connection;
 use app\helpers\integracaoWs;
 use app\helpers\logger;
 use app\helpers\recapcha;
@@ -173,8 +173,8 @@ class empresa extends controller {
 
         try {
 
-            transactionManeger::init();
-            transactionManeger::beginTransaction();
+            
+            connection::beginTransaction();
 
             if ($empresa->set()){
                 $usuario->id_empresa = $empresa->id;
@@ -226,7 +226,7 @@ class empresa extends controller {
                         }
     
                         mensagem::setSucesso("Usuario empresarial salvo com sucesso");
-                        transactionManeger::commit();
+                        connection::commit();
 
                         $login = (new login);
                         if(!$login->getLogged() && $login->login($usuario->cpf_cnpj,$senha)){
@@ -242,7 +242,7 @@ class empresa extends controller {
             mensagem::setErro("Erro ao Salvar Empresa Tente Novamente");
             logger::error($e->getMessage()." ".$e->getTraceAsString());
             mensagem::setSucesso(false);
-            transactionManeger::rollback();
+            connection::rollback();
             if(!$id_empresa || $id || $id_endereco){
                 $usuario->id = null;
                 $empresa->id = null;
@@ -253,7 +253,7 @@ class empresa extends controller {
         }
 
         mensagem::setSucesso(false);
-        transactionManeger::rollback();
+        connection::rollback();
         if(!$id_empresa || $id || $id_endereco){
             $usuario->id = null;
             $empresa->id = null;
