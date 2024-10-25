@@ -61,10 +61,11 @@ final class login extends controller{
         $elements = new elements;
 
         $form = new form("login/sendEsqueci",hasRecapcha:true);
-        $form->setElement($elements->titulo(1,"Esqueci Minha Senha"));
+        $form->setElement($elements->titulo(1,"Esqueci minha senha"));
         $form->setElement($elements->input("email","E-mail","",true,type:"email"));
         $form->setElement($elements->input("cpf_cnpj","CPF/CNPJ","",true));
         $form->setButton($elements->button("Recuperar","recuperar"));
+        $form->setButton($elements->button("Voltar", "voltar", "button", "btn btn-primary w-100 pt-2 btn-block", "location.href='".($this->url."login")."'"));
         $form->show();
     }
 
@@ -107,6 +108,7 @@ final class login extends controller{
         $form->setElement($elements->titulo(1,"Resetar Senha"));
         $form->setElement($elements->input("senha","Senha","",true,type:"password"));
         $form->setButton($elements->button("Redefinir","redefinir"));
+        $form->setButton($elements->button("Voltar", "voltar", "button", "btn btn-primary w-100 pt-2 btn-block", "location.href='".($this->url."login")."'"));
         $form->show();
     }
 
