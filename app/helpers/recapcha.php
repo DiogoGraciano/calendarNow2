@@ -2,11 +2,11 @@
 
 namespace app\helpers;
 
-use app\models\main\empresaModel;
+use app\models\calendarNow;
 
 class recapcha{
 
-    public function siteverify(string $response){
+    public function siteverify(string|null $response){
 
         if(!$response){
             mensagem::setErro("Não foi possivel verificar o recapcha");

@@ -28,16 +28,16 @@ final class login extends controller{
 
     public function action(array $parameters = []):void
     {
-        $recapcha = (new recapcha())->siteverify($this->getValue("g-recaptcha-usuario-response"));
+        $recapcha = (new recapcha())->siteverify($this->getValue("g-recaptcha-login-response"));
 
         if(!$recapcha){
             $this->go("login");
         }
 
-        $cpf_cnpj = $this->getValue('cpf_cnpj');
+        $usuario = $this->getValue('usuario');
         $senha = $this->getValue('senha');
         
-        $login = ModelsLogin::login($cpf_cnpj,$senha);
+        $login = ModelsLogin::login($usuario,$senha);
 
         if ($login){
             $this->go("home");
@@ -60,7 +60,7 @@ final class login extends controller{
     {
         $elements = new elements;
 
-        $form = new form("login/sendEsqueci",hasRecapcha:true);
+        $form = new form($this->url."login/sendEsqueci","login",hasRecapcha:true);
         $form->setElement($elements->titulo(1,"Esqueci minha senha"));
         $form->setElement($elements->input("email","E-mail","",true,type:"email"));
         $form->setElement($elements->input("cpf_cnpj","CPF/CNPJ","",true));
@@ -71,7 +71,7 @@ final class login extends controller{
 
     public function sendEsqueci(array $parameters = []):void
     {
-        $recapcha = (new recapcha())->siteverify($this->getValue("g-recaptcha-usuario-response"));
+        $recapcha = (new recapcha())->siteverify($this->getValue("g-recaptcha-login-response"));
 
         if(!$recapcha){
             $this->esqueci();
@@ -81,14 +81,14 @@ final class login extends controller{
 
         if(isset($usuario[0]) && $usuario = $usuario[0]){
             $email = new email;
-            $email->addEmail($usuario->email);
+            $email->addEmail($usuario["email"]);
 
             $redefinir = new LayoutEmail();
             $redefinir->setEmailBtn("login/resetar/".functions::encrypt($usuario->id),"Resetar Senha","Clique no botão a baixo para resetar sua senha, caso não foi você que solicitou essa alteração, pode excluir esse email sem problemas.");
 
-            $email->send("Redefinir Senha",$redefinir->parse(),true);
+            $email->send("Resetar senha",$redefinir->parse(),true);
             mensagem::setMensagem("Verifique seu email para resetar sua senha");
-            $this->index();
+            $this->go("home");
         }
 
         mensagem::setErro("Nenhum usuario encontrado, revise as campos informados e tente novamente");
@@ -128,6 +128,24 @@ final class login extends controller{
         }
 
         $this->resetar($parameters);
+    }
+
+    public function confirmacao(array $parameters = []){
+        if(!isset($parameters[0])){
+            (new error())->index();
+            return;
+        }
+
+        $usuario = (new ModelsUsuario)->get(functions::decrypt($parameters[0]));
+        $usuario->ativo = 1;
+
+        if($usuario->set()){
+            mensagem::setSucesso("Usuario confimado com sucesso");
+            $this->go("home");
+        }
+
+        (new error())->index();
+        return;
     }
 
     public function deslogar(array $parameters = []):void

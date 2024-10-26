@@ -2,14 +2,13 @@
 
 namespace app\helpers;
 
-use app\models\empresa;
-use app\models\main\empresaModel;
+use app\models\calendarNow;
 use PHPMailer\PHPMailer\PHPMailer;
 
 class email{
 
     private PHPMailer $email;
-    private empresa $empresa;
+    private calendarNow $empresa;
     private array $emailsTo = [];
     private array $emailsCc = [];
     private array $emailsBcc = [];
@@ -49,6 +48,12 @@ class email{
     public function setFrom(string $email,string $nome = "Site"){
         $this->email->setFrom($email,$nome);
         $this->from = true;
+        return $this;
+    }
+
+    public function debug(){
+        $this->email->SMTPDebug = 1;
+        $this->email->Debugoutput = "echo";
         return $this;
     }
 

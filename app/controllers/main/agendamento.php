@@ -187,8 +187,6 @@ class agendamento extends controller{
     {
         try{
 
-            
-
             connection::beginTransaction();
 
             $ids = $this->getValue("massaction");

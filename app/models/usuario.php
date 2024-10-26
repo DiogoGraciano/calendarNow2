@@ -183,6 +183,8 @@ final class usuario extends model {
             $mensagens[] = "Valor de Ativo Invalido";
         }
 
+        $this->criado = functions::dateTimeBd("now");
+
         if($mensagens){
             mensagem::setErro(...$mensagens);
             return null;

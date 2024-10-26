@@ -9,14 +9,14 @@ class email extends pagina{
 
     private string $logo = "";
 
-    public function __construct(string $pathlogo = "assets\imagens\logo.webp")
+    public function __construct(string $pathlogo = "assets/imagens/logo.webp")
     {
         $this->logo = $pathlogo;
     }
 
     public function setEmailBtn(string $action,string $titulo,string $descricao,?string $btn_titulo = null,?string $nome_acao = null):email
     {
-        $this->setTemplate("btnEmail.html");
+        $this->setTemplate("email\btnEmail.html");
 
         $this->tpl->logo = $this->logo;
         $this->tpl->caminho = url::getUrlBase();

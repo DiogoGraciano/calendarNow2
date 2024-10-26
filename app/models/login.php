@@ -13,8 +13,8 @@ final class login{
             $login = (new usuario)->get($usuario,"email");
         else
             $login = (new usuario)->get(functions::onlynumber($usuario),"cpf_cnpj");
-        
-        if ($login->id && ($login->ativo && strtotime($login->criado) > strtotime('+1 days'))){
+
+        if ($login->id && ($login->ativo || strtotime($login->criado) < strtotime('+1 days'))){
             if (password_verify($senha, $login->senha)){
                 $login->senha = $senha;
                 session::set("user",(object)$login->getArrayData());

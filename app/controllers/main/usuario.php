@@ -81,8 +81,6 @@ final class usuario extends controller {
     {
         try{
 
-            
-
             connection::beginTransaction();
 
             $qtd_list = $this->getValue("qtd_list");
@@ -127,8 +125,6 @@ final class usuario extends controller {
 
     public function desbloquear($parameters = []){
         try{
-
-            
 
             connection::beginTransaction();
 
@@ -295,21 +291,22 @@ final class usuario extends controller {
                         }
                     }
 
-                    mensagem::setSucesso("Usuário salvo com sucesso");
-                    connection::commit();
-
                     if(!$user && $login->login($usuario->cpf_cnpj,$senha)){
                         $email = new email;
                         $email->addEmail($usuario->email);
     
                         $redefinir = new LayoutEmail();
-                        $redefinir->setEmailBtn("usuario/sendConfirmacao/".functions::encrypt($usuario->id),"Confirmação de cadastro","Clique no botão a baixo para confirmar seu cadastro, caso não foi você que solicitou essa ação, pode excluir esse email sem problemas.");
+                        $redefinir->setEmailBtn("login/confirmacao/".functions::encrypt($usuario->id),"Confirmação de cadastro","Clique no botão a baixo para confirmar seu cadastro, caso não foi você que solicitou essa ação, pode excluir esse email sem problemas.");
     
                         $email->send("Confirmação de cadastro",$redefinir->parse(),true);
                         mensagem::setMensagem("Verifique seu email para confirmação de cadastro");
+                        mensagem::setSucesso("Usuário salvo com sucesso");
+                        connection::commit();
                         $this->go("home");
                     }
 
+                    mensagem::setSucesso("Usuário salvo com sucesso");
+                    connection::commit();
                     $this->manutencao([$usuario->id],$usuario,tipo_usuario:$usuario->tipo_usuario);//,$endereco);
                     return;
                 // }
@@ -318,6 +315,7 @@ final class usuario extends controller {
             mensagem::setErro("Erro ao salvar usuário");
             logger::error($e->getMessage());
             connection::rollback();
+            login::deslogar();
             $this->manutencao([$usuario->id],$usuario,tipo_usuario:$usuario->tipo_usuario);//,$endereco);
             return;
         }
