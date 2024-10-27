@@ -6,6 +6,7 @@ use app\view\layout\form;
 use app\view\layout\elements;
 use app\helpers\functions;
 use app\controllers\abstract\controller;
+use app\helpers\logger;
 use app\view\layout\consulta;
 use app\view\layout\filter;
 use app\helpers\mensagem;
@@ -272,47 +273,34 @@ final class funcionario extends controller
     {
         $id_grupo_funcionario = $this->getValue('id_grupo_funcionario');
         $id_agenda = $this->getValue('id_agenda');
-        $hora_ini = $this->getValue('hora_ini');
-        $hora_fim = $this->getValue('hora_fim');
-        $hora_almoco_ini = $this->getValue('hora_almoco_ini');
-        $hora_almoco_fim = $this->getValue('hora_almoco_fim');
-        $id = intval($this->getValue('cd'));
-        $id_funcionario = intval($this->getValue("id_funcionario"));
-        $nome = $this->getValue('nome');
         $cpf_cnpj = $this->getValue('cpf_cnpj');
-        $senha = $this->getValue('senha');
         $email = $this->getValue('email');
-        $telefone = $this->getValue('telefone');
-        $espacamento_agenda = $this->getValue('espacamento_agenda')?:30;
-
+       
         $dias = implode(",", [$this->getValue("dom"), $this->getValue("seg"), $this->getValue("ter"), $this->getValue("qua"), $this->getValue("qui"), $this->getValue("sex"), $this->getValue("sab")]);
 
         $usuario = new usuario;
-        $usuario->id           = $id;
-        $usuario->nome         = $nome;
+        $usuario->id           = intval($this->getValue('cd'));
+        $usuario->nome         = $this->getValue('nome');
         $usuario->cpf_cnpj     = $cpf_cnpj;
-        $usuario->senha        = $senha;
+        $usuario->senha        = $this->getValue('senha');
         $usuario->email        = $email;
-        $usuario->telefone     = $telefone;
+        $usuario->telefone     = $this->getValue('telefone');
         $usuario->tipo_usuario = 2;
         $usuario->id_empresa   = $this->getValue("id_empresa");
+        $usuario->ativo        = 1;
         
         $funcionario                       = new funcionarioModel;
-        $funcionario->id                   = $id_funcionario;
-        $funcionario->id_grupo_funcionario = $id_grupo_funcionario;
-        $funcionario->id_agenda            = $id_agenda;
-        $funcionario->hora_ini             = $hora_ini;
-        $funcionario->hora_fim             = $hora_fim;
-        $funcionario->hora_almoco_ini      = $hora_almoco_ini;
-        $funcionario->hora_almoco_fim      = $hora_almoco_fim;
+        $funcionario->id                   = intval($this->getValue("id_funcionario"));
+        $funcionario->hora_ini             = $this->getValue('hora_ini');
+        $funcionario->hora_fim             = $this->getValue('hora_fim');
+        $funcionario->hora_almoco_ini      = $this->getValue('hora_almoco_ini');
+        $funcionario->hora_almoco_fim      = $this->getValue('hora_almoco_fim');
         $funcionario->dias                 = $dias;
-        $funcionario->espacamento_agenda   = $espacamento_agenda;
-        $funcionario->nome                 = $nome;
+        $funcionario->espacamento_agenda   = $this->getValue('espacamento_agenda')?:30;
+        $funcionario->nome                 = $this->getValue('nome');
         $funcionario->cpf_cnpj             = $cpf_cnpj;
         $funcionario->email                = $email;
-        $funcionario->telefone             = $telefone;
-
-        
+        $funcionario->telefone             = $this->getValue('telefone');
 
         connection::beginTransaction();
 
@@ -343,6 +331,7 @@ final class funcionario extends controller
                 }
             }
         } catch (\Exception $e) {
+            logger::error($e->getMessage());
             mensagem::setSucesso(false);
             connection::rollback();
             $this->manutencao([$funcionario->id],$funcionario,$usuario);
@@ -357,8 +346,6 @@ final class funcionario extends controller
     public function massActionAgenda(array $parameters = [])
     {
         try {
-
-            
 
             connection::beginTransaction();
 
@@ -400,8 +387,6 @@ final class funcionario extends controller
     public function massActionGrupoFuncionario(array $parameters = [])
     {
         try {
-
-            
 
             connection::beginTransaction();
 

@@ -5,6 +5,7 @@ namespace app\controllers\main;
 use app\view\layout\form;
 use app\view\layout\elements;
 use app\controllers\abstract\controller;
+use app\helpers\email;
 use app\view\layout\consulta;
 use app\helpers\functions;
 use app\helpers\mensagem;
@@ -12,14 +13,19 @@ use diogodg\neoorm\connection;
 use app\helpers\integracaoWs;
 use app\helpers\logger;
 use app\helpers\recapcha;
+use app\models\agenda;
+use app\models\agendaFuncionario;
+use app\models\agendaUsuario;
 use app\models\cidade;
 use app\models\configuracoes;
 use app\models\empresa as empresaModel;
 use app\models\endereco;
 use app\models\estado;
+use app\models\funcionario;
 use app\models\login;
 use app\models\segmento;
 use app\models\usuario;
+use app\view\layout\email as LayoutEmail;
 use app\view\layout\filter;
 use app\view\layout\pagination;
 
@@ -86,7 +92,8 @@ class empresa extends controller {
             $elements->input("cpf_cnpj", "CPF/CNPJ da Empresa:", $dado->cpf_cnpj?functions::formatCnpjCpf($dado->cpf_cnpj):"", true),
             $elements->select("segmento", "Segmento:",$dadoEmpresa->id_segmento),
             array("nome", "cpf_cnpj","segmento")
-        )->setThreeElements(
+        )->setElement($elements->checkbox("mei","Sou MEI",false,false),"mei")
+        ->setThreeElements(
             $elements->input("email","Email",$dado->email, true, false,"",type:"email"),
             $elements->input("senha","Senha","",$dado->senha?false:true,false,type:"password"),
             $elements->input("telefone", "Telefone",functions::formatPhone($dado->telefone),true,type:"tel"),
@@ -126,7 +133,7 @@ class empresa extends controller {
 
     public function action($parameters = []):void
     {
-        $recapcha = (new recapcha())->siteverify($this->getValue("g-recaptcha-usuario-response"));
+        $recapcha = (new recapcha())->siteverify($this->getValue("g-recaptcha-empresa-response"));
 
         if(!$recapcha){
             $this->manutencao();
@@ -173,7 +180,6 @@ class empresa extends controller {
 
         try {
 
-            
             connection::beginTransaction();
 
             if ($empresa->set()){
@@ -223,16 +229,57 @@ class empresa extends controller {
                             $configuracoes->id_empresa = $empresa->id;
                             $configuracoes->valor = "N";
                             $configuracoes->set();
+
+                            if($this->getValue("mei")){
+
+                                $funcionario                       = new funcionario;
+                                $funcionario->hora_ini             = "08:00";
+                                $funcionario->hora_fim             = "18:00";
+                                $funcionario->hora_almoco_ini      = "12:00";
+                                $funcionario->hora_almoco_fim      = "13:30";
+                                $funcionario->dias                 = implode(",",[null,"seg","ter","qua","qui","sex",null]);
+                                $funcionario->espacamento_agenda   = 30;
+                                $funcionario->nome                 = $usuario->nome;
+                                $funcionario->cpf_cnpj             = $usuario->cpf_cnpj;
+                                $funcionario->email                = $usuario->email;
+                                $funcionario->telefone             = $usuario->telefone;
+                                $funcionario->id_usuario           = $usuario->id;
+                                $funcionario->set(false);
+
+                                $agenda                            = new agenda;
+                                $agenda->nome                      = $usuario->nome;
+                                $agenda->id_empresa                = $empresa->id;
+                                $agenda->set(false);
+
+                                $agendaUsuario = new agendaUsuario;
+                                $agendaUsuario->id_usuario = $usuario->id;
+                                $agendaUsuario->id_agenda = $agenda->id;
+                                $agendaUsuario->set();
+                
+                                $agendaFuncionario = new agendaFuncionario;
+                                $agendaFuncionario->id_funcionario = $funcionario->id;
+                                $agendaFuncionario->id_agenda = $agenda->id;
+                                $agendaFuncionario->set();
+                            }
                         }
-    
-                        mensagem::setSucesso("Usuario empresarial salvo com sucesso");
-                        connection::commit();
 
                         $login = (new login);
                         if(!$login->getLogged() && $login->login($usuario->cpf_cnpj,$senha)){
+                            $email = new email;
+                            $email->addEmail($usuario->email);
+        
+                            $redefinir = new LayoutEmail();
+                            $redefinir->setEmailBtn("login/confirmacao/".functions::encrypt($usuario->id),"Confirmação de cadastro","Clique no botão a baixo para confirmar seu cadastro, caso não foi você que solicitou essa ação, pode excluir esse email sem problemas.");
+        
+                            $email->send("Confirmação de cadastro",$redefinir->parse(),true);
+                            mensagem::setMensagem("Verifique seu email para confirmação de cadastro");
+                            mensagem::setSucesso("Usuario empresarial salvo com sucesso");
+                            connection::commit();
                             $this->go("agenda");
                         }
 
+                        mensagem::setSucesso("Usuario empresarial salvo com sucesso");
+                        connection::commit();
                         $this->manutencao([$usuario->id],$usuario,$endereco,$empresa);
                         return;
                     }

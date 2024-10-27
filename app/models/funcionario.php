@@ -115,7 +115,7 @@ final class funcionario extends model {
                 ->selectColumns(funcionario::table.".id",funcionario::table.".nome",funcionario::table.".cpf_cnpj",funcionario::table.".email",funcionario::table.".telefone","hora_ini","hora_fim","dias");
     }
 
-    public function set():funcionario|null
+    public function set(bool $valid_fk = true):funcionario|null
     {
         $mensagens = [];
 
@@ -123,7 +123,7 @@ final class funcionario extends model {
             $mensagens[] = "Funcionario não encontrada";
         }
 
-        if(!$this->id_usuario || !(new usuario)->get($this->id_usuario)->id){
+        if($valid_fk && (!$this->id_usuario || !(new usuario)->get($this->id_usuario)->id)){
             $mensagens[] = "Usuario não encontrada";
         }
 
@@ -211,7 +211,7 @@ final class funcionario extends model {
         }
 
         if ($this->store()){
-            mensagem::setSucesso(funcionario::table." salvo com sucesso");
+            mensagem::setSucesso("Funcionario salvo com sucesso");
             return $this;
         }
         

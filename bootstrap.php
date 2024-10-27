@@ -8,7 +8,7 @@ require __DIR__.DIRECTORY_SEPARATOR."vendor".DIRECTORY_SEPARATOR."autoload.php";
 define("DRIVER","mysql");
 define("DBHOST","localhost");
 define("DBPORT","3306");
-define("DBNAME","agenda");
+define("DBNAME","agenda3");
 define("DBCHARSET","utf8mb4");
 define("DBUSER","root");
 define("DBPASSWORD","");

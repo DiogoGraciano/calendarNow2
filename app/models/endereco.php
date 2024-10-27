@@ -27,7 +27,7 @@ final class endereco extends model {
             ->addColumn((new column("rua","VARCHAR",300))->isNotNull()->setComment("Rua"))
             ->addColumn((new column("numero","INT"))->isNotNull()->setComment("Numero"))
             ->addColumn((new column("latitude","DECIMAL","10,7"))->isNotNull()->setComment("Latitude da empresa"))
-            ->addColumn((new column("longitude","DECIMAL","10,7"))->isNotNull()->isUnique()->setComment("Longitude da empresa"))
+            ->addColumn((new column("longitude","DECIMAL","10,7"))->isNotNull()->setComment("Longitude da empresa"))
             ->addColumn((new column("complemento","VARCHAR",300))->setComment("Complemento do endereço"));
     }
 

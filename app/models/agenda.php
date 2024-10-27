@@ -67,14 +67,14 @@ final class agenda extends model {
                     ->selectColumns(agenda::table.".id",agenda::table.".nome",empresa::table.".nome as emp_nome");
     }
 
-    public function set():self|null
+    public function set(bool $valid_fk = true):self|null
     {
         $mensagens = [];
 
         if($this->id && !(new self)->get($this->id)->id)
-            $mensagens[] = agenda::table." não encontrada";
+            $mensagens[] = "Agenda não encontrada";
         
-        if(!((new empresa)->get($this->id_empresa)->id))
+        if($valid_fk && !((new empresa)->get($this->id_empresa)->id))
             $mensagens[] = "Empresa não encontrada"; 
 
         if(!($this->nome = htmlspecialchars(trim($this->nome))))
@@ -109,7 +109,6 @@ final class agenda extends model {
     {
         try {
 
-            
             connection::beginTransaction();
 
             $agendaUsuario = (new agendaUsuario);

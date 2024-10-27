@@ -179,6 +179,10 @@ final class usuario extends model {
             $mensagens[] = "Empresa não existe";
         }
 
+        if(!$this->ativo){
+            $this->ativo = 0;
+        }
+
         if(!($this->ativo != 0 || $this->ativo != 1)){
             $mensagens[] = "Valor de Ativo Invalido";
         }
