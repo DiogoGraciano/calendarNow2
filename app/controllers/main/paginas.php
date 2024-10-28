@@ -1,5 +1,5 @@
 <?php 
-namespace app\controllers\main;
+namespace app\controllers\admin;
 use app\view\layout\form;
 use app\controllers\abstract\controller;
 use app\models\paragrafo;
@@ -61,8 +61,7 @@ final class paginas extends controller{
         {
             $form->addCustomElement(6,$elements->titulo(3,$paragrafo["titulo"])."<br>".$paragrafo["descricao"]);
             $form->addCustomElement(6,[
-                $elements->buttonHtmx("Editar Paragrafo","editarParagrafo",$this->url."paginas/editar/".$pagina."/".$paragrafo["id"],"#form-pagina-".$pagina,class:"btn btn-primary w-100 mt-1 pt-2 btn-block"),
-                $elements->buttonHtmx("Excluir Paragrafo","excluirParagrafo",$this->url."paginas/action/".$pagina."/".$paragrafo["id"],"#form-pagina-".$pagina,confirmMessage:"Tem certeza que desaja excluir?",class:"btn btn-primary w-100 mt-1 pt-2 btn-block")
+                $elements->button("Excluir Paragrafo","excluirParagrafo",action:"location.href='".$this->url."paginas/action/".$pagina."/".$paragrafo["id"]."'",class:"btn btn-primary w-100 mt-1 pt-2 btn-block")
                 ]
             );
             $form->setCustomElements("align-items-center");
@@ -77,7 +76,7 @@ final class paginas extends controller{
             $paragrafo = new paragrafo;
             $paragrafo->id = $parameters[1];
             $paragrafo->remove();
-            $this->loadForm([],pagina:$parameters[0])->show();
+            $this->go("paginas");
             return;
         }
 
@@ -91,12 +90,12 @@ final class paginas extends controller{
         $paragrafo->ordem             = $this->getValue('ordem')?:1;
 
         if ($paragrafo->set()){ 
-            $this->loadForm([],pagina:$paragrafo->pagina)->show();
+            $this->go("paginas");
             return;
         }
 
         mensagem::setSucesso(false);
-        $this->loadForm([],pagina:$paragrafo->pagina)->show();
+        $this->go("paginas");
         return;
     }
 }

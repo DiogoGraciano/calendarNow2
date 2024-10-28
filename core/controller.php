@@ -2,7 +2,6 @@
 namespace core;
 
 use app\controllers\main\error;
-use Exception;
 
 class controller{
    
@@ -46,15 +45,19 @@ class controller{
     }
 
     private function controllerHome(){
-        if (!$this->controllerExist('home'))
-            throw new Exception("Essa pagina não existe");
-        
+        if (!$this->controllerExist('home')){
+            (new error)->index();
+            die;
+        }
+      
         return $this->instatiateController();
     }
 
     private function controllerSet($controller){
-        if (!$this->controllerExist($controller))
-            throw new Exception("Essa pagina não existe");
+        if (!$this->controllerExist($controller)){
+            (new error)->index();
+            die;
+        }
         
         return $this->instatiateController();
     }
