@@ -21,4 +21,12 @@ class dashbord extends layout
 
         return $this;
     }
+
+    public function addGrafico(grafico $grafico,string $title){
+        $this->tpl->titulo_grafico = $title;
+        $this->tpl->grafico = $grafico->parse();
+        $this->tpl->block("BLOCK_GRAFICO");
+
+        return $this;
+    }
 }

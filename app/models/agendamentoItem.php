@@ -32,15 +32,16 @@ final class agendamentoItem extends model {
     }
 
     public function countItens(int $id_agendamento){
-        return $this->addFilter("id_agendamento","=",$id_agendamento)
+        return $this->addJoin(servico::table."",servico::table.".id",agendamentoItem::table.".id_servico")
+                    ->addFilter("id_agendamento","=",$id_agendamento)
                     ->addGroup("id_servico")
                     ->asArray()
-                    ->selectColumns("id_servico","COUNT(*) as qtd");
+                    ->selectColumns("id_servico","nome","COUNT(*) as qtd","SUM(valor) as valor");
     }
 
     public function getItemByServico(int $id_agendamento,int $id_servico):object|null
     {
-        $result = $this->addJoin(servico::table."",servico::table.".id",agendamento::table."_item.id_servico")
+        $result = $this->addJoin(servico::table."",servico::table.".id",agendamentoItem::table.".id_servico")
                     ->addFilter("id_agendamento","=",$id_agendamento)
                     ->addFilter("id_servico","=",$id_servico)
                     ->addLimit(1)

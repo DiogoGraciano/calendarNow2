@@ -1,0 +1,25 @@
+<canvas id="{chartName}" class="chart-container chartjs-render-monitor {class} p-2"></canvas>
+<script>
+    new Chart("{chartName}", {
+        type: "{type}",
+        data: {
+            labels: {datax},
+            datasets: [{
+                label: {label},
+                backgroundColor: {backColor},
+                borderColor: {borderColor},
+                data: {datay},
+                fill: {fill}
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            responsive: true,
+            legend: {display: {legends}},
+            title: {
+                display: {displayTitle},
+                text: "{title}"
+            }
+        }
+    });
+</script>

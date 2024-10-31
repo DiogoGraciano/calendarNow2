@@ -209,18 +209,15 @@ class servico extends controller{
         $id = intval(($this->getValue('cd')));
         $id_grupo_servico  = intval($this->getValue('grupo_servico'));
         $id_funcionario = intval($this->getValue('funcionario'));
-        $nome  = $this->getValue('nome');
-        $tempo  = $this->getValue('tempo');
-        $valor  = $this->getValue('valor');
-
+    
         $servico = new ModelsServico;
     
         $servico->id               = $id;
         $servico->id_grupo_servico = $id_grupo_servico;
         $servico->id_funcionario   = $id_funcionario;
-        $servico->nome             = $nome;
-        $servico->tempo            = $tempo;
-        $servico->valor            = $valor;
+        $servico->nome             = $this->getValue('nome');
+        $servico->tempo            = $this->getValue('tempo');
+        $servico->valor            = $this->getValue('valor');
         $servico->id_empresa       = $user->id_empresa;
 
         if ($servico->set()){ 
@@ -278,9 +275,7 @@ class servico extends controller{
 
     public function massActionFuncionario(){
         try{
-
             
-
             connection::beginTransaction();
 
             $ids = $this->getValue("massaction");
