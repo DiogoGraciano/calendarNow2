@@ -3,10 +3,10 @@ namespace app\view\layout;
 
 use app\helpers\functions;
 use app\models\main\produtoModel;
-use app\view\layout\abstract\pagina;
+use app\view\layout\abstract\layout;
 use core\url;
 
-class produtoListagem extends pagina
+class produtoListagem extends layout
 {
 
     public function __construct()

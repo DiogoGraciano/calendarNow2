@@ -122,6 +122,15 @@ final class menu extends model {
     public static function seed(){
         $menu = new self;
         if(!$menu->addLimit(1)->selectColumns("id")){
+            $menu->controller = "dashbord";
+            $menu->tipo_usuario = json_encode([1,2]);
+            $menu->nome = "Dashbord";
+            $menu->class_icone = "fa-solid fa-chart-line";
+            $menu->ordem = 1;
+            $menu->target_blank = 0;
+            $menu->ativo = 1;
+            $menu->store();
+            $menu = new self;
             $menu->controller = "home";
             $menu->tipo_usuario = json_encode([1,2,3]);
             $menu->nome = "Agendar";

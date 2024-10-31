@@ -2,7 +2,7 @@
 namespace app\view\layout;
 
 use app\helpers\functions;
-use app\view\layout\abstract\pagina;
+use app\view\layout\abstract\layout;
 use app\helpers\mensagem;
 use app\models\calendarNow;
 use stdClass;
@@ -10,7 +10,7 @@ use stdClass;
 /**
  * Classe form é responsável por gerar um formulário dinâmico com base em um template HTML.
  */
-class form extends pagina
+class form extends layout
 {
     private $inputs_custom = [];
     

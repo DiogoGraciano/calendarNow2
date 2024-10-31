@@ -2,10 +2,10 @@
 
 namespace app\view\layout;
 
-use app\view\layout\abstract\pagina;
+use app\view\layout\abstract\layout;
 use core\url;
 
-class email extends pagina{
+class email extends layout{
 
     private string $logo = "";
 

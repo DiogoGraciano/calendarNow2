@@ -3,12 +3,12 @@ namespace app\view\layout;
 
 use app\helpers\functions;
 use app\models\main\representanteModel;
-use app\view\layout\abstract\pagina;
+use app\view\layout\abstract\layout;
 
 /**
  * Classe footer é responsável por exibir o rodapé de uma página usando um template HTML.
  */
-class representantes extends pagina
+class representantes extends layout
 {
 
     public function __construct(string $action,?int $id_estado = null)

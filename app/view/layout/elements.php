@@ -1,12 +1,12 @@
 <?php
 
 namespace app\view\layout;
-use app\view\layout\abstract\pagina;
+use app\view\layout\abstract\layout;
 
 /**
  * Classe elements é responsável por gerar diversos elementos HTML, como botões, labels, checkboxes, inputs, textareas, selects e datalists.
  */
-class elements extends pagina{
+class elements extends layout{
 
     private $options = []; 
 

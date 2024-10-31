@@ -355,7 +355,7 @@ class agendamento extends controller{
                 $i++;
             }
         }else{
-            mensagem::setErro("Nenhum serviço vinculado ao funcionario");
+            mensagem::setErro("Nenhum serviço vinculado ao funcionario ({$Dadofuncionario->nome})");
             if ($user->tipo_usuario == 3)
             {
                 $this->go("encontrar");

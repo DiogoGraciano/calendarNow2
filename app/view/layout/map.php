@@ -2,10 +2,10 @@
 
 namespace app\view\layout;
 
-use app\view\layout\abstract\pagina;
+use app\view\layout\abstract\layout;
 use core\url;
 
-class map extends pagina{
+class map extends layout{
 
     private int $countMaker = 1;
 

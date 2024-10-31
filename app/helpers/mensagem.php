@@ -1,10 +1,10 @@
 <?php
 
 namespace app\helpers;
-use app\view\layout\abstract\pagina;
+use app\view\layout\abstract\layout;
 use core\session;
 
-class mensagem extends pagina{
+class mensagem extends layout{
 
     public function load(string $localizacao="")
     {

@@ -24,13 +24,18 @@ final class agendamentoItem extends model {
                 ->addColumn((new column("total_item","DECIMAL","10,2"))->isNotNull()->setComment("Valor do serviço"));
     }
 
-    public  function getItens(int $id_agendamento):array
+    public function getItens(int $id_agendamento):array
     {
-        $result = $this->addJoin(servico::table."",servico::table.".id",agendamento::table."_item.id_servico")
+        return $this->addJoin(servico::table."",servico::table.".id",agendamento::table."_item.id_servico")
                     ->addFilter("id_agendamento","=",$id_agendamento)
-                    ->selectAll();
-        
-        return $result;
+                    ->selectColumns(agendamentoItem::table.".id","id_agendamento","id_servico","qtd_item","tempo_item","total_item","nome","valor","tempo","id_empresa");
+    }
+
+    public function countItens(int $id_agendamento){
+        return $this->addFilter("id_agendamento","=",$id_agendamento)
+                    ->addGroup("id_servico")
+                    ->asArray()
+                    ->selectColumns("id_servico","COUNT(*) as qtd");
     }
 
     public function getItemByServico(int $id_agendamento,int $id_servico):object|null
@@ -39,7 +44,7 @@ final class agendamentoItem extends model {
                     ->addFilter("id_agendamento","=",$id_agendamento)
                     ->addFilter("id_servico","=",$id_servico)
                     ->addLimit(1)
-                    ->selectColumns(agendamento::table."_item.id","id_agendamento","id_servico","qtd_item","tempo_item","total_item","nome","valor","tempo","id_empresa");
+                    ->selectColumns(agendamentoItem::table.".id","id_agendamento","id_servico","qtd_item","tempo_item","total_item","nome","valor","tempo","id_empresa");
 
         if ($result)
             return $result[0];

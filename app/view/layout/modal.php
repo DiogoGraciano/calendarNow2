@@ -1,9 +1,9 @@
 <?php
 
 namespace app\view\layout;
-use app\view\layout\abstract\pagina;
+use app\view\layout\abstract\layout;
 
-class modal extends pagina{
+class modal extends layout{
 
     public function __construct(string $id = "modal",string $title = "Modal",string $content = "",string $class = "modal fade")
     {

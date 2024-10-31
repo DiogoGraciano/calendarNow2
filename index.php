@@ -26,7 +26,7 @@ $urlPermitidas = [
     "/usuario/action",
     "/login/empresa",
     "/empresa/action",
-    "usuario/confirnacao"
+    "/login/confirmacao"
 ];
 
 $controller = new Controller;
@@ -34,6 +34,7 @@ $controller = new Controller;
 $user = session::get("user");
 
 if(!$user && str_contains(url::getUriPath(),"encontrar/action/")){
+    mensagem::setMensagem("Faça Login ou cadastra-se para cadastrar seu agendamento");
     session::set("url_encontrar",url::getUriPath());
 }
 
@@ -42,10 +43,21 @@ if($user && $encontrar = session::get("url_encontrar")){
     url::go(ltrim($encontrar,"/"));
 }
 
-if ($user || in_array(url::getUriPath(),$urlPermitidas)){
+$uri = explode("/",url::getUriPath());
+
+$path = "/";
+
+if(isset($uri[1])){
+    $path .= $uri[1];
+}
+if(isset($uri[2])){
+    $path .= "/".$uri[2];
+}
+
+if ($user || in_array($path,$urlPermitidas)){
     $controller = $controller->load();
 }else{
-    $head = new head("login");
+    $head = new head("Login");
     $head->show();
     $controller = $controller->load("login");
     $controller->index();

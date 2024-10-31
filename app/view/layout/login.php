@@ -1,7 +1,7 @@
 <?php
 
 namespace app\view\layout;
-use app\view\layout\abstract\pagina;
+use app\view\layout\abstract\layout;
 use app\helpers\mensagem;
 use core\url;
 use app\models\calendarNow;
@@ -10,7 +10,7 @@ use app\models\calendarNow;
  * Classe para gerar a página de login.
  * Esta classe estende a classe 'pagina' para herdar métodos relacionados ao template.
  */
-class login extends pagina{
+class login extends layout{
 
     /**
      * Exibe o template da página de login.

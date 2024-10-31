@@ -1,11 +1,11 @@
 <?php
 namespace app\view\layout;
-use app\view\layout\abstract\pagina;
+use app\view\layout\abstract\layout;
 
 /**
  * Classe footer é responsável por exibir o rodapé de uma página usando um template HTML.
  */
-class error extends pagina
+class error extends layout
 {
     /**
      * Mostra o erro renderizado.

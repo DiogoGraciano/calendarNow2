@@ -1,11 +1,11 @@
 <?php
 
 namespace app\view\layout;
-use app\view\layout\abstract\pagina;
+use app\view\layout\abstract\layout;
 use app\helpers\mensagem;
 use core\url;
 
-class agenda extends pagina{
+class agenda extends layout{
 
     public function __construct()
     {

@@ -1,11 +1,11 @@
 <?php
 namespace app\view\layout;
-use app\view\layout\abstract\pagina;
+use app\view\layout\abstract\layout;
 
 /**
  * Classe footer é responsável por exibir o rodapé de uma página usando um template HTML.
  */
-class wave extends pagina
+class wave extends layout
 {
 
     public function __construct(int $type = 0,string $color = "#000",$color_backgroud = "#fff",int $width = 5,int $dasharray = 6,string $name = "",int $margin = 1)

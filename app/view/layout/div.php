@@ -2,9 +2,9 @@
 namespace app\view\layout;
 
 use app\helpers\functions;
-use app\view\layout\abstract\pagina;
+use app\view\layout\abstract\layout;
 
-class div extends pagina
+class div extends layout
 {
 
     public function __construct(string $name,string $class = "col-md-12",string $extra = "")

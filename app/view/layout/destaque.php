@@ -1,8 +1,8 @@
 <?php
 namespace app\view\layout;
-use app\view\layout\abstract\pagina;
+use app\view\layout\abstract\layout;
 
-class destaque extends pagina
+class destaque extends layout
 {
     public function __construct(string $link,string $titulo,string $descricao,int $tamanho_texto = 6,string $id = "destaque")
     {

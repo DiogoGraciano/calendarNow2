@@ -6,10 +6,10 @@ use app\helpers\functions;
 use app\models\calendarNow;
 use app\models\cidade;
 use app\models\estado;
-use app\view\layout\abstract\pagina;
+use app\view\layout\abstract\layout;
 use core\url;
 
-class head extends pagina{
+class head extends layout{
 
     public function __construct(string $titulo=""){
 

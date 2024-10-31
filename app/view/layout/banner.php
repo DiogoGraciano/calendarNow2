@@ -2,13 +2,13 @@
 namespace app\view\layout;
 
 use app\models\main\bannerModel;
-use app\view\layout\abstract\pagina;
+use app\view\layout\abstract\layout;
 use core\url;
 
 /**
  * Classe footer é responsável por exibir o rodapé de uma página usando um template HTML.
  */
-class banner extends pagina
+class banner extends layout
 {
 
     public function __construct(string $nome = "principal",string $wave_color = "#fff")

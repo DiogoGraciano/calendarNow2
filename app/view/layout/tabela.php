@@ -1,9 +1,9 @@
 <?php
 
 namespace app\view\layout;
-use app\view\layout\abstract\pagina;
+use app\view\layout\abstract\layout;
 
-class tabela extends pagina{
+class tabela extends layout{
 
     private $columns = [];
 

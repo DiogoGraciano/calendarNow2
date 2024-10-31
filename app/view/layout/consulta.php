@@ -2,11 +2,11 @@
 
 namespace app\view\layout;
 
-use app\view\layout\abstract\pagina;
+use app\view\layout\abstract\layout;
 use app\helpers\mensagem;
 use app\view\layout\elements;
 
-class consulta extends pagina
+class consulta extends layout
 {
    
     private array $buttons = [];

@@ -2,9 +2,9 @@
 namespace app\view\layout;
 
 use app\helpers\functions;
-use app\view\layout\abstract\pagina;
+use app\view\layout\abstract\layout;
 
-class tab extends pagina
+class tab extends layout
 {
 
     public function __construct()

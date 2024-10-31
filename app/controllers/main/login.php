@@ -84,10 +84,10 @@ final class login extends controller{
             $email->addEmail($usuario["email"]);
 
             $redefinir = new LayoutEmail();
-            $redefinir->setEmailBtn("login/resetar/".functions::encrypt($usuario->id),"Resetar Senha","Clique no botão a baixo para resetar sua senha, caso não foi você que solicitou essa alteração, pode excluir esse email sem problemas.");
+            $redefinir->setEmailBtn("login/resetar/".functions::encrypt($usuario["id"]),"Resetar Senha","Clique no botão a baixo para resetar sua senha, caso não foi você que solicitou essa alteração, pode excluir esse email sem problemas.");
 
             $email->send("Resetar senha",$redefinir->parse(),true);
-            mensagem::setMensagem("Verifique seu email para resetar sua senha");
+            mensagem::setMensagem("Verifique seu email ({$usuario["email"]}) para resetar sua senha");
             $this->go("home");
         }
 
@@ -104,7 +104,7 @@ final class login extends controller{
 
         $elements = new elements;
 
-        $form = new form("login/actionResetar/".$parameters[0],hasRecapcha:true);
+        $form = new form($this->url."login/actionResetar/".$parameters[0],hasRecapcha:true);
         $form->setElement($elements->titulo(1,"Resetar Senha"));
         $form->setElement($elements->input("senha","Senha","",true,type:"password"));
         $form->setButton($elements->button("Redefinir","redefinir"));

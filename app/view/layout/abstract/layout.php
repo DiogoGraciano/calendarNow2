@@ -4,7 +4,7 @@ namespace app\view\layout\abstract;
 use app\view\layout\template;
 use app\helpers\functions;
 
-abstract class pagina{
+abstract class layout{
 
     protected template $tpl;
 

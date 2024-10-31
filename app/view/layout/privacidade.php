@@ -2,12 +2,12 @@
 namespace app\view\layout;
 
 use app\models\main\empresaModel;
-use app\view\layout\abstract\pagina;
+use app\view\layout\abstract\layout;
 
 /**
  * Classe footer é responsável por exibir o rodapé de uma página usando um template HTML.
  */
-class privacidade extends pagina
+class privacidade extends layout
 {
     public function show():void
     {

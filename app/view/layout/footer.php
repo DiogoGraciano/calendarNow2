@@ -4,14 +4,14 @@ namespace app\view\layout;
 use app\helpers\functions;
 use app\models\calendarNow;
 use app\models\login;
-use app\view\layout\abstract\pagina;
+use app\view\layout\abstract\layout;
 use app\models\menu;
 use core\url;
 
 /**
  * Classe footer é responsável por exibir o rodapé de uma página usando um template HTML.
  */
-class footer extends pagina
+class footer extends layout
 {
 
     public function __construct(string $logo = "assets\imagens\logo_grande.webp",int $tamanho_logo = 4)

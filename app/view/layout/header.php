@@ -3,11 +3,11 @@
 namespace app\view\layout;
 
 use app\models\login;
-use app\view\layout\abstract\pagina;
+use app\view\layout\abstract\layout;
 use core\url;
 use app\models\menu;
 
-class header extends pagina{
+class header extends layout{
 
     public function __construct(string $pathlogo = "assets\imagens\logo.webp")
     {

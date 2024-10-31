@@ -5,10 +5,10 @@ use app\helpers\functions;
 use app\models\calendarNow;
 use app\models\cidade;
 use app\models\estado;
-use app\view\layout\abstract\pagina;
+use app\view\layout\abstract\layout;
 use core\url;
 
-class contato extends pagina
+class contato extends layout
 {
     public function __construct()
     {

@@ -25,6 +25,8 @@ class servico extends controller{
 
     public function index($parameters = [])
     {
+        $servico = new consulta(true,"Consulta Serviço");
+        
         $id_funcionario = $this->getValue("funcionario");
         $id_grupo_servico = $this->getValue("grupo_servico");
         $nome = $this->getValue("nome");
@@ -82,8 +84,6 @@ class servico extends controller{
         $servicos = new ModelsServico;
 
         $dados = $servicos->prepareData($servicos->getByfilter(intval($user->id_empresa),$nome,intval($id_funcionario),intVal($id_grupo_servico)));
-
-        $servico = new consulta(true,"Consulta Serviço");
 
         $servico->addButtons($elements->button("Adicionar","manutencao","button","btn btn-primary","location.href='".$this->url."servico/manutencao'"))
                 ->addButtons($elements->buttonModal("Vincular  Serviço ao Funcionario", "massActionFuncionario", "#modalFuncionario"))

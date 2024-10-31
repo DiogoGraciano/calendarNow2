@@ -1,8 +1,8 @@
 <?php
 namespace app\view\layout;
-use app\view\layout\abstract\pagina;
+use app\view\layout\abstract\layout;
 
-class filter extends pagina
+class filter extends layout
 {
     public function __construct(string $action,string $target = "#consulta-admin")
     {

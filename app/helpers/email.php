@@ -111,13 +111,13 @@ class email{
         $this->email->isHTML($isHtml);
         $this->email->Body = $mensagem;
 
-        if (!$this->email->send()) {
-            mensagem::setErro("Erro ao enviar email");
-            return false;
+        if ($this->email->send()) {
+            mensagem::setSucesso("Email enviado com sucesso");
+            return true;
         } 
 
-        mensagem::setSucesso("Email enviado com sucesso");
-        return true;
+        mensagem::setErro("Erro ao enviar email");
+        return false;
     }
 }
 

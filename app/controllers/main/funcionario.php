@@ -29,6 +29,8 @@ final class funcionario extends controller
 
     public function index(array $parameters = [])
     {
+        $cadastro = new consulta(true,"Consulta Funcionario");
+        
         $user = login::getLogged();
 
         $elements = new elements();
@@ -83,8 +85,6 @@ final class funcionario extends controller
         $funcionario = new funcionarioModel;
 
         $dados = $funcionario->prepareData($funcionario->getByFilter($user->id_empresa,$nome,intval($id_agenda),intval($id_grupo_funcionarios),$this->getLimit(),$this->getOffset()));
-
-        $cadastro = new consulta(true,"Consulta Funcionario");
         
         $cadastro->addButtons($elements->button("Adicionar","manutencao","button","btn btn-primary","location.href='".$this->url."funcionario/manutencao'"))
             ->addButtons($elements->buttonModal("Vincular Agenda ao Funcionario", "massActionAgenda", "#modalAgenda"))
