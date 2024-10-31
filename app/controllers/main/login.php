@@ -40,7 +40,7 @@ final class login extends controller{
         $login = ModelsLogin::login($usuario,$senha);
 
         if ($login){
-            $this->go("home");
+            ModelsLogin::getLogged()->id_empresa?$this->go("dashbord"):$this->go("home");
         }else {
             $this->go("login");
         }
