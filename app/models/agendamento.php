@@ -354,15 +354,10 @@ final class agendamento extends model {
         $this->obs = htmlspecialchars(trim($this->obs));
 
         if ($this->store()){
-            mensagem::setSucesso(agendamento::table." salvo com sucesso");
+            mensagem::setSucesso("Agendamento salvo com sucesso");
             return $this;
         }
             
         return null;
-    }
-
-    public function remove():bool
-    {
-        return $this->delete($this->id);
     }
 }
