@@ -107,7 +107,7 @@ final class menu extends model {
         $finalResult = [];
         foreach ($dados as $dado){
 
-            if(is_subclass_of($dado,"diogodg\neoorm\db")){
+            if(is_subclass_of($dado,"diogodg\\neoorm\db")){
                 $dado = $dado->getArrayData();
             }
             
@@ -126,7 +126,7 @@ final class menu extends model {
             $menu->tipo_usuario = json_encode([1,2]);
             $menu->nome = "Dashbord";
             $menu->class_icone = "fa-solid fa-chart-line";
-            $menu->ordem = 1;
+            $menu->ordem = 0;
             $menu->target_blank = 0;
             $menu->ativo = 1;
             $menu->store();
@@ -185,11 +185,20 @@ final class menu extends model {
             $menu->ativo = 1;
             $menu->store();
             $menu = new self;
+            $menu->controller = "feriado";
+            $menu->tipo_usuario = json_encode([1]);
+            $menu->nome = "Feriados/Folgas";
+            $menu->class_icone = "fa-solid fa-calendar-xmark";
+            $menu->ordem = 5;
+            $menu->target_blank = 0;
+            $menu->ativo = 1;
+            $menu->store();
+            $menu = new self;
             $menu->controller = "grupo/index/funcionario";
             $menu->tipo_usuario = json_encode([1]);
             $menu->nome = "Grupo de Funcionarios";
             $menu->class_icone = "fa-solid fa-users";
-            $menu->ordem = 5;
+            $menu->ordem = 6;
             $menu->target_blank = 0;
             $menu->ativo = 1;
             $menu->store();
@@ -198,7 +207,7 @@ final class menu extends model {
             $menu->tipo_usuario = json_encode([1]);
             $menu->nome = "Grupo de Serviços";
             $menu->class_icone = "fa-solid fa-users";
-            $menu->ordem = 6;
+            $menu->ordem = 7;
             $menu->target_blank = 0;
             $menu->ativo = 1;
             $menu->store();
@@ -207,7 +216,7 @@ final class menu extends model {
             $menu->tipo_usuario = json_encode([1,2]);
             $menu->nome = "Usuarios";
             $menu->class_icone = "fa-solid fa-address-book";
-            $menu->ordem = 7;
+            $menu->ordem = 8;
             $menu->target_blank = 0;
             $menu->ativo = 1;
             $menu->store();
@@ -216,7 +225,7 @@ final class menu extends model {
             $menu->tipo_usuario = json_encode([1]);
             $menu->nome = "Relatorios";
             $menu->class_icone = "fa-solid fa-chart-pie";
-            $menu->ordem = 8;
+            $menu->ordem = 9;
             $menu->target_blank = 0;
             $menu->ativo = 1;
             $menu->store();
@@ -225,7 +234,7 @@ final class menu extends model {
             $menu->tipo_usuario = json_encode([1,2,3]);
             $menu->nome = "Cadastro";
             $menu->class_icone = "fa-solid fa-user-gear";
-            $menu->ordem = 9;
+            $menu->ordem = 10;
             $menu->target_blank = 0;
             $menu->ativo = 1;
             $menu->store();
@@ -234,7 +243,7 @@ final class menu extends model {
             $menu->tipo_usuario = json_encode([1]);
             $menu->nome = "Configurações";
             $menu->class_icone = "fa-solid fa-gear";
-            $menu->ordem = 10;
+            $menu->ordem = 11;
             $menu->target_blank = 0;
             $menu->ativo = 1;
             $menu->store();
@@ -243,7 +252,7 @@ final class menu extends model {
             $menu->tipo_usuario = json_encode([0]);
             $menu->nome = "CalendarNow";
             $menu->class_icone = "fa-solid fa-building";
-            $menu->ordem = 11;
+            $menu->ordem = 12;
             $menu->target_blank = 0;
             $menu->ativo = 1;
             $menu->store();
@@ -252,7 +261,7 @@ final class menu extends model {
             $menu->tipo_usuario = json_encode([0]);
             $menu->nome = "Contatos";
             $menu->class_icone = "fa-solid fa-envelope";
-            $menu->ordem = 12;
+            $menu->ordem = 13;
             $menu->target_blank = 0;
             $menu->ativo = 1;
             $menu->store();
@@ -261,7 +270,7 @@ final class menu extends model {
             $menu->tipo_usuario = json_encode([0]);
             $menu->nome = "Paginas";
             $menu->class_icone = "fa-solid fa-desktop";
-            $menu->ordem = 13;
+            $menu->ordem = 14;
             $menu->target_blank = 0;
             $menu->ativo = 1;
             $menu->store();
@@ -270,7 +279,7 @@ final class menu extends model {
             $menu->class_icone = "fa-solid fa-right-from-bracket";
             $menu->tipo_usuario = json_encode([0,1,2,3]);
             $menu->nome = "Deslogar";
-            $menu->ordem = 14;
+            $menu->ordem = 15;
             $menu->target_blank = 0;
             $menu->ativo = 1;
             $menu->store();

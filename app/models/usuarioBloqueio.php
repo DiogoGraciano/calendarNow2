@@ -14,9 +14,8 @@ final class usuarioBloqueio extends model {
 
     public static function table(){
         return (new table(self::table, comment: "Tabela de usuários bloqueados"))
-                ->addColumn((new column("id", "INT"))->isPrimary()->setComment("ID do bloqueio"))
-                ->addColumn((new column("id_usuario", "INT"))->isForeingKey(usuario::table())->isNotNull()->setComment("ID do usuário"))
-                ->addColumn((new column("id_empresa", "INT"))->isForeingKey(empresa::table())->isNotNull()->setComment("ID da empresa"));
+                ->addColumn((new column("id_usuario", "INT"))->isPrimary()->isForeingKey(usuario::table())->isNotNull()->setComment("ID do usuário"))
+                ->addColumn((new column("id_empresa", "INT"))->isPrimary()->isForeingKey(empresa::table())->isNotNull()->setComment("ID da empresa"));
     }
 
     public function set():bool
@@ -28,7 +27,7 @@ final class usuarioBloqueio extends model {
             $mensagens[] = "Agenda não existe";
         }
 
-        if($this->store()){
+        if($this->storeMutiPrimary()){
             return true;
         }
 

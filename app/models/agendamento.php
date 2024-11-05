@@ -30,12 +30,12 @@ final class agendamento extends model {
                 ->addIndex("getEventsbyFuncionario",["dt_ini","dt_fim","id_agenda","id_funcionario"]);
     }
 
-    public function getEventsbyFilter(?string $dt_inicio = null,?string $dt_fim = null,?int $id_agenda = null,?int $id_funcionario = null,?int $isnotstatus = 4):array
+    public function getEventsbyFilter(?string $dt_ini = null,?string $dt_fim = null,?int $id_agenda = null,?int $id_funcionario = null,?int $isnotstatus = 4):array
     {
         $dinnerStop = [];
         
-        if($dt_inicio)
-            $this->addFilter("dt_ini",">=",functions::dateTimeBd($dt_inicio));
+        if($dt_ini)
+            $this->addFilter("dt_ini",">=",functions::dateTimeBd($dt_ini));
         if($dt_fim)
             $this->addFilter("dt_fim","<=",functions::dateTimeBd($dt_fim));
         if($id_agenda)
@@ -64,6 +64,38 @@ final class agendamento extends model {
                 'color' => "#000",
             ];
             
+            $feriados = (new funcionarioFeriado)->getFeriadoByFuncionario($funcionario->id,$dt_ini,$dt_fim);
+
+            $feriadosFinal = [];
+            foreach ($feriados as $feriado){
+                if($feriado->repetir){
+                    $feriado->dt_ini = new \DateTime($feriado->dt_ini);
+
+                    $feriado->dt_ini->setDate(date("Y"), $feriado->dt_ini->format('m'), $feriado->dt_ini->format('d'));
+
+                    $feriado->dt_ini = $feriado->dt_ini->format('Y-m-d H:i:s');
+
+                    $feriado->dt_fim = new \DateTime($feriado->dt_fim);
+
+                    $feriado->dt_fim->setDate(date("Y"), $feriado->dt_fim->format('m'), $feriado->dt_fim->format('d'));
+
+                    $feriado->dt_fim = $feriado->dt_fim->format('Y-m-d H:i:s');
+                }
+            
+                $feriadosFinal[] =  [
+                    'start' => $feriado->dt_ini,
+                    'end'   => $feriado->dt_fim,
+                    'title' => $feriado->nome,
+                    'color' => "#000",
+                ];
+
+                $feriado->dt_ini = explode(" ",$feriado->dt_ini)[1];
+                $feriado->dt_fim = explode(" ",$feriado->dt_fim)[1];
+
+                if(strtotime($feriado->dt_ini) < strtotime($funcionario->hora_almoco_ini) || strtotime($feriado->dt_fim) > strtotime($funcionario->hora_almoco_fim)){
+                    $dinnerStop = [];
+                }
+            }
         }
         if($isnotstatus)
             $this->addFilter("id_status","!=",intval($isnotstatus));
@@ -104,7 +136,7 @@ final class agendamento extends model {
                 }
             }
         }
-        return array_merge($return,$dinnerStop);
+        return array_merge($return,$dinnerStop,$feriadosFinal);
     }
 
     public function getQtdValorByDia(int $id_empresa,?string $dt_ini = null,?string $dt_fim = null){

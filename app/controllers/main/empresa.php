@@ -21,6 +21,7 @@ use app\models\configuracoes;
 use app\models\empresa as empresaModel;
 use app\models\endereco;
 use app\models\estado;
+use app\models\feriado;
 use app\models\funcionario;
 use app\models\login;
 use app\models\segmento;
@@ -261,6 +262,78 @@ class empresa extends controller {
                                 $agendaFuncionario->id_agenda = $agenda->id;
                                 $agendaFuncionario->set();
                             }
+
+                            $feriado = new feriado;
+                            $feriado->nome = "Ano Novo";
+                            $feriado->dt_ini = "01-01-2024 00:00:00";
+                            $feriado->dt_fim = "01-01-2024 23:59:59";
+                            $feriado->id_empresa = $empresa->id;
+                            $feriado->repetir = 1;
+                            $feriado->set();
+
+                            $feriado = new feriado;
+                            $feriado->nome = "Tiradentes";
+                            $feriado->dt_ini = "21-04-2024 00:00:00";
+                            $feriado->dt_fim = "21-04-2024 23:59:59";
+                            $feriado->id_empresa = $empresa->id;
+                            $feriado->repetir = 1;
+                            $feriado->set();
+
+                            $feriado = new feriado;
+                            $feriado->nome = "Dia do Trabalhador";
+                            $feriado->dt_ini = "01-05-2024 00:00:00";
+                            $feriado->dt_fim = "01-05-2024 23:59:59";
+                            $feriado->id_empresa = $empresa->id;
+                            $feriado->repetir = 1;
+                            $feriado->set();
+
+                            $feriado = new feriado;
+                            $feriado->nome = "Independência do Brasil";
+                            $feriado->dt_ini = "07-09-2024 00:00:00";
+                            $feriado->dt_fim = "07-09-2024 23:59:59";
+                            $feriado->id_empresa = $empresa->id;
+                            $feriado->repetir = 1;
+                            $feriado->set();
+
+                            $feriado = new feriado;
+                            $feriado->nome = "Nossa Senhora Aparecida";
+                            $feriado->dt_ini = "12-10-2024 00:00:00";
+                            $feriado->dt_fim = "12-10-2024 23:59:59";
+                            $feriado->id_empresa = $empresa->id;
+                            $feriado->repetir = 1;
+                            $feriado->set();
+
+                            $feriado = new feriado;
+                            $feriado->nome = "Finados";
+                            $feriado->dt_ini = "02-11-2024 00:00:00";
+                            $feriado->dt_fim = "02-11-2024 23:59:59";
+                            $feriado->id_empresa = $empresa->id;
+                            $feriado->repetir = 1;
+                            $feriado->set();
+
+                            $feriado = new feriado;
+                            $feriado->nome = "Proclamação da República";
+                            $feriado->dt_ini = "15-11-2024 00:00:00";
+                            $feriado->dt_fim = "15-11-2024 23:59:59";
+                            $feriado->id_empresa = $empresa->id;
+                            $feriado->repetir = 1;
+                            $feriado->set();
+
+                            $feriado = new feriado;
+                            $feriado->nome = "Dia Nacional de Zumbi e da Consciência Negra";
+                            $feriado->dt_ini = "20-11-2024 00:00:00";
+                            $feriado->dt_fim = "20-11-2024 23:59:59";
+                            $feriado->id_empresa = $empresa->id;
+                            $feriado->repetir = 1;
+                            $feriado->set();
+
+                            $feriado = new feriado;
+                            $feriado->nome = "Natal";
+                            $feriado->dt_ini = "25-11-2024 00:00:00";
+                            $feriado->dt_fim = "25-11-2024 23:59:59";
+                            $feriado->id_empresa = $empresa->id;
+                            $feriado->repetir = 1;
+                            $feriado->set();
                         }
 
                         $login = (new login);

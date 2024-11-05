@@ -28,7 +28,7 @@ final class agenda extends controller{
 
         $elements = new elements;
 
-        $filter = new filter($this->url."index/");
+        $filter = new filter($this->url."agenda/index");
 
         $filter->addbutton($elements->button("Buscar","buscar","submit","btn btn-primary pt-2"))
                 ->addFilter(3,$elements->input("nome","Nome:",$nome))
@@ -95,7 +95,7 @@ final class agenda extends controller{
             $table->addColumns("10","Ações","acoes");
 
             foreach ($funcionarios as $funcionario){
-                $funcionario->acoes = $elements->buttonHtmx("Desvincular","desvincular",$this->url."funcionario/desvincularFuncionario/".$dado->id."/".$funcionario->id,"#form-manutencao");
+                $funcionario->acoes = $elements->buttonHtmx("Desvincular","desvincular",$this->url."agenda/desvincularFuncionario/".$dado->id."/".$funcionario->id,"#form-manutencao");
                 $table->addRow($funcionario->getArrayData());
             }
 

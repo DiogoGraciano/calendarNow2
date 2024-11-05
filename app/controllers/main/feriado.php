@@ -26,7 +26,7 @@ final class feriado extends controller{
 
         $elements = new elements;
 
-        $filter = new filter($this->url."index/");
+        $filter = new filter($this->url."feriado/index");
 
         $filter->addbutton($elements->button("Buscar","buscar","submit","btn btn-primary pt-2"))
                 ->addFilter(3,$elements->input("nome","Nome:",$nome));
@@ -35,17 +35,16 @@ final class feriado extends controller{
 
         $feriadoModel = new ModelsFeriado;
 
-        $feriado = new consulta(false,"Consulta Agenda");
+        $feriado = new consulta(false,"Consulta Feriados/Folgas");
 
         $feriado->addButtons($elements->button("Adicionar","manutencao","button","btn btn-primary","location.href='".$this->url."feriado/manutencao'"));
-        $feriado->addButtons($elements->button("Voltar","voltar","button","btn btn-primary","location.href='".$this->url."home'"));
 
         $feriado->addColumns("1","Id","id")
             ->addColumns("50","Nome","nome")
             ->addColumns("11","Ações","acoes")
-            ->setData($this->url."agenda/manutencao",
-                    $this->url."agenda/action/",
-                    $feriadoModel->getByFilter($user->id_empresa,$nome,$this->getLimit(),$this->getOffset()),
+            ->setData($this->url."feriado/manutencao",
+                    $this->url."feriado/action/",
+                    $feriadoModel->getByFilter($user->id_empresa,$nome,limit:$this->getLimit(),offset:$this->getOffset()),
                     "id")
             ->addPagination(new pagination(
                 $feriadoModel::getLastCount("getByFilter"),
@@ -70,12 +69,14 @@ final class feriado extends controller{
         
         $dado = $feriado?:(new ModelsFeriado)->get($id);
         
-        $form->setElement($elements->titulo(1,"Manutenção Agenda"));
+        $form->setElement($elements->titulo(1,"Manutenção Feriado/Folgas"));
         $form->setElement($elements->input("nome","Nome:",$dado->nome,true));
+        $form->setTwoElements($elements->input("dt_ini","Data Inicial:",$dado->dt_ini,true,false,type:"datetime-local",class:"form-control form-control-date"),
+                              $elements->input("dt_fim","Data Final:",$dado->dt_fim,true,false,type:"datetime-local",class:"form-control form-control-date"));
 
         $user = login::getLogged();
 
-        $funcionarios = (new agendaFuncionario)->getFuncionarioByAgenda($dado->id);
+        $funcionarios = (new funcionarioFeriado)->getFuncionarioByFeriado($dado->id);
 
         if($funcionarios){
 
@@ -91,7 +92,7 @@ final class feriado extends controller{
             $table->addColumns("10","Ações","acoes");
 
             foreach ($funcionarios as $funcionario){
-                $funcionario->acoes = $elements->buttonHtmx("Desvincular","desvincular",$this->url."funcionario/desvincularFuncionario/".$dado->id."/".$funcionario->id,"#form-manutencao");
+                $funcionario->acoes = $elements->buttonHtmx("Desvincular","desvincular",$this->url."feriado/desvincularFuncionario/".$dado->id."/".$funcionario->id,"#form-manutencao");
                 $table->addRow($funcionario->getArrayData());
             }
 
@@ -100,35 +101,32 @@ final class feriado extends controller{
 
         $funcionarios = (new funcionario)->getByEmpresa($user->id_empresa);
 
-        $elements->addOption("","Nenhum");
+        $elements->addOption("todos","Todos");
         foreach ($funcionarios as $funcionario){
             $elements->addOption($funcionario->id,$funcionario->nome);
         }
         $form->setElement($elements->select("funcionario","Funcionario:",""));
-
-        $form->setElement($elements->input("codigo","Codigo:",$dado->codigo,false,true));
+        $form->setElement($elements->checkbox("repetir","Repetir",false,$dado->repetir));
 
         $form->setButton($elements->button("Salvar","submit"));
-        if($dado->id)
-            $form->setButton($elements->link($this->url."qrCode/agendaQrCode/".$dado->id,"Gerar QrCode","_blank","btn btn-primary w-100 btn-block"));
-        $form->setButton($elements->button("Voltar","voltar","button","btn btn-primary w-100 btn-block","location.href='".$this->url."agenda'"));
+        $form->setButton($elements->button("Voltar","voltar","button","btn btn-primary w-100 btn-block","location.href='".$this->url."feriado'"));
         $form->show();
     }
 
     public function desvincularFuncionario($parameters = []):void
     {
-        $id_agenda = ($parameters[0] ?? '');
+        $id_feriado = ($parameters[0] ?? '');
         $id_funcionario = ($parameters[1] ?? '');
 
-        if($id_agenda && $id_funcionario){
-            $agendaFuncionario = (new agendaFuncionario);
-            $agendaFuncionario->id_agenda = $id_agenda;
-            $agendaFuncionario->id_funcionario = $id_funcionario;
-            $agendaFuncionario->remove();
+        if($id_feriado && $id_funcionario){
+            $funcionarioFeriado = (new funcionarioFeriado);
+            $funcionarioFeriado->id_feriado = $id_feriado;
+            $funcionarioFeriado->id_funcionario = $id_funcionario;
+            $funcionarioFeriado->remove();
         }
 
-        mensagem::setErro("Agenda ou Funcionario não informados");
-        $this->manutencao([$id_agenda]);
+        mensagem::setErro("Feriado ou Funcionario não informados");
+        $this->manutencao([$id_feriado]);
         return;
     }
 
@@ -136,42 +134,49 @@ final class feriado extends controller{
     {
         $user = login::getLogged();
 
-        $agenda = new ModelsAgenda;
+        $feriado = new ModelsFeriado;
        
         if (isset($parameters[0])){
-            $agenda->id = ($parameters[0]);
-            $agenda->remove();
+            $feriado->id = ($parameters[0]);
+            $feriado->remove();
             $this->index(); 
             return;
         }
        
-        $agenda->id               = intval($this->getValue('cd'));
-        $agenda->id_funcionario   = intval($this->getValue('funcionario'));
-        $agenda->id_empresa       = intval($user->id_empresa);
-        $agenda->codigo           = $this->getValue('codigo');
-        $agenda->nome             = $this->getValue('nome');
+        $feriado->id               = intval($this->getValue('cd'));
+        $feriado->id_funcionario   = $this->getValue('funcionario');
+        $feriado->id_empresa       = intval($user->id_empresa);
+        $feriado->nome             = $this->getValue('nome');
+        $feriado->dt_ini           = $this->getValue('dt_ini');
+        $feriado->dt_fim           = $this->getValue('dt_fim');
+        $feriado->repetir          = $this->getValue('repetir') ?: 0;
 
         try{
             
             connection::beginTransaction();
 
-            if ($agenda->set()){ 
+            if ($feriado->set()){ 
 
-                $agendaUsuario = new agendaUsuario;
-                $agendaUsuario->id_usuario = $user->id;
-                $agendaUsuario->id_agenda = $agenda->id;
-                $agendaUsuario->set();
+                if($feriado->id_funcionario == "todos"){
+                    $funcionarios = (new funcionario)->getByEmpresa($user->id_empresa);
 
-                if($agenda->id_funcionario){
-                    $agendaFuncionario = new agendaFuncionario;
-                    $agendaFuncionario->id_funcionario = $agenda->id_funcionario;
-                    $agendaFuncionario->id_agenda = $agenda->id;
-                    $agendaFuncionario->set();
+                    foreach ($funcionarios as $funcionario){
+                        $funcionarioFeriado = new funcionarioFeriado;
+                        $funcionarioFeriado->id_funcionario = $funcionario->id;
+                        $funcionarioFeriado->id_feriado = $feriado->id;
+                        $funcionarioFeriado->set();
+                    }
+                }
+                else{
+                    $funcionarioFeriado = new funcionarioFeriado;
+                    $funcionarioFeriado->id_funcionario = $feriado->id_funcionario;
+                    $funcionarioFeriado->id_feriado = $feriado->id;
+                    $funcionarioFeriado->set();
                 }
 
-                mensagem::setSucesso("Agenda salva com sucesso");
+                mensagem::setSucesso("Feriado salva com sucesso");
                 connection::commit();
-                $this->manutencao([$agenda->id],$agenda); 
+                $this->manutencao([$feriado->id],$feriado); 
                 return;
             }
 
@@ -179,13 +184,13 @@ final class feriado extends controller{
             mensagem::setSucesso(false);
             connection::rollBack();
             logger::error($e->getMessage()." ".$e->getTraceAsString());
-            mensagem::setErro("Erro ao cadastrar agenda, tente novamente");
-            $this->manutencao([$agenda->id],$agenda); 
+            mensagem::setErro("Erro ao cadastrar feriado, tente novamente");
+            $this->manutencao([$feriado->id],$feriado); 
             return;
         }
 
         mensagem::setSucesso(false);
-        $this->manutencao([$agenda->id],$agenda); 
+        $this->manutencao([$feriado->id],$feriado); 
         return;
     }
 }

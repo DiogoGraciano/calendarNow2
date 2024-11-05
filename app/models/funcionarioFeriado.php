@@ -5,6 +5,7 @@ namespace app\models;
 use diogodg\neoorm\abstract\model;
 use diogodg\neoorm\migrations\column;
 use diogodg\neoorm\migrations\table;
+use app\helpers\functions;
 
 class funcionarioFeriado extends model
 {
@@ -16,13 +17,20 @@ class funcionarioFeriado extends model
 
     public static function table(){
         return (new table(self::table, comment: "Tabela de usuários bloqueados"))
-                ->addColumn((new column("id", "INT"))->isPrimary()->setComment("ID do bloqueio"))
-                ->addColumn((new column("id_funcionario", "INT"))->isForeingKey(funcionario::table())->isNotNull()->setComment("ID do funcionario"))
-                ->addColumn((new column("id_feriado", "INT"))->isForeingKey(feriado::table())->isNotNull()->setComment("ID da feriado"));
+                ->addColumn((new column("id_funcionario", "INT"))->isPrimary()->isForeingKey(funcionario::table())->isNotNull()->setComment("ID do funcionario"))
+                ->addColumn((new column("id_feriado", "INT"))->isPrimary()->isForeingKey(feriado::table())->isNotNull()->setComment("ID da feriado"));
     }
 
     public function set():bool
     {
+        $result = $this->addFilter("id_feriado","=",$this->id_feriado)
+                    ->addFilter("id_funcionario","=",$this->id_funcionario)
+                    ->selectAll();
+
+        if ($result){
+            return true;
+        }
+
         if(!($this->id_funcionario = (new funcionario)->get($this->id_funcionario)->id)){
             $mensagens[] = "Usuario não existe";
         }
@@ -30,11 +38,37 @@ class funcionarioFeriado extends model
             $mensagens[] = "Agenda não existe";
         }
 
-        if($this->store()){
+        if($this->storeMutiPrimary()){
             return true;
         }
 
         return false;
+    }
+
+    public function getFeriadoByFuncionario(int|null $id_funcionario = null,?string $dt_ini = null,?string $dt_fim = null){
+        if(!$id_funcionario){
+            return [];
+        }
+
+        if($dt_ini)
+            $this->addFilter("dt_ini",">=",functions::dateTimeBd($dt_ini));
+        if($dt_fim)
+            $this->addFilter("dt_fim","<=",functions::dateTimeBd($dt_fim));
+
+        return $this->addJoin(feriado::table,feriado::table.".id","id_feriado")
+                    ->addFilter("id_funcionario","=",$id_funcionario)
+                    ->selectColumns(feriado::table.".id",feriado::table.".nome","dt_ini","dt_fim","repetir");
+    }
+
+    public function getFuncionarioByFeriado(int|null $id_feriado = null):array
+    {
+        if(!$id_feriado){
+            return [];
+        }
+
+        return $this->addJoin(funcionario::table,funcionario::table.".id","id_funcionario")
+                    ->addFilter("id_feriado","=",$id_feriado)
+                    ->selectColumns(funcionario::table.".id",funcionario::table.".nome");
     }
 
     public function remove():bool

@@ -20,10 +20,11 @@ class feriado extends model
     public static function table(){
         return (new table(self::table, comment: "Tabela de feriados"))
                 ->addColumn((new column("id", "INT"))->isPrimary()->setComment("ID do feriados"))
-                ->addColumn((new column("nome", "INT"))->isForeingKey(funcionario::table())->isNotNull()->setComment("Nome do Feriado"))
+                ->addColumn((new column("nome", "VARCHAR", 250))->isNotNull()->setComment("Nome do Feriado"))
                 ->addColumn((new column("dt_ini", "TIMESTAMP"))->isNotNull()->setComment("Data inicial do feriado"))
                 ->addColumn((new column("dt_fim", "TIMESTAMP"))->isNotNull()->setComment("Data final do feriado"))
-                ->addColumn((new column("id_empresa", "TIMESTAMP"))->isForeingKey(empresa::table())->isNotNull()->setComment("Id da Empresa"));
+                ->addColumn((new column("repetir", "BOOLEAN"))->setDefaut(0)->isNotNull()->setComment("Repete"))
+                ->addColumn((new column("id_empresa", "INT"))->isForeingKey(empresa::table())->isNotNull()->setComment("Id da Empresa"));
     }
 
     public function getByfilter(int $id_empresa,?string $nome = null,?string $dt_ini = null,?string $dt_fim = null,?int $limit = null,?int $offset = null):array
@@ -76,6 +77,15 @@ class feriado extends model
             $mensagens[] = "Data final invalida";
         }
 
+        if($this->repetir > 1 || $this->repetir < 0){
+            $mensagens[] = "Valor de repetir invalido";
+        }
+
+        if($mensagens){
+            mensagem::setErro(...$mensagens);
+            return null;
+        }
+
         if ($this->store()){
             mensagem::setSucesso("Feriado salvo com sucesso");
             return $this;
@@ -83,5 +93,4 @@ class feriado extends model
             
         return null;
     }
-
 }

@@ -24,7 +24,7 @@ final class funcionarioGrupoFuncionario extends model {
         return $this->addFilter(self::table.".id_funcionario","=",$this->id_funcionario)->deleteByFilter();
     }
 
-    public function set():funcionarioGrupoFuncionario
+    public function set():funcionarioGrupoFuncionario|null
     {
         $result = $this->addFilter("id_grupo_funcionario","=",$this->id_grupo_funcionario)
                     ->addFilter("id_funcionario","=",$this->id_funcionario)
@@ -34,7 +34,7 @@ final class funcionarioGrupoFuncionario extends model {
             if ($this->storeMutiPrimary()){
                 return $this;
             }
-            return false;
+            return null;
         }
         return $this;
     }
