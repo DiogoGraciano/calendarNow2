@@ -44,10 +44,8 @@ class consulta extends layout
     }
 
     public function addPagination(pagination $pagination){
-
         $this->tpl->pagination = $pagination->parse();
         $this->tpl->block('BLOCK_PAGINATION');
-
         return $this;
     }
 

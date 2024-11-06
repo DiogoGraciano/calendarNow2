@@ -58,7 +58,6 @@ final class usuario extends controller {
         
         $cadastro->addButtons($elements->buttonHtmx("Bloquear Usuario","usuarioblock","bloquear","#consulta-admin",class:"btn btn-primary"));
         $cadastro->addButtons($elements->buttonHtmx("Desbloquear Usuario","usuariounblock","desbloquear","#consulta-admin",class:"btn btn-primary"));
-        $cadastro->addButtons($elements->button("Voltar","voltar","button","btn btn-primary","location.href='".$this->url."home'"));
         
         $usuario = (new usuarioModel);
         $dados = $usuario->prepareData($usuario->getByFilter($user->id_empresa,$nome,$id_funcionario,3,$this->getLimit(),$this->getOffset()));
@@ -71,6 +70,7 @@ final class usuario extends controller {
                  ->setData($this->url."usuario/manutencao", $this->url."usuario/action", $dados,"id")
                  ->addPagination(new pagination(
                     $usuario::getLastCount("getByFilter"),
+                    "usuario/index",
                     "#consulta-admin",
                     limit:$this->getLimit()))
                 ->addFilter($filter)

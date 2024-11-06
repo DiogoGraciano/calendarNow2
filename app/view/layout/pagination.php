@@ -3,7 +3,6 @@
 namespace app\view\layout;
 
 use app\view\layout\abstract\layout;
-use core\request;
 use core\url;
 
 class pagination extends layout{
@@ -64,7 +63,7 @@ class pagination extends layout{
             $this->tpl->link_proximo = $this->action.$this->getQuery($this->page+1);
             $this->tpl->block("BLOCK_PROXIMO");
         }
-
+        
         return $this->tpl->parse();
     }
 

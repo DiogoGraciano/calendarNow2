@@ -89,7 +89,6 @@ final class funcionario extends controller
         $cadastro->addButtons($elements->button("Adicionar","manutencao","button","btn btn-primary","location.href='".$this->url."funcionario/manutencao'"))
             ->addButtons($elements->buttonModal("Vincular Agenda ao Funcionario", "massActionAgenda", "#modalAgenda"))
             ->addButtons($elements->buttonModal("Vincular Funcionario ao Grupo", "massActionGrupoFuncionario", "#modalGrupo"))
-            ->addButtons($elements->button("Voltar", "voltar", "button", "btn btn-primary", "location.href='" . $this->url . "opcoes'"))
             ->addColumns("1", "Id", "id")
             ->addColumns("10", "CPF/CNPJ", "cpf_cnpj")
             ->addColumns("15", "Nome", "nome")
@@ -107,6 +106,7 @@ final class funcionario extends controller
                         "id")
             ->addPagination(new pagination(
                 $funcionario->getLastCount("getByFilter"),
+                "funcionario/index",
                 "#consulta-admin",
                 limit:$this->getLimit()))
             ->addFilter($filter)

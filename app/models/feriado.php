@@ -27,7 +27,7 @@ class feriado extends model
                 ->addColumn((new column("id_empresa", "INT"))->isForeingKey(empresa::table())->isNotNull()->setComment("Id da Empresa"));
     }
 
-    public function getByfilter(int $id_empresa,?string $nome = null,?string $dt_ini = null,?string $dt_fim = null,?int $limit = null,?int $offset = null):array
+    public function getByFilter(int $id_empresa,?string $nome = null,?string $dt_ini = null,?string $dt_fim = null,?int $limit = null,?int $offset = null):array
     {
         
         $this->addFilter(feriado::table.".id_empresa","=",$id_empresa);

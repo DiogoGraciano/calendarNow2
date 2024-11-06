@@ -47,7 +47,6 @@ final class grupo extends controller{
         $cadastro = new consulta(false,"Consulta Grupo");
 
         $cadastro->addButtons($elements->button("Adicionar","manutencao","button","btn btn-primary","location.href='".$this->url."grupo/manutencao/".($tipo_grupo)."'"))
-                 ->addButtons($elements->button("Voltar","voltar","button","btn btn-primary","location.href='".$this->url."opcoes'")) 
                 ->addColumns("1","Id","id")
                 ->addColumns("70","Nome","nome")
                 ->addColumns("15","Ações","acoes")
@@ -57,6 +56,7 @@ final class grupo extends controller{
                         "id")
                 ->addPagination(new pagination(
                     $dados->getLastCount("getByFilter"),
+                    "grupo/index",
                     "#consulta-admin",
                     limit:$this->getLimit()))
                 ->addFilter($filter)

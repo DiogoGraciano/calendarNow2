@@ -50,7 +50,6 @@ final class configuracoes extends controller{
         $form->setElement($elements->select("mostrar_endereco","Mostrar Endereço",$configuracoes->getConfiguracao("mostrar_endereco",$user->id_empresa)));
 
         $form->setButton($elements->button("Salvar","submit"));
-        $form->setButton($elements->button("Voltar","voltar","button","btn btn-primary w-100 btn-block","location.href='".$this->url."opcoes'"));
         $form->show();
     }
 

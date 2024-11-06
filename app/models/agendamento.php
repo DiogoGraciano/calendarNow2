@@ -155,7 +155,7 @@ final class agendamento extends model {
         return $this->asArray()->addGroup("DATE(dt_ini)")->addOrder("dia")->selectColumns("DATE(dt_ini) AS dia","COUNT(*) as qtd","SUM(total) AS total_por_dia");
     }
 
-    public function getByfilter(?int $id_empresa = null,?int $id_usuario = null,?string $dt_ini = null,?string $dt_fim = null,bool $onlyActive = false,?int $id_agenda = null,?int $id_funcionario = null,?int $limit = null,?int $offset = null):array
+    public function getByFilter(?int $id_empresa = null,?int $id_usuario = null,?string $dt_ini = null,?string $dt_fim = null,bool $onlyActive = false,?int $id_agenda = null,?int $id_funcionario = null,?int $limit = null,?int $offset = null):array
     {
         $this->addJoin(usuario::table,usuario::table.".id",agendamento::table.".id_usuario","LEFT")
             ->addJoin(agenda::table."",agenda::table.".id",agendamento::table.".id_agenda")

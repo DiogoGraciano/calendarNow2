@@ -67,6 +67,7 @@ final class contatos extends controller{
                     "id")
             ->addPagination(new pagination(
                             $contato::getLastCount("getByFilter"),
+                            "contatos/loadConsulta",
                             $this->url."contato/loadConsulta",
                             limit:$this->getLimit()))
             ->show();

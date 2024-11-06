@@ -168,16 +168,16 @@
         },
         {
             "name": "diogodg/neoorm",
-            "version": "v1.0.0",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/DiogoGraciano/NeoORM.git",
-                "reference": "abd243cd151ac39a7b4a5d91c6fbf2f9f0373d5d"
+                "reference": "98b47c2a69412974c5663c16e44bc7df088fb086"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/DiogoGraciano/NeoORM/zipball/abd243cd151ac39a7b4a5d91c6fbf2f9f0373d5d",
-                "reference": "abd243cd151ac39a7b4a5d91c6fbf2f9f0373d5d",
+                "url": "https://api.github.com/repos/DiogoGraciano/NeoORM/zipball/98b47c2a69412974c5663c16e44bc7df088fb086",
+                "reference": "98b47c2a69412974c5663c16e44bc7df088fb086",
                 "shasum": ""
             },
             "type": "library",
@@ -199,9 +199,9 @@
             "description": "NeoORM é uma classe para mapeamento de um banco de dados Mysql/Pgsql",
             "support": {
                 "issues": "https://github.com/DiogoGraciano/NeoORM/issues",
-                "source": "https://github.com/DiogoGraciano/NeoORM/tree/v1.0.0"
+                "source": "https://github.com/DiogoGraciano/NeoORM/tree/v1.0.2"
             },
-            "time": "2024-10-25T21:25:57+00:00"
+            "time": "2024-11-06T18:39:23+00:00"
         },
         {
             "name": "phpmailer/phpmailer",

@@ -83,7 +83,6 @@ class agendamento extends controller{
         $filter->addFilter(6,$elements->select("funcionario","Funcionario",$Dadofuncionario->id));
 
         $agenda = new agenda();
-        $agenda->addButton($elements->button("Voltar","voltar","button","btn btn-primary w-100 btn-block","location.href='".$this->url."home'"));
         $agenda->set(
             $this->url."agendamento/manutencao/".$parameters[0]."/".(!$id_funcionario?$firstFuncionario:$id_funcionario)."/",
             "agendamento/loadEventos/".$id_agenda."/".$Dadofuncionario->id,
@@ -156,7 +155,6 @@ class agendamento extends controller{
         $filter->addFilter(3, $elements->input("dt_ini","Data Inicial:",$dt_ini,false,false,type:"datetime-local",class:"form-control form-control-date"));
         $filter->addFilter(3, $elements->input("dt_fim","Data Final:",$dt_fim,false,false,type:"datetime-local",class:"form-control form-control-date"));
 
-        $cadastro->addButtons($elements->button("Voltar","voltar","button","btn btn-primary","location.href='".$this->url."home'")); 
         $cadastro->addButtons($elements->buttonHtmx("Cancelar Agendamento","agendamentocancel","massCancel","#consulta-admin",confirmMessage:"Tem certeza que deseja cancelar?",includes:"#consulta-admin"));
 
         $cadastro->addColumns("1","Id","id")
@@ -172,11 +170,12 @@ class agendamento extends controller{
                 ->addColumns("10","Status","status");
 
         $agendamento = new ModelsAgendamento;
-        $dados = $agendamento->prepareList($agendamento->getByfilter($user->tipo_usuario == 3?null:$user->id_empresa,$user->tipo_usuario == 1?null:$user->id,$dt_ini,$dt_fim,false,$id_agenda,$id_funcionario,$this->getLimit(),$this->getOffset()));
+        $dados = $agendamento->prepareList($agendamento->getByFilter($user->tipo_usuario == 3?null:$user->id_empresa,$user->tipo_usuario == 1?null:$user->id,$dt_ini,$dt_fim,false,$id_agenda,$id_funcionario,$this->getLimit(),$this->getOffset()));
        
         $cadastro->setData($this->url."agendamento/manutencao",$this->url."agendamento/action",$dados,"id")
         ->addPagination(new pagination(
             $agendamento::getLastCount("getByFilter"),
+            "agendamento/listagem",
             "#consulta-admin",
             limit:$this->getLimit()))
         ->addFilter($filter)

@@ -104,6 +104,21 @@ final class relatorio extends controller{
             session::set("filter_dt_fim",null);
         }
 
+        $consulta->addColumns("1","ID","id")
+                ->addColumns("10","CPF/CNPJ","cpf_cnpj")
+                ->addColumns("15","Nome","nome")
+                ->addColumns("15","Email","email")
+                ->addColumns("10","Telefone","telefone")
+                ->addColumns("10","Agenda","agenda")
+                ->addColumns("10","Funcionario","fun_nome")
+                ->addColumns("12","Data Inicial","dt_ini")
+                ->addColumns("12","Data Final","dt_fim")
+                ->addColumns("12","Total","total")
+                ->addColumns("10","Status","status");
+
+        $agendamento = new agendamento;
+        $dados = $agendamento->prepareList($agendamento->getByFilter($user->id_empresa,$user->id != 3?null:$user->id,$dt_ini,$dt_fim,true,$id_agenda,$id_funcionario,$this->getLimit(),$this->getOffset()));
+
         if(!isset($parameters[0]) || $parameters[0] != "imprimir"){
 
             if ($user->tipo_usuario == 3){
@@ -143,31 +158,19 @@ final class relatorio extends controller{
             $consulta->addButtons($elements->link($this->url."relatorio/faturamentoAgendamento/imprimir","Imprimir","_blank","btn btn-primary")); 
 
             $consulta->addFilter($filter);
+
+            $consulta->addPagination(new pagination(
+                $agendamento::getLastCount("getByFilter"),
+                "relatorio/faturamentoAgendamento",
+                "#consulta-admin",
+                limit:$this->getLimit()));
         }
 
-        $consulta->addColumns("1","ID","id")
-                ->addColumns("10","CPF/CNPJ","cpf_cnpj")
-                ->addColumns("15","Nome","nome")
-                ->addColumns("15","Email","email")
-                ->addColumns("10","Telefone","telefone")
-                ->addColumns("10","Agenda","agenda")
-                ->addColumns("10","Funcionario","fun_nome")
-                ->addColumns("12","Data Inicial","dt_ini")
-                ->addColumns("12","Data Final","dt_fim")
-                ->addColumns("12","Total","total")
-                ->addColumns("10","Status","status");
-
-        $agendamento = new agendamento;
-        $dados = $agendamento->prepareList($agendamento->getByfilter($user->id_empresa,$user->id != 3?null:$user->id,$dt_ini,$dt_fim,true,$id_agenda,$id_funcionario,$this->getLimit(),$this->getOffset()));
 
         $consulta->setData($this->url."agendamento/manutencao",
                           $this->url."agendamento/action",
                           $dados,
-                          "id")
-        ->addPagination(new pagination(
-            $agendamento::getLastCount("getByFilter"),
-            "#consulta-admin",
-            limit:$this->getLimit()));
+                          "id");
 
         $relatorio->addContent($consulta->parse());
 

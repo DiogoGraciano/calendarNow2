@@ -9,7 +9,7 @@ final class agendaFuncionario extends model {
     public const table = "agenda_funcionario";
 
     public function __construct() {
-        parent::__construct(self::table,get_class($this));
+        parent::__construct(self::table,$this::class);
     }
 
     public static function table(){

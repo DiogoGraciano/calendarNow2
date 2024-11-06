@@ -22,7 +22,7 @@ class dashbord extends controller
 
         $user = (new login)->getLogged();
 
-        $agendamentos = $agendamento->getByfilter($user->id_empresa,dt_ini:$dt_ini,dt_fim:$dt_fim);
+        $agendamentos = $agendamento->getByFilter($user->id_empresa,dt_ini:$dt_ini,dt_fim:$dt_fim);
 
         $servicos = [];
         $valor = 0;

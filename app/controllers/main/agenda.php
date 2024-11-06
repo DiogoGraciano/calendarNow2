@@ -41,7 +41,6 @@ final class agenda extends controller{
         $agenda = new consulta(false,"Consulta Agenda");
 
         $agenda->addButtons($elements->button("Adicionar","manutencao","button","btn btn-primary","location.href='".$this->url."agenda/manutencao'"));
-        $agenda->addButtons($elements->button("Voltar","voltar","button","btn btn-primary","location.href='".$this->url."home'"));
 
         $agenda->addColumns("1","Id","id")
             ->addColumns("50","Nome","nome")
@@ -53,6 +52,7 @@ final class agenda extends controller{
                     "id")
             ->addPagination(new pagination(
                 $agendaModel::getLastCount("getByFilter"),
+                "agenda/index",
                 "#consulta-admin",
                 limit:$this->getLimit()))
             ->addFilter($filter)
@@ -125,7 +125,7 @@ final class agenda extends controller{
         $id_funcionario = ($parameters[1] ?? '');
 
         if($id_agenda && $id_funcionario){
-            $agendaFuncionario = (new agendaFuncionario);
+            $agendaFuncionario = new agendaFuncionario;
             $agendaFuncionario->id_agenda = $id_agenda;
             $agendaFuncionario->id_funcionario = $id_funcionario;
             $agendaFuncionario->remove();

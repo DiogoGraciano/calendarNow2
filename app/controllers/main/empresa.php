@@ -47,7 +47,6 @@ class empresa extends controller {
 
         $cadastro = new consulta(false,"Empresa");
         $cadastro->addButtons($elements->button("Adicionar","manutencao","button","btn btn-primary","location.href='".$this->url."empresa/manutencao'"));
-        $cadastro->addButtons($elements->button("Voltar", "voltar", "button", "btn btn-primary", "location.href='".$this->url."home'"));
 
         $empresa = (new empresaModel);
         $dados = $empresa->prepareData($empresa->getByFilter($nome,$this->getLimit(),$this->getOffset()));
@@ -60,6 +59,7 @@ class empresa extends controller {
                  ->setData($this->url."empresa/manutencao", $this->url."empresa/action", $dados,"id")
                  ->addPagination(new pagination(
                     $empresa::getLastCount("getByFilter"),
+                    "empresa/index",
                     "#consulta-admin",
                     limit:$this->getLimit()))
                  ->show();

@@ -83,12 +83,11 @@ class servico extends controller{
 
         $servicos = new ModelsServico;
 
-        $dados = $servicos->prepareData($servicos->getByfilter(intval($user->id_empresa),$nome,intval($id_funcionario),intVal($id_grupo_servico)));
+        $dados = $servicos->prepareData($servicos->getByFilter(intval($user->id_empresa),$nome,intval($id_funcionario),intVal($id_grupo_servico)));
 
         $servico->addButtons($elements->button("Adicionar","manutencao","button","btn btn-primary","location.href='".$this->url."servico/manutencao'"))
                 ->addButtons($elements->buttonModal("Vincular  Serviço ao Funcionario", "massActionFuncionario", "#modalFuncionario"))
                 ->addButtons($elements->buttonModal("Vincular Serviço ao Grupo", "massActionGrupoServico", "#modalGrupo"))
-                ->addButtons($elements->button("Voltar","voltar","button","btn btn-primary","location.href='".$this->url."opcoes'"))
                 ->addColumns("1","Id","id")
                 ->addColumns("40","Nome","nome")
                 ->addColumns("5","Tempo","tempo")
@@ -100,6 +99,7 @@ class servico extends controller{
                         "id")
                 ->addPagination(new pagination(
                     $servicos->getLastCount("getByFilter"),
+                    "servico/index",
                     "#consulta-admin",
                     limit:$this->getLimit()))
                 ->addFilter($filter)

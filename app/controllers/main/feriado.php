@@ -48,6 +48,7 @@ final class feriado extends controller{
                     "id")
             ->addPagination(new pagination(
                 $feriadoModel::getLastCount("getByFilter"),
+                "feriado/index",
                 "#consulta-admin",
                 limit:$this->getLimit()))
             ->addFilter($filter)

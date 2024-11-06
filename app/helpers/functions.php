@@ -671,6 +671,30 @@ class functions{
     public static function createNameId(string $string){
         return str_replace("[]","",str_replace(" ","-",self::tirarAcentos(strtolower($string))));
     }
+
+    public static function formatDre(string $codigo) {
+       
+        $codigo = strval($codigo);
+        
+        $partes = str_split($codigo, 1);
+        
+        $i = 1;
+        $b = 1;
+        $parteFinal = "";
+        foreach ($partes as $parte) {
+            $parteFinal .= $i > 3 ? $parte : $parte.".";
+            $i++;
+
+            if($i > 3){
+                if($b > 2){
+                    $parteFinal .= ".";
+                    $b = 1;
+                }
+                $b++;
+            }
+        }
+        return rtrim($parteFinal,".");
+    }
 }
 
 ?>

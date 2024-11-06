@@ -1,6 +1,8 @@
 <?php
 
 namespace app\view\layout;
+
+use app\helpers\functions;
 use app\view\layout\abstract\layout;
 
 /**
@@ -316,6 +318,12 @@ class elements extends layout{
         $this->tpl->extra = $extra;
         $this->tpl->block("BLOCK_ENBED"); 
         return $this->parse();
+    }
+
+    public function setOptionsByArray(array $dados){
+        foreach ($dados as $key => $dado){
+            $this->addOption($key,$dado);
+        }
     }
 
     public function setOptions(array $dados,$coluna_vl,$coluna_nm):self
